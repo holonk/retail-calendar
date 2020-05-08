@@ -1,4 +1,4 @@
-import { Moment } from 'moment'
+import moment from 'moment'
 import {
   MerchandiseCalendar,
   MerchandiseCalendarConstructor,
@@ -7,8 +7,13 @@ import {
   MerchandiseCalendarWeek,
   WeekCalculation,
   WeekGrouping,
+  LastDayStrategy,
 } from './types'
-const moment = require('moment')
+
+import { CalendarMonth } from './calendar_month'
+import { CalendarWeek } from './calendar_week'
+import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
+import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 
 export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class Calendar
   implements MerchandiseCalendar {
@@ -17,8 +22,8 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
   months: MerchandiseCalendarMonth[]
   weeks: MerchandiseCalendarWeek[]
   options: MerchandiseCalendarOptions
-  lastDayOfYear: Moment
-  firstDayOfYear: Moment
+  lastDayOfYear: moment.Moment
+  firstDayOfYear: moment.Moment
 
   constructor(calendarOptions: MerchandiseCalendarOptions, year: number) {
     this.year = year
@@ -39,7 +44,7 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
     const currentStart = this.firstDayOfYear
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
-      const weeks = this.weeks.filter((week) => week.monthOfYear == index)
+      const weeks = this.weeks.filter((week) => week.monthOfYear === index)
       const monthStart = moment(currentStart)
       const monthEnd = moment(monthStart)
         .add(numberOfWeeks, 'week')
@@ -85,7 +90,7 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
   }
 
   getMonthAndWeekOfMonthOfRestatedWeek(weekIndex: number): [number, number] {
-    if (weekIndex == -1) {
+    if (weekIndex === -1) {
       return [-1, -1]
     }
     const weekDistribution = this.getWeekDistribution()
@@ -113,14 +118,14 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
   }
 
   getRestatedWeekIndex(weekIndex: number): number {
-    if (this.numberOfWeeks != 53) {
+    if (this.numberOfWeeks !== 53) {
       return weekIndex
     }
 
     if (this.options.restated) {
       // If restated shift all weeks by -1
       return weekIndex - 1
-    } else if (weekIndex == 52) {
+    } else if (weekIndex === 52) {
       // If not restated, move
       return -1
     } else {
@@ -157,114 +162,6 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
         return new LastDayBeforeEOMStrategy()
       case WeekCalculation.LastDayNearestEOM:
         return new LastDayNearestEOMStrategy()
-    }
-  }
-}
-
-class CalendarWeek implements MerchandiseCalendarWeek {
-  weekOfYear: number
-  weekOfMonth: number
-  monthOfYear: number
-  gregorianStartDate: Date
-  gregorianEndDate: Date
-  constructor(
-    weekOfYear: number,
-    weekOfMonth: number,
-    monthOfYear: number,
-    gregorianStartDate: Date,
-    gregorianEndDate: Date,
-  ) {
-    this.weekOfYear = weekOfYear
-    this.weekOfMonth = weekOfMonth
-    this.monthOfYear = monthOfYear
-    this.gregorianStartDate = gregorianStartDate
-    this.gregorianEndDate = gregorianEndDate
-  }
-}
-
-class CalendarMonth implements MerchandiseCalendarMonth {
-  monthOfYear: number
-  numberOfWeeks: number
-  weeks: MerchandiseCalendarWeek[]
-  gregorianStartDate: Date
-  gregorianEndDate: Date
-  constructor(
-    monthOfYear: number,
-    numberOfWeeks: number,
-    weeks: MerchandiseCalendarWeek[],
-    gregorianStartDate: Date,
-    gregorianEndDate: Date,
-  ) {
-    this.monthOfYear = monthOfYear
-    this.numberOfWeeks = numberOfWeeks
-    this.weeks = weeks
-    this.gregorianStartDate = gregorianStartDate
-    this.gregorianEndDate = gregorianEndDate
-  }
-}
-
-interface LastDayStrategy {
-  getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: Moment,
-    isoLastDayOfWeek: number,
-  ): Moment
-}
-
-class LastDayBeforeEOMStrategy implements LastDayStrategy {
-  getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: Moment,
-    lastDayOfIsoWeek: number,
-  ): Moment {
-    const candidate = moment(lastDayOfGregorianYear).isoWeekday(
-      lastDayOfIsoWeek,
-    )
-
-    if (candidate.month() != lastDayOfGregorianYear.month()) {
-      candidate.subtract(1, 'week')
-    }
-    return candidate
-  }
-}
-
-class LastDayNearestEOMStrategy implements LastDayStrategy {
-  getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: Moment,
-    lastDayOfIsoWeek: number,
-  ): Moment {
-    const mutableLastDay = moment(lastDayOfGregorianYear)
-    // Generate 3 candidates which has the same day of week.
-    // Current week, last week, next week
-    const currentWeekCandidate = moment(mutableLastDay).isoWeekday(
-      lastDayOfIsoWeek,
-    )
-
-    const lastWeekCandidate = moment(mutableLastDay)
-      .subtract(1, 'week')
-      .isoWeekday(lastDayOfIsoWeek)
-    const nextWeekCandidate = moment(mutableLastDay)
-      .add(1, 'week')
-      .isoWeekday(lastDayOfIsoWeek)
-
-    // Calculate absolute day differences from each candidate to EOM
-    const currentWeekDiff = Math.abs(
-      mutableLastDay.diff(currentWeekCandidate, 'days'),
-    )
-    const lastWeekDiff = Math.abs(
-      mutableLastDay.diff(lastWeekCandidate, 'days'),
-    )
-    const nextWeekDiff = Math.abs(
-      mutableLastDay.diff(nextWeekCandidate, 'days'),
-    )
-
-    // Find nearest difference
-    const minDiff = Math.min(currentWeekDiff, lastWeekDiff, nextWeekDiff)
-
-    if (minDiff == nextWeekDiff) {
-      return nextWeekCandidate
-    } else if (minDiff == lastWeekDiff) {
-      return lastWeekCandidate
-    } else {
-      return currentWeekCandidate
     }
   }
 }

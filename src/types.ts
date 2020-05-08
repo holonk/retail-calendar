@@ -78,3 +78,10 @@ export interface MerchandiseCalendarMonth {
   gregorianStartDate: Date
   gregorianEndDate: Date
 }
+
+export interface LastDayStrategy {
+  getLastDayForGregorianLastDay(
+    lastDayOfGregorianYear: moment.Moment,
+    isoLastDayOfWeek: number,
+  ): moment.Moment
+}
