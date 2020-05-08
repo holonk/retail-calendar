@@ -2,18 +2,43 @@
   "name": "merchandise-calendar",
   "version": "1.0.0",
   "description": "",
-  "main": "greeter.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --config jestconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "merchandise",
+    "calendar",
+    "retail"
+  ],
+  "author": "cihan@toolio.com",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "ts-jest": "^25.5.0",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "moment": "^2.25.3"
+  },
+  "engines": {
+    "node": "~10.13.0"
+  },
+  "volta": {
+    "node": "10.13.0"
   }
 }
