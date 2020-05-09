@@ -1,4 +1,4 @@
-import { MerchandiseCalendarFactory } from './merchandise_calendar'
+import { RetailCalendarFactory } from './retail_calendar'
 
-export { MerchandiseCalendarFactory }
+export { RetailCalendarFactory }
 export * from './types'

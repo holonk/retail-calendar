@@ -1,10 +1,10 @@
 import moment from 'moment'
 import {
-  MerchandiseCalendar,
-  MerchandiseCalendarConstructor,
-  MerchandiseCalendarMonth,
-  MerchandiseCalendarOptions,
-  MerchandiseCalendarWeek,
+  RetailCalendar,
+  RetailCalendarConstructor,
+  RetailCalendarMonth,
+  RetailCalendarOptions,
+  RetailCalendarWeek,
   WeekCalculation,
   WeekGrouping,
   LastDayStrategy,
@@ -15,17 +15,17 @@ import { CalendarWeek } from './calendar_week'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 
-export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class Calendar
-  implements MerchandiseCalendar {
+export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
+  implements RetailCalendar {
   year: number
   numberOfWeeks: number
-  months: MerchandiseCalendarMonth[]
-  weeks: MerchandiseCalendarWeek[]
-  options: MerchandiseCalendarOptions
+  months: RetailCalendarMonth[]
+  weeks: RetailCalendarWeek[]
+  options: RetailCalendarOptions
   lastDayOfYear: moment.Moment
   firstDayOfYear: moment.Moment
 
-  constructor(calendarOptions: MerchandiseCalendarOptions, year: number) {
+  constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
     this.numberOfWeeks = this.calculateNumberOfWeeks()
@@ -38,7 +38,7 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
     this.months = this.generateMonths()
   }
 
-  generateMonths(): MerchandiseCalendarMonth[] {
+  generateMonths(): RetailCalendarMonth[] {
     const months = []
     let index = 1
     const currentStart = this.firstDayOfYear
@@ -66,7 +66,7 @@ export const MerchandiseCalendarFactory: MerchandiseCalendarConstructor = class 
     return months
   }
 
-  generateWeeks(): MerchandiseCalendarWeek[] {
+  generateWeeks(): RetailCalendarWeek[] {
     const weeks = []
     for (let index = 0; index < this.numberOfWeeks; index++) {
       const restatedWeekIndex = this.getRestatedWeekIndex(index)

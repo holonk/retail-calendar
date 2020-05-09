@@ -1,6 +1,6 @@
-import { MerchandiseCalendarFactory } from '../src/merchandise_calendar'
+import { RetailCalendarFactory } from '../src/retail_calendar'
 import {
-  MerchandiseCalendarOptions,
+  RetailCalendarOptions,
   WeekGrouping,
   LastDayOfWeek,
   LastMonthOfYear,
@@ -12,20 +12,17 @@ import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
 import { nrf2018 } from './data/nrf_2018'
 import moment from 'moment'
 
-describe('MerchandiseCalendar', () => {
+describe('RetailCalendar', () => {
   describe('given NRF calendar options', () => {
     it('numberOfWeeks calculates properly for each year', () => {
       for (const { year, numberOfWeeks } of nrfYears) {
-        const calendar = new MerchandiseCalendarFactory(
-          NRFCalendarOptions,
-          year,
-        )
+        const calendar = new RetailCalendarFactory(NRFCalendarOptions, year)
         expect(calendar.numberOfWeeks).toBe(numberOfWeeks)
       }
     })
 
     it('returns months with correct number of weeks', () => {
-      const calendar = new MerchandiseCalendarFactory(NRFCalendarOptions, 2018)
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
       const months = calendar.months
       const expectedMonthLenthsInWeeks = [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
       expect(months.length).toBe(12)
@@ -35,7 +32,7 @@ describe('MerchandiseCalendar', () => {
     })
 
     it('returns month with correct start and end dates', () => {
-      const calendar = new MerchandiseCalendarFactory(NRFCalendarOptions, 2018)
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
       for (let index = 0; index < 12; index++) {
         const month = calendar.months[index]
         const nrfMonth = nrf2018[index]
@@ -50,7 +47,7 @@ describe('MerchandiseCalendar', () => {
     })
 
     it('returns weeks with corect month', () => {
-      const calendar = new MerchandiseCalendarFactory(NRFCalendarOptions, 2018)
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
       const weeks = calendar.weeks
       // 4, 5, 4 calendar
       const monthOfYearByWeek = [
@@ -74,7 +71,7 @@ describe('MerchandiseCalendar', () => {
     })
 
     it('returns weeks with corect start and end dates', () => {
-      const calendar = new MerchandiseCalendarFactory(NRFCalendarOptions, 2018)
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
       const weeks = calendar.weeks
       expect(weeks[0].gregorianStartDate.getTime()).toEqual(
         moment('2018-02-04').toDate().getTime(),
@@ -94,10 +91,7 @@ describe('MerchandiseCalendar', () => {
     describe('on leap years', () => {
       describe('when restated', () => {
         it('does not assign any months to first week', () => {
-          const calendar = new MerchandiseCalendarFactory(
-            NRFCalendarOptions,
-            2017,
-          )
+          const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2017)
           const firstWeek = calendar.weeks[0]
           expect(firstWeek.monthOfYear).toBe(-1)
           expect(firstWeek.weekOfMonth).toBe(-1)
@@ -111,7 +105,7 @@ describe('MerchandiseCalendar', () => {
 
       describe('when not restated', () => {
         it('does not assign any months to last week', () => {
-          const calendar = new MerchandiseCalendarFactory(
+          const calendar = new RetailCalendarFactory(
             { ...NRFCalendarOptions, restated: false },
             2017,
           )
@@ -133,7 +127,7 @@ describe('MerchandiseCalendar', () => {
 
   describe('given saturday nearest end of month option', () => {
     it('numberOfWeeks calculates properly for each year', () => {
-      const calendarOptions: MerchandiseCalendarOptions = {
+      const calendarOptions: RetailCalendarOptions = {
         weekGrouping: WeekGrouping.Group454,
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.August,
@@ -142,21 +136,21 @@ describe('MerchandiseCalendar', () => {
       }
 
       for (const { year, numberOfWeeks } of lastDayBeforeEOMYears) {
-        const calendar = new MerchandiseCalendarFactory(calendarOptions, year)
+        const calendar = new RetailCalendarFactory(calendarOptions, year)
         expect(calendar.numberOfWeeks).toBe(numberOfWeeks)
       }
     })
 
     describe('given 544 week grouping', () => {
       it('distributes weeks in 5 4 4 per month in each quarter', () => {
-        const calendarOptions: MerchandiseCalendarOptions = {
+        const calendarOptions: RetailCalendarOptions = {
           weekGrouping: WeekGrouping.Group544,
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
           restated: false,
         }
-        const calendar = new MerchandiseCalendarFactory(calendarOptions, 2015)
+        const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
         expect(calendar.months.length).toBe(12)
         expect(calendar.months.map((month) => month.weeks.length)).toEqual(
@@ -167,14 +161,14 @@ describe('MerchandiseCalendar', () => {
 
     describe('given 445 week grouping', () => {
       it('distributes weeks in 4 4 5 per month in each quarter', () => {
-        const calendarOptions: MerchandiseCalendarOptions = {
+        const calendarOptions: RetailCalendarOptions = {
           weekGrouping: WeekGrouping.Group445,
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
           restated: false,
         }
-        const calendar = new MerchandiseCalendarFactory(calendarOptions, 2015)
+        const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
         expect(calendar.months.length).toBe(12)
         expect(calendar.months.map((month) => month.weeks.length)).toEqual(

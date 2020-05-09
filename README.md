@@ -1,4 +1,4 @@
-# Merchandise Calendar
+# Retail Calendar
 
 A configurable merchandising and retail calendar generator.
 For a given year and configuration, generates merchandising calendar along with Gregorian boundaries.
@@ -8,12 +8,12 @@ For a given year and configuration, generates merchandising calendar along with 
 Using npm:
 
 ```shell
- $ npm i --save merchandise-calendar
+ $ npm i --save retail-calendar
 ```
 
 ## Usage:
 
-Instantiate MerchandiseCalendarFactory with preferred options.
+Instantiate RetailCalendarFactory with preferred options.
 
 ```javascript
 const {
@@ -21,10 +21,10 @@ const {
   WeekGrouping,
   LastDayOfWeek,
   LastMonthOfYear,
-  MerchandiseCalendarFactory,
-} = require('merchandise-calendar')
+  RetailCalendarFactory,
+} = require('retail-calendar')
 
-const calendar = new MerchandiseCalendarFactory(
+const calendar = new RetailCalendarFactory(
   {
     weekCalculation: WeekCalculation.LastDayNearestEOM,
     weekGrouping: WeekGrouping.Group454,
@@ -78,7 +78,7 @@ calendar.months[0].gregorianStartDate
 calendar.months[0].gregorianEndDate
 ```
 
-All weeks in a merchandise calendar are also directly accessible.
+All weeks in a retail calendar are also directly accessible.
 Each week also has boundaries available in Gregorian calendar.
 
 ```javascript
@@ -132,19 +132,19 @@ Positive integer from 1 (Monday) to 7 (Sunday). Identifies on which day of week 
 
 #### WeekCalculation
 
-Identifies which method to use when calculating end of the merchandise calendar year.
+Identifies which method to use when calculating end of the retail calendar year.
 
 See [4-4-5 Calendar](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar) article for how both of these methods work.
 
-- WeekCalculation.LastDayNearestEOM: Use the last end of merchandise week, nearest the end of last gregorian month in the year.
+- WeekCalculation.LastDayNearestEOM: Use the last end of retail week, nearest the end of last gregorian month in the year.
 
-- WeekCalculation.LastDayBeforeEOM: Use the last end of merchandise week, before the end of last gregorian month in the year.
+- WeekCalculation.LastDayBeforeEOM: Use the last end of retail week, before the end of last gregorian month in the year.
 
 #### LastMonthOfYear
 
 Specifies the month the year ends. An integer from 0 (January), to 11 (December). Currently last month of retail year is always assumed to be in next calendar year.
 
-For example if last month is January and given year is 2017. The last month of merchandise calendar is January 201
+For example if last month is January and given year is 2017. The last month of retail calendar is January 201
 8
 
 #### WeekGrouping

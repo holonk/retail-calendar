@@ -1,15 +1,15 @@
-import { MerchandiseCalendarMonth, MerchandiseCalendarWeek } from './types'
+import { RetailCalendarMonth, RetailCalendarWeek } from './types'
 
-export class CalendarMonth implements MerchandiseCalendarMonth {
+export class CalendarMonth implements RetailCalendarMonth {
   monthOfYear: number
   numberOfWeeks: number
-  weeks: MerchandiseCalendarWeek[]
+  weeks: RetailCalendarWeek[]
   gregorianStartDate: Date
   gregorianEndDate: Date
   constructor(
     monthOfYear: number,
     numberOfWeeks: number,
-    weeks: MerchandiseCalendarWeek[],
+    weeks: RetailCalendarWeek[],
     gregorianStartDate: Date,
     gregorianEndDate: Date,
   ) {

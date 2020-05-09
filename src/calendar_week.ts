@@ -1,6 +1,6 @@
-import { MerchandiseCalendarWeek } from './types'
+import { RetailCalendarWeek } from './types'
 
-export class CalendarWeek implements MerchandiseCalendarWeek {
+export class CalendarWeek implements RetailCalendarWeek {
   weekOfYear: number
   weekOfMonth: number
   monthOfYear: number

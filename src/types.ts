@@ -31,7 +31,7 @@ export enum WeekCalculation {
   LastDayNearestEOM,
 }
 
-export interface MerchandiseCalendarOptions {
+export interface RetailCalendarOptions {
   weekGrouping: WeekGrouping
   lastDayOfWeek: LastDayOfWeek
   lastMonthOfYear: LastMonthOfYear | number
@@ -43,7 +43,7 @@ export interface MerchandiseCalendarOptions {
   restated: boolean
 }
 
-export const NRFCalendarOptions: MerchandiseCalendarOptions = {
+export const NRFCalendarOptions: RetailCalendarOptions = {
   weekGrouping: WeekGrouping.Group454,
   lastDayOfWeek: LastDayOfWeek.Saturday,
   lastMonthOfYear: LastMonthOfYear.January,
@@ -51,19 +51,19 @@ export const NRFCalendarOptions: MerchandiseCalendarOptions = {
   restated: true,
 }
 
-export type MerchandiseCalendarConstructor = new (
-  calendarOptions: MerchandiseCalendarOptions,
+export type RetailCalendarConstructor = new (
+  calendarOptions: RetailCalendarOptions,
   year: number,
-) => MerchandiseCalendar
+) => RetailCalendar
 
-export interface MerchandiseCalendar {
+export interface RetailCalendar {
   year: number
   numberOfWeeks: number
-  months: MerchandiseCalendarMonth[]
-  weeks: MerchandiseCalendarWeek[]
+  months: RetailCalendarMonth[]
+  weeks: RetailCalendarWeek[]
 }
 
-export interface MerchandiseCalendarWeek {
+export interface RetailCalendarWeek {
   weekOfYear: number
   weekOfMonth: number
   monthOfYear: number
@@ -71,10 +71,10 @@ export interface MerchandiseCalendarWeek {
   gregorianEndDate: Date
 }
 
-export interface MerchandiseCalendarMonth {
+export interface RetailCalendarMonth {
   monthOfYear: number
   numberOfWeeks: number
-  weeks: MerchandiseCalendarWeek[]
+  weeks: RetailCalendarWeek[]
   gregorianStartDate: Date
   gregorianEndDate: Date
 }
