@@ -99,14 +99,14 @@ FIRST week of year is "dropped". It doesn't belong the any month.
 ```javascript
 // Restated calendar example.
 // First week of year has no month.
+// Note that first week's weekOfYear is -1.
 calendar.numberOfWeeks // 53
-calendar.weeks[0].weekOfYear // 0
+calendar.weeks[0].weekOfYear // -1
 calendar.weeks[0].weekOfMonth // -1
 calendar.weeks[0].monthOfYear // -1
 
-// First month starts from 2nd week
-
-calendar.months[0].weeks[0].weekOfYear // 1
+// First month still starts from first week
+calendar.months[0].weeks[0].weekOfYear // 0
 ```
 
 If `restated` is `false`
@@ -116,7 +116,7 @@ LAST week of year is "dropped".
 ```javascript
 // Restated calendar example.
 // First week of year has no month.
-calendar.weeks[52].weekOfYear // 0
+calendar.weeks[52].weekOfYear // -1
 calendar.weeks[52].weekOfMonth // -1
 calendar.weeks[52].monthOfYear // -1
 

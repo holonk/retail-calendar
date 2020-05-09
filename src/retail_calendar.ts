@@ -78,7 +78,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
       weeks.push(
         new CalendarWeek(
-          index,
+          restatedWeekIndex,
           weekOfMonth,
           monthOfYear,
           start.toDate(),

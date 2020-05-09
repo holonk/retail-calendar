@@ -95,14 +95,14 @@ describe('RetailCalendar', () => {
           const firstWeek = calendar.weeks[0]
           expect(firstWeek.monthOfYear).toBe(-1)
           expect(firstWeek.weekOfMonth).toBe(-1)
-          expect(firstWeek.weekOfYear).toBe(0)
+          expect(firstWeek.weekOfYear).toBe(-1)
 
           const secondWeekInYear = calendar.weeks[1]
-          expect(secondWeekInYear.weekOfYear).toBe(1)
+          expect(secondWeekInYear.weekOfYear).toBe(0)
 
           const firstMonth = calendar.months[0]
           expect(firstMonth.weeks[0]).not.toEqual(firstWeek)
-          expect(firstMonth.weeks[0].weekOfYear).toEqual(1)
+          expect(firstMonth.weeks[0].weekOfYear).toEqual(0)
         })
       })
 
@@ -115,7 +115,7 @@ describe('RetailCalendar', () => {
           const lastWeek = calendar.weeks[52]
           expect(lastWeek.monthOfYear).toBe(-1)
           expect(lastWeek.weekOfMonth).toBe(-1)
-          expect(lastWeek.weekOfYear).toBe(52)
+          expect(lastWeek.weekOfYear).toBe(-1)
 
           const firstMonth = calendar.months[0]
           expect(firstMonth.weeks[0].weekOfYear).toEqual(0)
