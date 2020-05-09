@@ -144,8 +144,7 @@ See [4-4-5 Calendar](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calenda
 
 Specifies the month the year ends. An integer from 0 (January), to 11 (December). Currently last month of retail year is always assumed to be in next calendar year.
 
-For example if last month is January and given year is 2017. The last month of retail calendar is January 201
-8
+For example if last month is January and given year is 2017. The last month of retail calendar is January 2018
 
 #### WeekGrouping
 
