@@ -97,6 +97,9 @@ describe('RetailCalendar', () => {
           expect(firstWeek.weekOfMonth).toBe(-1)
           expect(firstWeek.weekOfYear).toBe(0)
 
+          const secondWeekInYear = calendar.weeks[1]
+          expect(secondWeekInYear.weekOfYear).toBe(1)
+
           const firstMonth = calendar.months[0]
           expect(firstMonth.weeks[0]).not.toEqual(firstWeek)
           expect(firstMonth.weeks[0].weekOfYear).toEqual(1)
