@@ -48,6 +48,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     const currentStart = this.firstDayOfYear
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
+      const quarterOfYear = Math.ceil(index / 3)
       const weeks = this.weeks.filter((week) => week.monthOfYear === index)
       const monthStart = moment(currentStart)
       const monthEnd = moment(monthStart)
@@ -57,6 +58,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       months.push(
         new CalendarMonth(
           index,
+          quarterOfYear,
           numberOfWeeks,
           weeks,
           monthStart.toDate(),
@@ -77,6 +79,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       const [
         monthOfYear,
         weekOfMonth,
+        weekOfQuarter,
+        quarterOfYear
       ] = this.getMonthAndWeekOfMonthOfRestatedWeek(restatedWeekIndex)
       const start = moment(this.firstDayOfYear).add(index, 'week')
       const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
@@ -84,7 +88,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         new CalendarWeek(
           restatedWeekIndex,
           weekOfMonth,
+          weekOfQuarter,
           monthOfYear,
+          quarterOfYear,
           start.toDate(),
           end.toDate(),
         ),
@@ -93,21 +99,24 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weeks
   }
 
-  getMonthAndWeekOfMonthOfRestatedWeek(weekIndex: number): [number, number] {
+  getMonthAndWeekOfMonthOfRestatedWeek(weekIndex: number): [number, number, number, number] {
     if (weekIndex === -1) {
-      return [-1, -1]
+      return [-1, -1, -1, -1]
     }
     const weekDistribution = this.getWeekDistribution()
     let monthOfYear = 1
+    let quarterOfYear = 1
     let remainder = weekIndex
+    const weekOfQuarter = weekIndex % 13
     for (const weeksInMonth of weekDistribution) {
       if (remainder < weeksInMonth) {
         break
       }
       remainder -= weeksInMonth
       monthOfYear += 1
+      quarterOfYear = Math.ceil(monthOfYear / 3)
     }
-    return [monthOfYear, remainder]
+    return [monthOfYear, remainder, weekOfQuarter, quarterOfYear]
   }
 
   getWeekDistribution(): number[] {

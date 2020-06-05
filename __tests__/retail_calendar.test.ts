@@ -90,6 +90,30 @@ describe('RetailCalendar', () => {
       )
     })
 
+    it('returns quarters', () => {
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
+      const months = calendar.months
+      const weeks = calendar.weeks
+      expect(months[0].quarterOfYear).toEqual(1)
+      expect(months[1].quarterOfYear).toEqual(1)
+      expect(months[2].quarterOfYear).toEqual(1)
+      expect(months[3].quarterOfYear).toEqual(2)
+      expect(months[4].quarterOfYear).toEqual(2)
+      expect(months[5].quarterOfYear).toEqual(2)
+      expect(months[6].quarterOfYear).toEqual(3)
+      expect(months[7].quarterOfYear).toEqual(3)
+      expect(months[8].quarterOfYear).toEqual(3)
+      expect(months[9].quarterOfYear).toEqual(4)
+      expect(months[10].quarterOfYear).toEqual(4)
+      expect(months[11].quarterOfYear).toEqual(4)
+
+      expect(weeks[0].weekOfQuarter).toEqual(0)
+      expect(weeks[13].weekOfQuarter).toEqual(0)
+      expect(weeks[26].weekOfQuarter).toEqual(0)
+      expect(weeks[39].weekOfQuarter).toEqual(0)
+      expect(weeks[51].weekOfQuarter).toEqual(12)
+    })
+
     describe('on leap years', () => {
       describe('when restated', () => {
         it('does not assign any months to first week', () => {
@@ -98,6 +122,7 @@ describe('RetailCalendar', () => {
           expect(firstWeek.monthOfYear).toBe(-1)
           expect(firstWeek.weekOfMonth).toBe(-1)
           expect(firstWeek.weekOfYear).toBe(-1)
+          expect(firstWeek.weekOfQuarter).toBe(-1)
 
           const secondWeekInYear = calendar.weeks[1]
           expect(secondWeekInYear.weekOfYear).toBe(0)
