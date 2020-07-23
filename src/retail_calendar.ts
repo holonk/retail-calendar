@@ -15,6 +15,7 @@ import { CalendarMonth } from './calendar_month'
 import { CalendarWeek } from './calendar_week'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
+import { FirstBOWOfFirstMonth } from './first_bow_of_first_month'
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
@@ -152,9 +153,16 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateNumberOfWeeks(): any {
-    const lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
-    const lastDayOfLastYear = this.calculateLastDayOfYear(this.calendarYear - 1)
-    return lastDayOfYear.diff(lastDayOfLastYear, 'week')
+    // Make sure we get whole day difference
+    // by measuring from the end of current year to start of last year
+    const lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear).endOf(
+      'day',
+    )
+    const lastDayOfLastYear = this.calculateLastDayOfYear(
+      this.calendarYear - 1,
+    ).startOf('day')
+    const numWeeks = lastDayOfYear.diff(lastDayOfLastYear, 'week')
+    return numWeeks
   }
 
   getWeekCalculationStrategy(
@@ -165,6 +173,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         return new LastDayBeforeEOMStrategy()
       case WeekCalculation.LastDayNearestEOM:
         return new LastDayNearestEOMStrategy()
+      case WeekCalculation.FirstBOWOfFirstMonth:
+        return new FirstBOWOfFirstMonth()
     }
   }
 
