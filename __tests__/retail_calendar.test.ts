@@ -1,3 +1,4 @@
+import { FirstBOWOfFirstMonth } from '../src/first_bow_of_first_month'
 import { RetailCalendarFactory } from '../src/retail_calendar'
 import {
   RetailCalendarOptions,
@@ -10,6 +11,7 @@ import {
 import { nrfYears } from './data/nrf_years'
 import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
 import { nrf2018 } from './data/nrf_2018'
+import { firstBow } from './data/first_bow'
 import moment from 'moment'
 
 describe('RetailCalendar', () => {
@@ -178,6 +180,44 @@ describe('RetailCalendar', () => {
           expectedMonthLenthsInWeeks,
         )
       })
+    })
+  })
+  describe('given December as last month of year', () => {
+    it('the gregorian year ends in December of the given year', () => {
+      const options = {
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        restated: true,
+      }
+      const calendar = new RetailCalendarFactory(options, 2019)
+      expect(calendar.months[11].gregorianStartDate.getFullYear()).toBe(2019)
+    })
+  })
+
+  describe('given first end of week of first month strategy', () => {
+    it('returns month with correct start and end dates', () => {
+      const options = {
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.FirstBOWOfFirstMonth,
+        restated: true,
+      }
+
+      for (const yearData of firstBow) {
+        const calendar = new RetailCalendarFactory(options, yearData.year)
+        for (const month of yearData.months) {
+          const calendarMonth = calendar.months[month.monthOfYear]
+          expect(calendarMonth.gregorianStartDate.getTime()).toEqual(
+            moment(month.start).startOf('day').toDate().getTime(),
+          )
+          expect(calendarMonth.gregorianEndDate.getTime()).toEqual(
+            moment(month.end).endOf('day').toDate().getTime(),
+          )
+        }
+      }
     })
   })
 })

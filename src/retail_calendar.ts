@@ -8,16 +8,19 @@ import {
   WeekCalculation,
   WeekGrouping,
   LastDayStrategy,
+  LastMonthOfYear,
 } from './types'
 
 import { CalendarMonth } from './calendar_month'
 import { CalendarWeek } from './calendar_week'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
+import { FirstBOWOfFirstMonth } from './first_bow_of_first_month'
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
   year: number
+  calendarYear: number
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
@@ -28,8 +31,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
+    this.calendarYear = this.getAdjustedGregorianYear(year)
     this.numberOfWeeks = this.calculateNumberOfWeeks()
-    this.lastDayOfYear = this.calculateLastDayOfYear(this.year + 1)
+    this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = moment(this.lastDayOfYear)
       .subtract(this.numberOfWeeks, 'week')
       .add(1, 'day')
@@ -149,9 +153,16 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateNumberOfWeeks(): any {
-    const lastDayOfYear = this.calculateLastDayOfYear(this.year + 1)
-    const lastDayOfLastYear = this.calculateLastDayOfYear(this.year)
-    return lastDayOfYear.diff(lastDayOfLastYear, 'week')
+    // Make sure we get whole day difference
+    // by measuring from the end of current year to start of last year
+    const lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear).endOf(
+      'day',
+    )
+    const lastDayOfLastYear = this.calculateLastDayOfYear(
+      this.calendarYear - 1,
+    ).startOf('day')
+    const numWeeks = lastDayOfYear.diff(lastDayOfLastYear, 'week')
+    return numWeeks
   }
 
   getWeekCalculationStrategy(
@@ -162,6 +173,16 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         return new LastDayBeforeEOMStrategy()
       case WeekCalculation.LastDayNearestEOM:
         return new LastDayNearestEOMStrategy()
+      case WeekCalculation.FirstBOWOfFirstMonth:
+        return new FirstBOWOfFirstMonth()
+    }
+  }
+
+  getAdjustedGregorianYear(year: number): number {
+    if (this.options.lastMonthOfYear !== LastMonthOfYear.December) {
+      return year + 1
+    } else {
+      return year
     }
   }
 }

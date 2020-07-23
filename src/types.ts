@@ -29,6 +29,7 @@ export enum LastMonthOfYear {
 export enum WeekCalculation {
   LastDayBeforeEOM,
   LastDayNearestEOM,
+  FirstBOWOfFirstMonth,
 }
 
 export interface RetailCalendarOptions {

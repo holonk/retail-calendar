@@ -140,11 +140,14 @@ See [4-4-5 Calendar](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calenda
 
 - WeekCalculation.LastDayBeforeEOM: Use the last end of retail week, before the end of last gregorian month in the year.
 
+- WeekCalculation.FirstBOWOfFirstMonth: Use the first, beginning of week day, of the start month as the start day of year.
+
 #### LastMonthOfYear
 
-Specifies the month the year ends. An integer from 0 (January), to 11 (December). Currently last month of retail year is always assumed to be in next calendar year.
+Specifies the month the year ends. Plan year is the Gregorian year of the first month.
 
 For example if last month is January and given year is 2017. The last month of retail calendar is January 2018
+If last month is December and given year is 2017. The last month of retail calendar is December 2017.
 
 #### WeekGrouping
 
