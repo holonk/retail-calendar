@@ -180,4 +180,17 @@ describe('RetailCalendar', () => {
       })
     })
   })
+  describe('given December as last month of year', () => {
+    it('the gregorian year ends in December of the given year', () => {
+      const options = {
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        restated: true,
+      }
+      const calendar = new RetailCalendarFactory(options, 2019)
+      expect(calendar.months[11].gregorianStartDate.getFullYear()).toBe(2019)
+    })
+  })
 })

@@ -8,6 +8,7 @@ import {
   WeekCalculation,
   WeekGrouping,
   LastDayStrategy,
+  LastMonthOfYear,
 } from './types'
 
 import { CalendarMonth } from './calendar_month'
@@ -18,6 +19,7 @@ import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
   year: number
+  calendarYear: number
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
@@ -28,8 +30,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
+    this.calendarYear = this.getAdjustedGregorianYear(year)
     this.numberOfWeeks = this.calculateNumberOfWeeks()
-    this.lastDayOfYear = this.calculateLastDayOfYear(this.year + 1)
+    this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = moment(this.lastDayOfYear)
       .subtract(this.numberOfWeeks, 'week')
       .add(1, 'day')
@@ -149,8 +152,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateNumberOfWeeks(): any {
-    const lastDayOfYear = this.calculateLastDayOfYear(this.year + 1)
-    const lastDayOfLastYear = this.calculateLastDayOfYear(this.year)
+    const lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
+    const lastDayOfLastYear = this.calculateLastDayOfYear(this.calendarYear - 1)
     return lastDayOfYear.diff(lastDayOfLastYear, 'week')
   }
 
@@ -162,6 +165,14 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         return new LastDayBeforeEOMStrategy()
       case WeekCalculation.LastDayNearestEOM:
         return new LastDayNearestEOMStrategy()
+    }
+  }
+
+  getAdjustedGregorianYear(year: number): number {
+    if (this.options.lastMonthOfYear !== LastMonthOfYear.December) {
+      return year + 1
+    } else {
+      return year
     }
   }
 }
