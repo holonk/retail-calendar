@@ -67,13 +67,16 @@ export interface RetailCalendar {
 export interface RetailCalendarWeek {
   weekOfYear: number
   weekOfMonth: number
+  weekOfQuarter: number
   monthOfYear: number
+  quarterOfYear: number
   gregorianStartDate: Date
   gregorianEndDate: Date
 }
 
 export interface RetailCalendarMonth {
   monthOfYear: number
+  quarterOfYear: number
   numberOfWeeks: number
   weeks: RetailCalendarWeek[]
   gregorianStartDate: Date

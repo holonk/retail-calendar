@@ -50,6 +50,19 @@ calendar.months
 calendar.months[0].monthOfYear // Starts from 1, up to 12
 ```
 
+A retail calendar has **quarter of year** and **week of quarter**
+
+Both Month and Week has quarter information
+```javascript
+calendar.months[0].quarterOfYear // from 1 to 4
+calendar.weeks[0].quarterOfYear // from 1 to 4
+```
+
+The week also has week of quarter:
+```javascript
+calendar.weeks[0].weekOfQuarter
+```
+
 Each month consist of complete weeks. Month boundaries are always at the end of week. End of week is given in `lastDayOfWeek` option. Number of weeks for each month is defined in `weekGrouping` option.
 
 ```javascript
