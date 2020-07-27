@@ -80,7 +80,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         monthOfYear,
         weekOfMonth,
         weekOfQuarter,
-        quarterOfYear
+        quarterOfYear,
       ] = this.getMonthAndWeekOfMonthOfRestatedWeek(restatedWeekIndex)
       const start = moment(this.firstDayOfYear).add(index, 'week')
       const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
@@ -99,7 +99,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weeks
   }
 
-  getMonthAndWeekOfMonthOfRestatedWeek(weekIndex: number): [number, number, number, number] {
+  getMonthAndWeekOfMonthOfRestatedWeek(
+    weekIndex: number,
+  ): [number, number, number, number] {
     if (weekIndex === -1) {
       return [-1, -1, -1, -1]
     }
