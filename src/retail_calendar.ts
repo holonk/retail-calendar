@@ -45,16 +45,12 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   generateMonths(): RetailCalendarMonth[] {
     const months = []
     let index = 1
-    const currentStart = this.firstDayOfYear
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
       const quarterOfYear = Math.ceil(index / 3)
       const weeks = this.weeks.filter((week) => week.monthOfYear === index)
-      const monthStart = moment(currentStart)
-      const monthEnd = moment(monthStart)
-        .add(numberOfWeeks, 'week')
-        .subtract(1, 'day')
-        .endOf('day')
+      const monthStart = moment(weeks[0].gregorianStartDate)
+      const monthEnd = moment(weeks[weeks.length - 1].gregorianEndDate)
       months.push(
         new CalendarMonth(
           index,
@@ -66,7 +62,6 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         ),
       )
       index += 1
-      currentStart.add(numberOfWeeks, 'week')
     }
 
     return months
