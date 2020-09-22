@@ -48,15 +48,19 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
       const quarterOfYear = Math.ceil(index / 3)
-      const weeks = this.weeks.filter((week) => week.monthOfYear === index)
-      const monthStart = moment(weeks[0].gregorianStartDate)
-      const monthEnd = moment(weeks[weeks.length - 1].gregorianEndDate)
+      const weeksOfMonth = this.weeks.filter(
+        (week) => week.monthOfYear === index,
+      )
+      const monthStart = moment(weeksOfMonth[0].gregorianStartDate)
+      const monthEnd = moment(
+        weeksOfMonth[weeksOfMonth.length - 1].gregorianEndDate,
+      )
       months.push(
         new CalendarMonth(
           index,
           quarterOfYear,
           numberOfWeeks,
-          weeks,
+          weeksOfMonth,
           monthStart.toDate(),
           monthEnd.toDate(),
         ),
