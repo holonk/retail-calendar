@@ -60,3 +60,11 @@ export const nrf2018 = [
     end: '2019-02-02',
   },
 ]
+
+export const nrf2017Restated = [
+  {
+    monthOfYear: 0,
+    start: '2017-02-05',
+    end: '2017-03-04',
+  },
+]

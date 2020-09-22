@@ -10,7 +10,7 @@ import {
 } from '../src/types'
 import { nrfYears } from './data/nrf_years'
 import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
-import { nrf2018 } from './data/nrf_2018'
+import { nrf2018, nrf2017Restated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import moment from 'moment'
 
@@ -46,6 +46,19 @@ describe('RetailCalendar', () => {
           moment(nrfMonth.end).endOf('day').toDate().getTime(),
         )
       }
+    })
+
+    it('returns start date and end of first month on leap years', () => {
+      const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2017)
+      const monthIndex = 0
+      const month = calendar.months[monthIndex]
+      const nrfMonth = nrf2017Restated[monthIndex]
+      expect(month.gregorianStartDate.getTime()).toEqual(
+        moment(nrfMonth.start).startOf('day').toDate().getTime(),
+      )
+      expect(month.gregorianEndDate.getTime()).toEqual(
+        moment(nrfMonth.end).endOf('day').toDate().getTime(),
+      )
     })
 
     it('returns weeks with corect month', () => {
