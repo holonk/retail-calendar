@@ -1,7 +1,6 @@
 # Retail Calendar
 
-A configurable merchandising and retail calendar generator.
-For a given year and configuration, generates merchandising calendar along with Gregorian boundaries.
+A configurable merchandising and retail calendar generator. For a given year and configuration, generates merchandising calendar along with Gregorian boundaries. It can be used for generating all calendar types, including NRF 4-5-4 calendar, 4-4-5 calendar or Gregorian calendar.
 
 ## Installation
 
@@ -36,7 +35,7 @@ const calendar = new RetailCalendarFactory(
 )
 ```
 
-A retail calendar either has 52 or 52 weeks.
+A retail calendar either has 52 or 53 weeks.
 
 ```javascript
 calendar.numberOfWeeks
