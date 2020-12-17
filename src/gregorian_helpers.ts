@@ -4,13 +4,13 @@ import { RetailCalendarOptions, WeekOfCalendar } from "./types"
  export function weekOfGregorianDate(date: Date, calendarOptions: RetailCalendarOptions): WeekOfCalendar {
    const year = date.getFullYear()
    const candidateYears = [year -1, year, year + 1]
-   for (let candiateYear of candidateYears) {
+   for (const candiateYear of candidateYears) {
      const calendar = new RetailCalendarFactory(calendarOptions, candiateYear)
-     const week = calendar.weeks.find(week => week.gregorianStartDate <=  date && week.gregorianEndDate >= date)
+     const week = calendar.weeks.find(calendarWeek => calendarWeek.gregorianStartDate <=  date && calendarWeek.gregorianEndDate >= date)
      if (week) {
        return {
-         calendar: calendar,
-         week: week
+         calendar,
+         week
        }
      }
    }
