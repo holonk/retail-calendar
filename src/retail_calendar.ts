@@ -44,10 +44,11 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
   generateMonths(): RetailCalendarMonth[] {
     const months = []
-    let index = this.getBeginningOfMonthIndex()
+    const beginningIndex = this.getBeginningOfMonthIndex()
+    let index = beginningIndex
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
-      const quarterOfYear = Math.ceil(index / 3)
+      const quarterOfYear = Math.floor((index - beginningIndex) / 3) + 1
       const weeksOfMonth = this.weeks.filter(
         (week) => week.monthOfYear === index,
       )
