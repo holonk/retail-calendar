@@ -89,3 +89,8 @@ export interface LastDayStrategy {
     isoLastDayOfWeek: number,
   ): moment.Moment
 }
+
+export type WeekOfCalendar = {
+  calendar: RetailCalendar,
+  week: RetailCalendarWeek
+}
