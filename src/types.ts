@@ -42,6 +42,7 @@ export interface RetailCalendarOptions {
    * If false, 53rd week won't belong to any month in leap year. First week will belong to the first month.
    */
   restated: boolean
+  beginningMonthIndex?: number
 }
 
 export const NRFCalendarOptions: RetailCalendarOptions = {

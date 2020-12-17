@@ -258,4 +258,33 @@ describe('RetailCalendar', () => {
       }
     })
   })
+
+  describe('given beginning month index option', () => {
+    it('returns correct monthOfYear value for each month and week', () => {
+      const calendar = new RetailCalendarFactory({...NRFCalendarOptions, beginningMonthIndex: 0}, 2018)
+      const weeks = calendar.weeks
+      // 4, 5, 4 calendar
+      const monthOfYearByWeek = [
+        ...Array.from({ length: 4 }).fill(0), // First 4 weeks in 1st month
+        ...Array.from({ length: 5 }).fill(1), // Then 5 weeks in 2nd month
+        ...Array.from({ length: 4 }).fill(2), // Then 4 weeks in 3rd month,
+        // this pattern repeats for other quarters
+        ...Array.from({ length: 4 }).fill(3),
+        ...Array.from({ length: 5 }).fill(4),
+        ...Array.from({ length: 4 }).fill(5),
+        ...Array.from({ length: 4 }).fill(6),
+        ...Array.from({ length: 5 }).fill(7),
+        ...Array.from({ length: 4 }).fill(8),
+        ...Array.from({ length: 4 }).fill(9),
+        ...Array.from({ length: 5 }).fill(10),
+        ...Array.from({ length: 4 }).fill(11),
+      ]
+      for (let index = 0; index < weeks.length; index++) {
+        expect(weeks[index].monthOfYear).toBe(monthOfYearByWeek[index])
+      }
+      for (let index = 0; index < calendar.months.length; index++) {
+        expect(calendar.months[index].monthOfYear).toBe(index)
+      }
+    })
+  })
 })
