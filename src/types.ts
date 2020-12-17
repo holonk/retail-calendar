@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export enum WeekGrouping {
   Group445,
   Group544,
@@ -88,4 +90,9 @@ export interface LastDayStrategy {
     lastDayOfGregorianYear: moment.Moment,
     isoLastDayOfWeek: number,
   ): moment.Moment
+}
+
+export type WeekOfCalendar = {
+  calendar: RetailCalendar,
+  week: RetailCalendarWeek
 }
