@@ -92,6 +92,6 @@ export interface LastDayStrategy {
 }
 
 export type WeekOfCalendar = {
-  calendar: RetailCalendar,
+  calendar: RetailCalendar
   week: RetailCalendarWeek
 }
