@@ -286,5 +286,25 @@ describe('RetailCalendar', () => {
         expect(calendar.months[index].monthOfYear).toBe(index)
       }
     })
+
+    it('returns correct quarterOfYear value for each month', () => {
+      const calendar = new RetailCalendarFactory({...NRFCalendarOptions, beginningMonthIndex: 0}, 2018)
+      const months= calendar.months
+      expect(months[0].quarterOfYear).toBe(1)
+      expect(months[1].quarterOfYear).toBe(1)
+      expect(months[2].quarterOfYear).toBe(1)
+
+      expect(months[3].quarterOfYear).toBe(2)
+      expect(months[4].quarterOfYear).toBe(2)
+      expect(months[5].quarterOfYear).toBe(2)
+
+      expect(months[6].quarterOfYear).toBe(3)
+      expect(months[7].quarterOfYear).toBe(3)
+      expect(months[8].quarterOfYear).toBe(3)
+
+      expect(months[9].quarterOfYear).toBe(4)
+      expect(months[10].quarterOfYear).toBe(4)
+      expect(months[11].quarterOfYear).toBe(4)
+    })
   })
 })
