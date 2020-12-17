@@ -44,7 +44,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
   generateMonths(): RetailCalendarMonth[] {
     const months = []
-    let index = 1
+    let index = this.getBeginningOfMonthIndex()
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
       const quarterOfYear = Math.ceil(index / 3)
@@ -105,7 +105,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return [-1, -1, -1, -1]
     }
     const weekDistribution = this.getWeekDistribution()
-    let monthOfYear = 1
+    let monthOfYear = this.getBeginningOfMonthIndex()
     let quarterOfYear = 1
     let remainder = weekIndex
     const weekOfQuarter = weekIndex % 13
@@ -118,6 +118,15 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       quarterOfYear = Math.ceil(monthOfYear / 3)
     }
     return [monthOfYear, remainder, weekOfQuarter, quarterOfYear]
+  }
+
+  getBeginningOfMonthIndex(): number {
+    const optionsIndex = this.options.beginningMonthIndex
+    if (optionsIndex !== undefined && optionsIndex !== null) {
+      return optionsIndex
+    } else {
+      return 1
+    }
   }
 
   getWeekDistribution(): number[] {
