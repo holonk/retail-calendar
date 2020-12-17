@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 export enum WeekGrouping {
   Group445,
   Group544,
