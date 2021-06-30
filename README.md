@@ -101,7 +101,7 @@ calendar.weeks[0].gregorianEndDate // Date
 
 ### 53 week years
 
-Based on given configuration, a year may contain 52 weeks.
+Based on given configuration, a year may contain 53 weeks.
 This complicates comparing months to previous year. This case is handled specially based on given `restated` option. Number
 
 If `restated` is `true`
