@@ -102,7 +102,7 @@ calendar.weeks[0].gregorianEndDate // Date
 ### 53 week years
 
 Based on given configuration, a year may contain 53 weeks.
-This complicates comparing months to previous year. This case is handled specially based on given `restated` option. Number
+This complicates comparing months to previous year. This case is handled specially based on given `restated` option.
 
 If `restated` is `true`
 
@@ -152,6 +152,8 @@ See [4-4-5 Calendar](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calenda
 
 - WeekCalculation.LastDayBeforeEOM: Use the last end of retail week, before the end of last gregorian month in the year.
 
+- WeekCalculation.LastDayBeforeEomExceptLeapYear: Use the last end of retail week, before the end of last gregorian month in the year. If next year is leap year (has 53 weeks), make this year leap year by moving end of this year by 1 week forward.
+
 - WeekCalculation.FirstBOWOfFirstMonth: Use the first, beginning of week day, of the start month as the start day of year.
 
 #### LastMonthOfYear
@@ -174,4 +176,4 @@ Specifies how many weeks each month has in a quarter.
 `boolean`. If true, in leap years, first week is not included in any month.
 Otherwise, in leap years, last week is not included in any month.
 
-Has not effect on 52 week years.
+Has no effect on 52 week years.

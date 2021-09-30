@@ -1,3 +1,5 @@
+import { LastDayBeforeEOMExceptLeapYearStrategy } from '../src/last_day_before_eom_except_leap_year';
+import { LastDayBeforeEOMStrategy } from './../src/last_day_before_eom';
 import { FirstBOWOfFirstMonth } from '../src/first_bow_of_first_month'
 import { RetailCalendarFactory } from '../src/retail_calendar'
 import {
@@ -13,6 +15,9 @@ import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
 import { nrf2018, nrf2017Restated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import moment from 'moment'
+import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
+
+const DayComparisonFormat = 'YYYY-MM-DD'
 
 describe('RetailCalendar', () => {
   describe('given NRF calendar options', () => {
@@ -305,6 +310,39 @@ describe('RetailCalendar', () => {
       expect(months[9].quarterOfYear).toBe(4)
       expect(months[10].quarterOfYear).toBe(4)
       expect(months[11].quarterOfYear).toBe(4)
+    })
+  })
+
+  describe('given "last day nearest end of month except restated" week calculation method', ()=> {
+
+    it('it moves 53rd week to previous year ', ()=> {
+      const options = {
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayBeforeEomExceptLeapYear,
+        restated: false,
+      }
+    
+      for (const yearData of lastDayBeforeEomExceptLeapYear) {
+        const calendar = new RetailCalendarFactory(options, yearData.year)
+        for (const month of yearData.months) {
+          const calendarMonth = calendar.months[month.monthOfYear]
+          expect(moment(calendarMonth.gregorianStartDate).format(DayComparisonFormat))
+            .toEqual(month.start,)
+          expect(moment(calendarMonth.gregorianEndDate).format(DayComparisonFormat)).toEqual(
+            month.end,
+          )
+        }
+        if(yearData.leapWeek) {
+          const leapWeek = calendar.weeks[52]
+          expect(moment(leapWeek.gregorianStartDate).format(DayComparisonFormat))
+            .toEqual(yearData.leapWeek.start)
+          expect(moment(leapWeek.gregorianEndDate).format(DayComparisonFormat))
+            .toEqual(yearData.leapWeek.end)
+        }
+      }
+      
     })
   })
 })
