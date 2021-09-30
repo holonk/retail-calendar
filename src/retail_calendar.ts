@@ -16,6 +16,7 @@ import { CalendarWeek } from './calendar_week'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 import { FirstBOWOfFirstMonth } from './first_bow_of_first_month'
+import { LastDayBeforeEOMExceptLeapYearStrategy } from './last_day_before_eom_except_leap_year'
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
@@ -191,6 +192,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     switch (weekCalculation) {
       case WeekCalculation.LastDayBeforeEOM:
         return new LastDayBeforeEOMStrategy()
+      case WeekCalculation.LastDayBeforeEomExceptLeapYear:
+        return new LastDayBeforeEOMExceptLeapYearStrategy()
       case WeekCalculation.LastDayNearestEOM:
         return new LastDayNearestEOMStrategy()
       case WeekCalculation.FirstBOWOfFirstMonth:
