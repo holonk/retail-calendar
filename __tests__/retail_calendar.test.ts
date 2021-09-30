@@ -329,9 +329,9 @@ describe('RetailCalendar', () => {
         for (const month of yearData.months) {
           const calendarMonth = calendar.months[month.monthOfYear]
           expect(moment(calendarMonth.gregorianStartDate).format(DayComparisonFormat))
-            .toEqual(month.start,)
+            .toEqual(month.start)
           expect(moment(calendarMonth.gregorianEndDate).format(DayComparisonFormat)).toEqual(
-            month.end,
+            month.end
           )
         }
         if(yearData.leapWeek) {
