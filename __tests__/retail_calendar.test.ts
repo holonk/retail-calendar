@@ -315,7 +315,7 @@ describe('RetailCalendar', () => {
 
   describe('given "last day nearest end of month except restated" week calculation method', ()=> {
 
-    it('it moves 53rd week to previous year ', ()=> {
+    it('it moves 53rd week to previous year', ()=> {
       const options = {
         weekGrouping: WeekGrouping.Group445,
         lastDayOfWeek: LastDayOfWeek.Saturday,
