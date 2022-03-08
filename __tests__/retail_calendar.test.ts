@@ -9,6 +9,7 @@ import {
   LastMonthOfYear,
   WeekCalculation,
   NRFCalendarOptions,
+  LeapYearStrategy,
 } from '../src/types'
 import { nrfYears } from './data/nrf_years'
 import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
@@ -154,7 +155,7 @@ describe('RetailCalendar', () => {
       describe('when not restated', () => {
         it('does not assign any months to last week', () => {
           const calendar = new RetailCalendarFactory(
-            { ...NRFCalendarOptions, restated: false },
+            { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropFirstWeek },
             2017,
           )
           const lastWeek = calendar.weeks[52]
@@ -180,7 +181,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.August,
         weekCalculation: WeekCalculation.LastDayBeforeEOM,
-        restated: false,
+        leapYearStrategy: LeapYearStrategy.DropFirstWeek
       }
 
       for (const { year, numberOfWeeks } of lastDayBeforeEOMYears) {
@@ -196,7 +197,7 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          restated: false,
+          leapYearStrategy: LeapYearStrategy.DropFirstWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
@@ -214,7 +215,7 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          restated: false,
+          leapYearStrategy: LeapYearStrategy.DropFirstWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
@@ -232,7 +233,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.LastDayNearestEOM,
-        restated: true,
+        leapYearStrategy: LeapYearStrategy.Restated
       }
       const calendar = new RetailCalendarFactory(options, 2019)
       expect(calendar.months[11].gregorianStartDate.getFullYear()).toBe(2019)
@@ -246,7 +247,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.FirstBOWOfFirstMonth,
-        restated: true,
+        leapYearStrategy: LeapYearStrategy.Restated
       }
 
       for (const yearData of firstBow) {
@@ -321,7 +322,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.LastDayBeforeEomExceptLeapYear,
-        restated: false,
+        leapYearStrategy: LeapYearStrategy.DropFirstWeek
       }
     
       for (const yearData of lastDayBeforeEomExceptLeapYear) {

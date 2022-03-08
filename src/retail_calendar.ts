@@ -9,6 +9,7 @@ import {
   WeekGrouping,
   LastDayStrategy,
   LastMonthOfYear,
+  LeapYearStrategy,
 } from './types'
 
 import { CalendarMonth } from './calendar_month'
@@ -147,7 +148,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return weekIndex
     }
 
-    if (this.options.restated) {
+    if (this.options.leapYearStrategy == LeapYearStrategy.Restated) {
       // If restated shift all weeks by -1
       return weekIndex - 1
     } else if (weekIndex === 52) {

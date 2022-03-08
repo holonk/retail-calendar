@@ -29,7 +29,7 @@ const calendar = new RetailCalendarFactory(
     weekGrouping: WeekGrouping.Group454,
     lastDayOfWeek: LastDayOfWeek.Saturday,
     lastMonthOfYear: LastMonthOfYear.January,
-    restated: false,
+    leapYearStrategy: LeapYearStrategy.DropFirstWeek
   },
   2017,
 )
@@ -102,9 +102,9 @@ calendar.weeks[0].gregorianEndDate // Date
 ### 53 week years
 
 Based on given configuration, a year may contain 53 weeks.
-This complicates comparing months to previous year. This case is handled specially based on given `restated` option.
+This complicates comparing months to previous year. This case is handled specially based on given [LeapYearStrategy](#LeapYearStrategy) option.
 
-If `restated` is `true`
+If `leapYearStrategy` is `LeapYearStrategy.Restated`
 
 FIRST week of year is "dropped". It doesn't belong the any month.
 
@@ -121,7 +121,7 @@ calendar.weeks[0].monthOfYear // -1
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
 
-If `restated` is `false`
+If `leapYearStrategy` is `LeapYearStrategy.DropFirstWeek`
 
 LAST week of year is "dropped".
 
@@ -171,9 +171,13 @@ Specifies how many weeks each month has in a quarter.
 - `WeekGrouping.Group544`: 1st month has 5 weeks, 2nd has 4, 3rd has 4. Repeats for each quarter.
 - `WeekGrouping.Group445`: 1st month has 4 weeks, 2nd has 4, 3rd has 5. Repeats for each quarter.
 
-#### restated
+#### LeapYearStrategy
 
-`boolean`. If true, in leap years, first week is not included in any month.
-Otherwise, in leap years, last week is not included in any month.
+`enum`
 
-Has no effect on 52 week years.
+If the year is a leap year (in the context of a retail calendar that means it has 53 weeks)
+
+* And `LeapYearStrategy.Restated` is selected, the first week is not included in any month.
+* And `LeapYearStrategy.DropFirstWeek` is selected, the last week is not included in any month.
+
+This option has no effect on 52 week years.
