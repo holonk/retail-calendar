@@ -136,6 +136,15 @@ calendar.weeks[52].monthOfYear // -1
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
 
+If `leapYearStrategy` is `LeapYearStrategy.AddToPenultimateMonth`
+
+extra week is "added" to the ELEVENTH month
+
+```javascript
+// AddToPenultimateMonth calendar example for 445 Calendar.
+// 11th Month has 5 weeks instead of 4
+calendar.months[10].weeks.length //5
+```
 ### Options
 
 #### LastDayOfWeek
@@ -179,5 +188,6 @@ If the year is a leap year (in the context of a retail calendar that means it ha
 
 * And `LeapYearStrategy.Restated` is selected, the first week is not included in any month.
 * And `LeapYearStrategy.DropFirstWeek` is selected, the last week is not included in any month.
+* And `LeapYearStrategy.AddToPenultimateMonth` is selected, the extra week is added to the 11th month
 
 This option has no effect on 52 week years.

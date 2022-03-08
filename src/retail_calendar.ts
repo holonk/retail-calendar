@@ -104,23 +104,34 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   getMonthAndWeekOfMonthOfRestatedWeek(
     weekIndex: number,
   ): [number, number, number, number] {
-    if (weekIndex === -1) {
-      return [-1, -1, -1, -1]
-    }
+    
     const weekDistribution = this.getWeekDistribution()
-    let monthOfYear = this.getBeginningOfMonthIndex()
-    let quarterOfYear = 1
-    let remainder = weekIndex
-    const weekOfQuarter = weekIndex % 13
-    for (const weeksInMonth of weekDistribution) {
-      if (remainder < weeksInMonth) {
-        break
+    const monthOffset = this.getBeginningOfMonthIndex()
+
+    let weeksInQuarter = 0;
+    let weekCount = 0;
+    let monthOfYear = 0;
+
+    for(let monthIndex = 0; monthIndex < 12; monthIndex++) {
+      const weeksInMonth = weekDistribution[monthIndex]
+
+      if (monthIndex % 3 === 0)
+        weeksInQuarter = weekDistribution.slice(monthIndex, monthIndex + 3).reduce((a,b) => a + b, 0)
+
+      monthOfYear = monthIndex + monthOffset
+
+      for (let weekInMonth = 0; weekInMonth < weeksInMonth; weekInMonth++) {
+        if(weekIndex === weekCount ) {
+          const weekInQuarter = weekIndex % weeksInQuarter
+          const quarterOfYear = monthIndex % 3
+          return [monthOfYear, weekInMonth, weekInQuarter, quarterOfYear]
+        }
+
+        weekCount++;
       }
-      remainder -= weeksInMonth
-      monthOfYear += 1
-      quarterOfYear = Math.ceil(monthOfYear / 3)
     }
-    return [monthOfYear, remainder, weekOfQuarter, quarterOfYear]
+
+    return [-1, -1, -1, -1]
   }
 
   getBeginningOfMonthIndex(): number {
@@ -133,14 +144,24 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getWeekDistribution(): number[] {
+    let weekDistribution:number[]
+
     switch (this.options.weekGrouping) {
       case WeekGrouping.Group445:
-        return [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
+        weekDistribution = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
+        break;
       case WeekGrouping.Group454:
-        return [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
+        weekDistribution = [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
+        break;
       case WeekGrouping.Group544:
-        return [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
+        weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
+        break;
     }
+
+    if(this.options.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth && this.numberOfWeeks === 53)
+      weekDistribution[10]++
+
+    return weekDistribution;
   }
 
   getRestatedWeekIndex(weekIndex: number): number {
@@ -148,14 +169,13 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return weekIndex
     }
 
-    if (this.options.leapYearStrategy == LeapYearStrategy.Restated) {
-      // If restated shift all weeks by -1
-      return weekIndex - 1
-    } else if (weekIndex === 52) {
-      // If not restated, move
-      return -1
-    } else {
-      return weekIndex
+    switch(this.options.leapYearStrategy) {
+      case LeapYearStrategy.Restated:
+        return weekIndex - 1
+      case LeapYearStrategy.AddToPenultimateMonth:
+        return weekIndex
+      default:
+        return weekIndex === 52 ? -1 : weekIndex
     }
   }
 
