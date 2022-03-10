@@ -77,18 +77,18 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   generateWeeks(): RetailCalendarWeek[] {
     const weeks = []
     for (let index = 0; index < this.numberOfWeeks; index++) {
-      const restatedWeekIndex = this.getRestatedWeekIndex(index)
+      const weekIndex = this.getWeekIndex(index)
       const [
         monthOfYear,
         weekOfMonth,
         weekOfQuarter,
         quarterOfYear,
-      ] = this.getMonthAndWeekOfMonthOfRestatedWeek(restatedWeekIndex)
+      ] = this.getMonthAndWeekOfMonthOfWeek(weekIndex)
       const start = moment(this.firstDayOfYear).add(index, 'week')
       const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
       weeks.push(
         new CalendarWeek(
-          restatedWeekIndex,
+          weekIndex,
           weekOfMonth,
           weekOfQuarter,
           monthOfYear,
@@ -101,7 +101,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weeks
   }
 
-  getMonthAndWeekOfMonthOfRestatedWeek(
+  getMonthAndWeekOfMonthOfWeek(
     weekIndex: number,
   ): [number, number, number, number] {
     
@@ -164,7 +164,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weekDistribution;
   }
 
-  getRestatedWeekIndex(weekIndex: number): number {
+  getWeekIndex(weekIndex: number): number {
     if (this.numberOfWeeks !== 53) {
       return weekIndex
     }
