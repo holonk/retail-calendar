@@ -35,7 +35,7 @@ export enum WeekCalculation {
 
 export enum LeapYearStrategy {
   Restated,
-  DropFirstWeek,
+  DropLastWeek,
   AddToPenultimateMonth,
 }
 
@@ -46,7 +46,7 @@ export interface RetailCalendarOptions {
   weekCalculation: WeekCalculation
   /**
    * If LeapYearStrategy.Restated, 53rd week will belong to last month in year. First week won't belong to any month.
-   * If LeapYearStrategy.DropFirstWeek, 53rd week won't belong to any month in year. First week will belong to the first month.
+   * If LeapYearStrategy.DropLastWeek, 53rd week won't belong to any month in year. First week will belong to the first month.
    * Note: restated: true is a deprecated option that is replaced by LeapYearStrategy.Restated
    */
   leapYearStrategy?: LeapYearStrategy

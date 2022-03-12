@@ -29,7 +29,7 @@ const calendar = new RetailCalendarFactory(
     weekGrouping: WeekGrouping.Group454,
     lastDayOfWeek: LastDayOfWeek.Saturday,
     lastMonthOfYear: LastMonthOfYear.January,
-    leapYearStrategy: LeapYearStrategy.DropFirstWeek // deprecated: restated: false
+    leapYearStrategy: LeapYearStrategy.DropLastWeek // deprecated: restated: false
   },
   2017,
 )
@@ -125,9 +125,9 @@ calendar.months[0].weeks[0].weekOfYear // 0
 
 ⚠ *previous versions of this library used the `restated: true` option to specify a Restated leap year strategy. This still works but is deprecated!* ⚠
 
-#### Drop First Week
+#### Drop Last Week
 
-If `leapYearStrategy` is `LeapYearStrategy.DropFirstWeek`
+If `leapYearStrategy` is `LeapYearStrategy.DropLastWeek`
 
 LAST week of year is "dropped".
 
@@ -141,7 +141,7 @@ calendar.weeks[52].monthOfYear // -1
 // First month starts from 1st week
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
-⚠ *previous versions of this library used the `restated: false` option to specify a "Drop First Week" leap year strategy. This still works but is deprecated!* ⚠
+⚠ *previous versions of this library used the `restated: false` option to specify a "Drop Last Week" leap year strategy. This still works but is deprecated!* ⚠
 
 #### Add to Penultimate Month
 
@@ -196,7 +196,7 @@ Specifies how many weeks each month has in a quarter.
 If the year is a leap year (in the context of a retail calendar that means it has 53 weeks)
 
 * And `LeapYearStrategy.Restated` is selected, the first week is not included in any month.
-* And `LeapYearStrategy.DropFirstWeek` is selected, the last week is not included in any month.
+* And `LeapYearStrategy.DropLastWeek` is selected, the last week is not included in any month.
 * And `LeapYearStrategy.AddToPenultimateMonth` is selected, the extra week is added to the 11th month
 
 This option has no effect on 52 week years.
