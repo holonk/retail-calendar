@@ -35,6 +35,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
+    this.leapYearStrategy = this.getLeapYearStrategy()
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = moment(this.lastDayOfYear)
@@ -43,7 +44,6 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       .startOf('day')
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
-    this.leapYearStrategy = this.getLeapYearStrategy()
   }
 
   getLeapYearStrategy() {
