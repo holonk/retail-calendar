@@ -9,6 +9,7 @@ import {
   WeekGrouping,
   LastDayStrategy,
   LastMonthOfYear,
+  LeapYearStrategy,
 } from './types'
 
 import { CalendarMonth } from './calendar_month'
@@ -28,11 +29,13 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   options: RetailCalendarOptions
   lastDayOfYear: moment.Moment
   firstDayOfYear: moment.Moment
+  leapYearStrategy: LeapYearStrategy;
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
+    this.leapYearStrategy = this.getLeapYearStrategy()
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = moment(this.lastDayOfYear)
@@ -41,6 +44,31 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       .startOf('day')
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
+  }
+
+  getLeapYearStrategy() {
+    if(this.options.restated === undefined && this.options.leapYearStrategy === undefined) {
+      throw(new Error("One of leapYearStrategy or restated options are required"))
+    }
+
+    if (this.options.restated !== undefined) {
+      // tslint:disable-next-line:no-console
+      console.warn('restated option is deprecated. Please use leapYearStrategy instead')
+    }
+
+    if(this.options.restated !== undefined && this.options.leapYearStrategy !== undefined) {
+      throw(new Error("Only one of leapYearStrategy or restated options can be given"))
+    }
+
+    if(this.options.restated !== undefined && this.options.restated === true) {
+      return LeapYearStrategy.Restated
+    }
+
+    if (this.options.leapYearStrategy !== undefined) {
+      return this.options.leapYearStrategy
+    }
+
+    return LeapYearStrategy.DropFirstWeek
   }
 
   generateMonths(): RetailCalendarMonth[] {
@@ -76,18 +104,18 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   generateWeeks(): RetailCalendarWeek[] {
     const weeks = []
     for (let index = 0; index < this.numberOfWeeks; index++) {
-      const restatedWeekIndex = this.getRestatedWeekIndex(index)
+      const weekIndex = this.getWeekIndex(index)
       const [
         monthOfYear,
         weekOfMonth,
         weekOfQuarter,
         quarterOfYear,
-      ] = this.getMonthAndWeekOfMonthOfRestatedWeek(restatedWeekIndex)
+      ] = this.getMonthAndWeekOfMonthOfWeek(weekIndex)
       const start = moment(this.firstDayOfYear).add(index, 'week')
       const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
       weeks.push(
         new CalendarWeek(
-          restatedWeekIndex,
+          weekIndex,
           weekOfMonth,
           weekOfQuarter,
           monthOfYear,
@@ -100,26 +128,37 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weeks
   }
 
-  getMonthAndWeekOfMonthOfRestatedWeek(
+  getMonthAndWeekOfMonthOfWeek(
     weekIndex: number,
   ): [number, number, number, number] {
-    if (weekIndex === -1) {
-      return [-1, -1, -1, -1]
-    }
+    
     const weekDistribution = this.getWeekDistribution()
-    let monthOfYear = this.getBeginningOfMonthIndex()
-    let quarterOfYear = 1
-    let remainder = weekIndex
-    const weekOfQuarter = weekIndex % 13
-    for (const weeksInMonth of weekDistribution) {
-      if (remainder < weeksInMonth) {
-        break
+    const monthOffset = this.getBeginningOfMonthIndex()
+
+    let weeksInQuarter = 0;
+    let weekCount = 0;
+    let monthOfYear = 0;
+
+    for(let monthIndex = 0; monthIndex < 12; monthIndex++) {
+      const weeksInMonth = weekDistribution[monthIndex]
+
+      if (monthIndex % 3 === 0)
+        weeksInQuarter = weekDistribution.slice(monthIndex, monthIndex + 3).reduce((a,b) => a + b, 0)
+
+      monthOfYear = monthIndex + monthOffset
+
+      for (let weekInMonth = 0; weekInMonth < weeksInMonth; weekInMonth++) {
+        if(weekIndex === weekCount ) {
+          const weekInQuarter = weekIndex % weeksInQuarter
+          const quarterOfYear = monthIndex % 3
+          return [monthOfYear, weekInMonth, weekInQuarter, quarterOfYear]
+        }
+
+        weekCount++;
       }
-      remainder -= weeksInMonth
-      monthOfYear += 1
-      quarterOfYear = Math.ceil(monthOfYear / 3)
     }
-    return [monthOfYear, remainder, weekOfQuarter, quarterOfYear]
+
+    return [-1, -1, -1, -1]
   }
 
   getBeginningOfMonthIndex(): number {
@@ -132,29 +171,38 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getWeekDistribution(): number[] {
+    let weekDistribution:number[]
+
     switch (this.options.weekGrouping) {
       case WeekGrouping.Group445:
-        return [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
+        weekDistribution = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
+        break;
       case WeekGrouping.Group454:
-        return [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
+        weekDistribution = [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
+        break;
       case WeekGrouping.Group544:
-        return [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
+        weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
+        break;
     }
+
+    if(this.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth && this.numberOfWeeks === 53)
+      weekDistribution[10]++
+
+    return weekDistribution;
   }
 
-  getRestatedWeekIndex(weekIndex: number): number {
+  getWeekIndex(weekIndex: number): number {
     if (this.numberOfWeeks !== 53) {
       return weekIndex
     }
 
-    if (this.options.restated) {
-      // If restated shift all weeks by -1
-      return weekIndex - 1
-    } else if (weekIndex === 52) {
-      // If not restated, move
-      return -1
-    } else {
-      return weekIndex
+    switch(this.leapYearStrategy) {
+      case LeapYearStrategy.Restated:
+        return weekIndex - 1
+      case LeapYearStrategy.AddToPenultimateMonth:
+        return weekIndex
+      default:
+        return weekIndex === 52 ? -1 : weekIndex
     }
   }
 

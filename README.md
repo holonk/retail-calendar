@@ -29,7 +29,7 @@ const calendar = new RetailCalendarFactory(
     weekGrouping: WeekGrouping.Group454,
     lastDayOfWeek: LastDayOfWeek.Saturday,
     lastMonthOfYear: LastMonthOfYear.January,
-    restated: false,
+    leapYearStrategy: LeapYearStrategy.DropFirstWeek // deprecated: restated: false
   },
   2017,
 )
@@ -102,9 +102,11 @@ calendar.weeks[0].gregorianEndDate // Date
 ### 53 week years
 
 Based on given configuration, a year may contain 53 weeks.
-This complicates comparing months to previous year. This case is handled specially based on given `restated` option.
+This complicates comparing months to previous year. This case is handled specially based on the given [LeapYearStrategy](#LeapYearStrategy) option.
 
-If `restated` is `true`
+#### Restated
+
+If `leapYearStrategy` is `LeapYearStrategy.Restated` 
 
 FIRST week of year is "dropped". It doesn't belong the any month.
 
@@ -121,7 +123,11 @@ calendar.weeks[0].monthOfYear // -1
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
 
-If `restated` is `false`
+⚠ *previous versions of this library used the `restated: true` option to specify a Restated leap year strategy. This still works but is deprecated!* ⚠
+
+#### Drop First Week
+
+If `leapYearStrategy` is `LeapYearStrategy.DropFirstWeek`
 
 LAST week of year is "dropped".
 
@@ -135,7 +141,19 @@ calendar.weeks[52].monthOfYear // -1
 // First month starts from 1st week
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
+⚠ *previous versions of this library used the `restated: false` option to specify a "Drop First Week" leap year strategy. This still works but is deprecated!* ⚠
 
+#### Add to Penultimate Month
+
+If `leapYearStrategy` is `LeapYearStrategy.AddToPenultimateMonth`
+
+extra week is "added" to the ELEVENTH month
+
+```javascript
+// AddToPenultimateMonth calendar example for 445 Calendar.
+// 11th Month has 5 weeks instead of 4
+calendar.months[10].weeks.length //5
+```
 ### Options
 
 #### LastDayOfWeek
@@ -171,9 +189,21 @@ Specifies how many weeks each month has in a quarter.
 - `WeekGrouping.Group544`: 1st month has 5 weeks, 2nd has 4, 3rd has 4. Repeats for each quarter.
 - `WeekGrouping.Group445`: 1st month has 4 weeks, 2nd has 4, 3rd has 5. Repeats for each quarter.
 
-#### restated
+#### LeapYearStrategy
 
-`boolean`. If true, in leap years, first week is not included in any month.
-Otherwise, in leap years, last week is not included in any month.
+`enum`
+
+If the year is a leap year (in the context of a retail calendar that means it has 53 weeks)
+
+* And `LeapYearStrategy.Restated` is selected, the first week is not included in any month.
+* And `LeapYearStrategy.DropFirstWeek` is selected, the last week is not included in any month.
+* And `LeapYearStrategy.AddToPenultimateMonth` is selected, the extra week is added to the 11th month
+
+This option has no effect on 52 week years.
+
+### restated [Deprecated]
+⚠ *This option has been superseded by [LeapYearStrategy](#LeapYearStrategy)* ⚠
+
+`boolean`. If true, in leap years, first week is not included in any month. Otherwise, in leap years, last week is not included in any month.
 
 Has no effect on 52 week years.
