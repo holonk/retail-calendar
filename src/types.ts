@@ -50,6 +50,7 @@ export interface RetailCalendarOptions {
    * Note: restated: true is a deprecated option that is replaced by LeapYearStrategy.Restated
    */
   leapYearStrategy?: LeapYearStrategy
+   /** @deprecated use leapYearStrategy field instead */
   restated?: boolean
   beginningMonthIndex?: number
 }
