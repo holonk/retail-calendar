@@ -36,7 +36,7 @@ export enum WeekCalculation {
 export enum LeapYearStrategy {
   Restated,
   DropFirstWeek,
-  AddToPenultimateMonth
+  AddToPenultimateMonth,
 }
 
 export interface RetailCalendarOptions {
@@ -50,7 +50,7 @@ export interface RetailCalendarOptions {
    * Note: restated: true is a deprecated option that is replaced by LeapYearStrategy.Restated
    */
   leapYearStrategy?: LeapYearStrategy
-   /** @deprecated use leapYearStrategy field instead */
+  /** @deprecated use leapYearStrategy field instead */
   restated?: boolean
   beginningMonthIndex?: number
 }
@@ -60,7 +60,7 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
   lastDayOfWeek: LastDayOfWeek.Saturday,
   lastMonthOfYear: LastMonthOfYear.January,
   weekCalculation: WeekCalculation.LastDayNearestEOM,
-  leapYearStrategy: LeapYearStrategy.Restated 
+  leapYearStrategy: LeapYearStrategy.Restated,
 }
 
 export type RetailCalendarConstructor = new (

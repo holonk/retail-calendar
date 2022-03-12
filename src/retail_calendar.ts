@@ -29,7 +29,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   options: RetailCalendarOptions
   lastDayOfYear: moment.Moment
   firstDayOfYear: moment.Moment
-  leapYearStrategy: LeapYearStrategy;
+  leapYearStrategy: LeapYearStrategy
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
@@ -47,20 +47,32 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getLeapYearStrategy() {
-    if(this.options.restated === undefined && this.options.leapYearStrategy === undefined) {
-      throw(new Error("One of leapYearStrategy or restated options are required"))
+    if (
+      this.options.restated === undefined &&
+      this.options.leapYearStrategy === undefined
+    ) {
+      throw new Error(
+        'One of leapYearStrategy or restated options are required',
+      )
     }
 
     if (this.options.restated !== undefined) {
       // tslint:disable-next-line:no-console
-      console.warn('restated option is deprecated. Please use leapYearStrategy instead')
+      console.warn(
+        'restated option is deprecated. Please use leapYearStrategy instead',
+      )
     }
 
-    if(this.options.restated !== undefined && this.options.leapYearStrategy !== undefined) {
-      throw(new Error("Only one of leapYearStrategy or restated options can be given"))
+    if (
+      this.options.restated !== undefined &&
+      this.options.leapYearStrategy !== undefined
+    ) {
+      throw new Error(
+        'Only one of leapYearStrategy or restated options can be given',
+      )
     }
 
-    if(this.options.restated !== undefined && this.options.restated === true) {
+    if (this.options.restated !== undefined && this.options.restated === true) {
       return LeapYearStrategy.Restated
     }
 
@@ -131,30 +143,31 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   getMonthAndWeekOfMonthOfWeek(
     weekIndex: number,
   ): [number, number, number, number] {
-    
     const weekDistribution = this.getWeekDistribution()
     const monthOffset = this.getBeginningOfMonthIndex()
 
-    let weeksInQuarter = 0;
-    let weekCount = 0;
-    let monthOfYear = 0;
+    let weeksInQuarter = 0
+    let weekCount = 0
+    let monthOfYear = 0
 
-    for(let monthIndex = 0; monthIndex < 12; monthIndex++) {
+    for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       const weeksInMonth = weekDistribution[monthIndex]
 
       if (monthIndex % 3 === 0)
-        weeksInQuarter = weekDistribution.slice(monthIndex, monthIndex + 3).reduce((a,b) => a + b, 0)
+        weeksInQuarter = weekDistribution
+          .slice(monthIndex, monthIndex + 3)
+          .reduce((a, b) => a + b, 0)
 
       monthOfYear = monthIndex + monthOffset
 
       for (let weekInMonth = 0; weekInMonth < weeksInMonth; weekInMonth++) {
-        if(weekIndex === weekCount ) {
+        if (weekIndex === weekCount) {
           const weekInQuarter = weekIndex % weeksInQuarter
           const quarterOfYear = monthIndex % 3
           return [monthOfYear, weekInMonth, weekInQuarter, quarterOfYear]
         }
 
-        weekCount++;
+        weekCount++
       }
     }
 
@@ -171,24 +184,27 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getWeekDistribution(): number[] {
-    let weekDistribution:number[]
+    let weekDistribution: number[]
 
     switch (this.options.weekGrouping) {
       case WeekGrouping.Group445:
         weekDistribution = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
-        break;
+        break
       case WeekGrouping.Group454:
         weekDistribution = [4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4]
-        break;
+        break
       case WeekGrouping.Group544:
         weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
-        break;
+        break
     }
 
-    if(this.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth && this.numberOfWeeks === 53)
+    if (
+      this.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth &&
+      this.numberOfWeeks === 53
+    )
       weekDistribution[10]++
 
-    return weekDistribution;
+    return weekDistribution
   }
 
   getWeekIndex(weekIndex: number): number {
@@ -196,7 +212,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return weekIndex
     }
 
-    switch(this.leapYearStrategy) {
+    switch (this.leapYearStrategy) {
       case LeapYearStrategy.Restated:
         return weekIndex - 1
       case LeapYearStrategy.AddToPenultimateMonth:
