@@ -185,7 +185,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         break;
     }
 
-    if(this.options.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth && this.numberOfWeeks === 53)
+    if(this.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth && this.numberOfWeeks === 53)
       weekDistribution[10]++
 
     return weekDistribution;
@@ -196,7 +196,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return weekIndex
     }
 
-    switch(this.options.leapYearStrategy) {
+    switch(this.leapYearStrategy) {
       case LeapYearStrategy.Restated:
         return weekIndex - 1
       case LeapYearStrategy.AddToPenultimateMonth:
