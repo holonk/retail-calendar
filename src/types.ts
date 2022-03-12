@@ -47,8 +47,10 @@ export interface RetailCalendarOptions {
   /**
    * If LeapYearStrategy.Restated, 53rd week will belong to last month in year. First week won't belong to any month.
    * If LeapYearStrategy.DropFirstWeek, 53rd week won't belong to any month in year. First week will belong to the first month.
+   * Note: restated: true is a deprecated option that is replaced by LeapYearStrategy.Restated
    */
-  leapYearStrategy: LeapYearStrategy
+  leapYearStrategy?: LeapYearStrategy
+  restated?: boolean
   beginningMonthIndex?: number
 }
 
@@ -66,6 +68,7 @@ export type RetailCalendarConstructor = new (
 ) => RetailCalendar
 
 export interface RetailCalendar {
+  leapYearStrategy: LeapYearStrategy
   year: number
   numberOfWeeks: number
   months: RetailCalendarMonth[]

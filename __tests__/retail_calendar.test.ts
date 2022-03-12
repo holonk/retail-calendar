@@ -22,6 +22,71 @@ import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_excep
 const DayComparisonFormat = 'YYYY-MM-DD'
 
 describe('RetailCalendar', () => {
+  describe("leap year strategy options", () => {
+
+    describe('when neither restated nor leapYearStrategy is provided', () => {
+      it('throws an error', () => {
+        expect(() => {
+          new RetailCalendarFactory({
+            weekGrouping: WeekGrouping.Group454,
+            lastDayOfWeek: LastDayOfWeek.Saturday,
+            lastMonthOfYear: LastMonthOfYear.January,
+            weekCalculation: WeekCalculation.LastDayNearestEOM,
+          }, 2018)
+        }).toThrowError(/leapYearStrategy or restated/)
+      })
+    })
+
+    describe("when restated is provided and its true", () => {
+      it("emits a warning", () => {
+        jest.spyOn(console, 'warn').mockImplementation()
+        const retailCalendar = new RetailCalendarFactory({
+          weekGrouping: WeekGrouping.Group454,
+          lastDayOfWeek: LastDayOfWeek.Saturday,
+          lastMonthOfYear: LastMonthOfYear.January,
+          weekCalculation: WeekCalculation.LastDayNearestEOM, 
+          restated: true
+        }, 2017)
+
+        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.Restated)
+        expect(console.warn).toHaveBeenCalledWith("restated option is deprecated. Please use leapYearStrategy instead")
+      })
+    })
+
+    describe("when restated is provided and its false", () => {
+      it("emits a warning", () => {
+        jest.spyOn(console, 'warn').mockImplementation()
+        const retailCalendar = new RetailCalendarFactory({
+          weekGrouping: WeekGrouping.Group454,
+          lastDayOfWeek: LastDayOfWeek.Saturday,
+          lastMonthOfYear: LastMonthOfYear.January,
+          weekCalculation: WeekCalculation.LastDayNearestEOM,
+          restated: false
+        }, 2017)
+
+        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.DropFirstWeek)
+        expect(console.warn).toHaveBeenCalledWith("restated option is deprecated. Please use leapYearStrategy instead")
+      })
+    })
+
+    describe("when restated and leapYearStrategy are provided", () => {
+      it('throws an erorr', () => {
+        expect(() => {
+          jest.spyOn(console, 'warn').mockImplementation()
+          const retailCalendar = new RetailCalendarFactory({
+            weekGrouping: WeekGrouping.Group454,
+            lastDayOfWeek: LastDayOfWeek.Saturday,
+            lastMonthOfYear: LastMonthOfYear.January,
+            weekCalculation: WeekCalculation.LastDayNearestEOM,
+            leapYearStrategy: LeapYearStrategy.Restated,
+            restated: false
+          }, 2017)
+        }).toThrowError(/Only one of leapYearStrategy or restated options can be given/)
+      })
+
+    })
+  })
+
   describe('given NRF calendar options', () => {
     it('numberOfWeeks calculates properly for each year', () => {
       for (const { year, numberOfWeeks } of nrfYears) {

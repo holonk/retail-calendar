@@ -29,7 +29,7 @@ const calendar = new RetailCalendarFactory(
     weekGrouping: WeekGrouping.Group454,
     lastDayOfWeek: LastDayOfWeek.Saturday,
     lastMonthOfYear: LastMonthOfYear.January,
-    leapYearStrategy: LeapYearStrategy.DropFirstWeek
+    leapYearStrategy: LeapYearStrategy.DropFirstWeek // deprecated: restated: false
   },
   2017,
 )
@@ -102,9 +102,11 @@ calendar.weeks[0].gregorianEndDate // Date
 ### 53 week years
 
 Based on given configuration, a year may contain 53 weeks.
-This complicates comparing months to previous year. This case is handled specially based on given [LeapYearStrategy](#LeapYearStrategy) option.
+This complicates comparing months to previous year. This case is handled specially based on the given [LeapYearStrategy](#LeapYearStrategy) option.
 
-If `leapYearStrategy` is `LeapYearStrategy.Restated`
+#### Restated
+
+If `leapYearStrategy` is `LeapYearStrategy.Restated` 
 
 FIRST week of year is "dropped". It doesn't belong the any month.
 
@@ -121,6 +123,10 @@ calendar.weeks[0].monthOfYear // -1
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
 
+⚠ *previous versions of this library used the `restated: true` option to specify a Restated leap year strategy. This still works but is deprecated!* ⚠
+
+#### Drop First Week
+
 If `leapYearStrategy` is `LeapYearStrategy.DropFirstWeek`
 
 LAST week of year is "dropped".
@@ -135,6 +141,9 @@ calendar.weeks[52].monthOfYear // -1
 // First month starts from 1st week
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
+⚠ *previous versions of this library used the `restated: false` option to specify a "Drop First Week" leap year strategy. This still works but is deprecated!* ⚠
+
+#### Add to Penultimate Month
 
 If `leapYearStrategy` is `LeapYearStrategy.AddToPenultimateMonth`
 
@@ -191,3 +200,10 @@ If the year is a leap year (in the context of a retail calendar that means it ha
 * And `LeapYearStrategy.AddToPenultimateMonth` is selected, the extra week is added to the 11th month
 
 This option has no effect on 52 week years.
+
+### restated [Deprecated]
+⚠ *This option has been superseded by [LeapYearStrategy](#LeapYearStrategy)* ⚠
+
+`boolean`. If true, in leap years, first week is not included in any month. Otherwise, in leap years, last week is not included in any month.
+
+Has no effect on 52 week years.

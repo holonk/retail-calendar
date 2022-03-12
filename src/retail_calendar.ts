@@ -29,6 +29,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   options: RetailCalendarOptions
   lastDayOfYear: moment.Moment
   firstDayOfYear: moment.Moment
+  leapYearStrategy: LeapYearStrategy;
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
@@ -42,6 +43,32 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       .startOf('day')
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
+    this.leapYearStrategy = this.getLeapYearStrategy()
+  }
+
+  getLeapYearStrategy() {
+    if(this.options.restated === undefined && this.options.leapYearStrategy === undefined) {
+      throw(new Error("One of leapYearStrategy or restated options are required"))
+    }
+
+    if (this.options.restated !== undefined) {
+      // tslint:disable-next-line:no-console
+      console.warn('restated option is deprecated. Please use leapYearStrategy instead')
+    }
+
+    if(this.options.restated !== undefined && this.options.leapYearStrategy !== undefined) {
+      throw(new Error("Only one of leapYearStrategy or restated options can be given"))
+    }
+
+    if(this.options.restated !== undefined && this.options.restated === true) {
+      return LeapYearStrategy.Restated
+    }
+
+    if (this.options.leapYearStrategy !== undefined) {
+      return this.options.leapYearStrategy
+    }
+
+    return LeapYearStrategy.DropFirstWeek
   }
 
   generateMonths(): RetailCalendarMonth[] {
