@@ -64,7 +64,7 @@ describe('RetailCalendar', () => {
           restated: false
         }, 2017)
 
-        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.DropFirstWeek)
+        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.DropLastWeek)
         expect(console.warn).toHaveBeenCalledWith("restated option is deprecated. Please use leapYearStrategy instead")
       })
     })
@@ -258,7 +258,7 @@ describe('RetailCalendar', () => {
       describe('when not restated', () => {
         it('does not assign any months to last week', () => {
           const calendar = new RetailCalendarFactory(
-            { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropFirstWeek },
+            { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropLastWeek },
             2017,
           )
           const lastWeek = calendar.weeks[52]
@@ -284,7 +284,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.August,
         weekCalculation: WeekCalculation.LastDayBeforeEOM,
-        leapYearStrategy: LeapYearStrategy.DropFirstWeek
+        leapYearStrategy: LeapYearStrategy.DropLastWeek
       }
 
       for (const { year, numberOfWeeks } of lastDayBeforeEOMYears) {
@@ -300,7 +300,7 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          leapYearStrategy: LeapYearStrategy.DropFirstWeek
+          leapYearStrategy: LeapYearStrategy.DropLastWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
@@ -318,7 +318,7 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          leapYearStrategy: LeapYearStrategy.DropFirstWeek
+          leapYearStrategy: LeapYearStrategy.DropLastWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
@@ -425,7 +425,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.LastDayBeforeEomExceptLeapYear,
-        leapYearStrategy: LeapYearStrategy.DropFirstWeek
+        leapYearStrategy: LeapYearStrategy.DropLastWeek
       }
     
       for (const yearData of lastDayBeforeEomExceptLeapYear) {

@@ -80,7 +80,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return this.options.leapYearStrategy
     }
 
-    return LeapYearStrategy.DropFirstWeek
+    return LeapYearStrategy.DropLastWeek
   }
 
   generateMonths(): RetailCalendarMonth[] {
