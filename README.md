@@ -201,7 +201,7 @@ If the year is a leap year (in the context of a retail calendar that means it ha
 
 This option has no effect on 52 week years.
 
-### restated [Deprecated]
+#### restated [Deprecated]
 ⚠ *This option has been superseded by [LeapYearStrategy](#LeapYearStrategy)* ⚠
 
 `boolean`. If true, in leap years, first week is not included in any month. Otherwise, in leap years, last week is not included in any month.
