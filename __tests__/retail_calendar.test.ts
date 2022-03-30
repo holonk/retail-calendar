@@ -18,6 +18,7 @@ import { nrf2018, nrf2017Restated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import moment from 'moment'
 import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
+import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
 
 const DayComparisonFormat = 'YYYY-MM-DD'
 
@@ -86,6 +87,24 @@ describe('RetailCalendar', () => {
 
     })
   })
+
+describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
+    it('returns the right data for each week of 2022', () => {
+      const calendar = new RetailCalendarFactory({
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Friday,
+        lastMonthOfYear: LastMonthOfYear.January,
+        leapYearStrategy: LeapYearStrategy.AddToPenultimateMonth
+      }, 2022)
+
+      for (let weekIndex = 0; weekIndex < lastDayNearestEOM445PenultimateWeeks.length; weekIndex++) {
+        const expectedWeek = lastDayNearestEOM445PenultimateWeeks[weekIndex];
+        const actualWeek = calendar.weeks[weekIndex];
+        expect(actualWeek).toBeTheSameWeekAs(expectedWeek)
+      }
+  })
+})
 
   describe('given NRF calendar options', () => {
     it('numberOfWeeks calculates properly for each year', () => {

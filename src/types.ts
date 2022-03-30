@@ -106,3 +106,13 @@ export type WeekOfCalendar = {
   calendar: RetailCalendar
   week: RetailCalendarWeek
 }
+
+export {} 
+
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      toBeTheSameWeekAs(expected: any): R;
+    }
+  }
+}
