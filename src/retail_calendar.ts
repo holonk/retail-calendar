@@ -146,28 +146,27 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     const weekDistribution = this.getWeekDistribution()
     const monthOffset = this.getBeginningOfMonthIndex()
 
-    let weeksInQuarter = 0
     let weekCount = 0
     let monthOfYear = 0
+    let weekInQuarter = 0
+    let quarterOfYear = 0
 
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       const weeksInMonth = weekDistribution[monthIndex]
-
-      if (monthIndex % 3 === 0)
-        weeksInQuarter = weekDistribution
-          .slice(monthIndex, monthIndex + 3)
-          .reduce((a, b) => a + b, 0)
-
       monthOfYear = monthIndex + monthOffset
+
+      if (monthIndex % 3 === 0) {
+        weekInQuarter = 0;
+        quarterOfYear = Math.floor(monthIndex / 3) + 1
+      }
 
       for (let weekInMonth = 0; weekInMonth < weeksInMonth; weekInMonth++) {
         if (weekIndex === weekCount) {
-          const weekInQuarter = weekIndex % weeksInQuarter
-          const quarterOfYear = monthIndex % 3
           return [monthOfYear, weekInMonth, weekInQuarter, quarterOfYear]
         }
 
         weekCount++
+        weekInQuarter++
       }
     }
 
