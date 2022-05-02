@@ -156,7 +156,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       monthOfYear = monthIndex + monthOffset
 
       if (monthIndex % 3 === 0) {
-        weekInQuarter = 0;
+        weekInQuarter = 0
         quarterOfYear = Math.floor(monthIndex / 3) + 1
       }
 

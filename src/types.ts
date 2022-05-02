@@ -107,12 +107,12 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {} 
+export {}
 
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toBeTheSameWeekAs(expected: any): R;
+      toBeTheSameWeekAs(expected: any): R
     }
   }
 }
