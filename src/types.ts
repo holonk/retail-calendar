@@ -74,6 +74,20 @@ export interface RetailCalendar {
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
+  days: RetailCalendarDay[]
+}
+
+export interface RetailCalendarDay {
+  weekOfYear: number;
+  monthOfYear: number;
+  dayOfWeek: number // 1 = Monday, 7 = Sunday
+  dayOfMonth: number // Starts at beginningMonthIndex
+  dayOfYear: number // Starts at 1
+  gregorianStartDate: Date
+  gregorianEndDate: Date
+  gregorianMonthOfYear: number; // Starts at 0
+  gregorianDayOfYear: number; // Starts at 1
+  gregorianDayOfMonth: number; // Starts at 1
 }
 
 export interface RetailCalendarWeek {

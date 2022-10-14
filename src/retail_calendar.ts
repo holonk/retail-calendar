@@ -10,6 +10,7 @@ import {
   LastDayStrategy,
   LastMonthOfYear,
   LeapYearStrategy,
+  RetailCalendarDay,
 } from './types'
 
 import { CalendarMonth } from './calendar_month'
@@ -26,6 +27,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
+  days: RetailCalendarDay[]
   options: RetailCalendarOptions
   lastDayOfYear: moment.Moment
   firstDayOfYear: moment.Moment
@@ -44,6 +46,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       .startOf('day')
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
+    this.days = this.generateDays()
   }
 
   getLeapYearStrategy() {
@@ -138,6 +141,37 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       )
     }
     return weeks
+  }
+
+  generateDays(): RetailCalendarDay[] {
+    const days: RetailCalendarDay[] = []
+    const DAYS_IN_WEEK = 7;
+    let dayOfYear = 1;
+    this.weeks.forEach((week) => {
+      for (let dayIndex = 1; dayIndex < DAYS_IN_WEEK + 1; dayIndex++) {
+        const gregorianStartDate = moment(week.gregorianStartDate).add(dayIndex - 1, 'day').toDate();
+        const gregorianEndDate = moment(gregorianStartDate).endOf('day').toDate();
+        const momentDateOfDay = moment(gregorianStartDate);
+        const gregorianMonthOfYear = momentDateOfDay.month();
+        const gregorianDayOfYear = momentDateOfDay.dayOfYear();
+        const gregorianDayOfMonth = momentDateOfDay.date();
+        const isLeapWeek = week.weekOfYear === -1;
+        days.push({
+          dayOfYear,
+          dayOfWeek: dayIndex,
+          dayOfMonth: isLeapWeek ? -1 : week.weekOfMonth * 7 + dayIndex,
+          weekOfYear: isLeapWeek ? -1 : week.weekOfYear,
+          monthOfYear: isLeapWeek ? -1 : week.monthOfYear,
+          gregorianStartDate,
+          gregorianEndDate,
+          gregorianMonthOfYear,
+          gregorianDayOfYear,
+          gregorianDayOfMonth
+        })  
+        dayOfYear += 1;
+      };
+    });
+    return days;
   }
 
   getMonthAndWeekOfMonthOfWeek(
