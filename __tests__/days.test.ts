@@ -20,7 +20,7 @@ describe("RetailCalendar", () => {
             expect(firstDay.monthOfYear).toBe(1)
             expect(firstDay.weekOfYear).toBe(0)
             expect(firstDay.gregorianDayOfYear).toBe(30)
-            expect(firstDay.gregorianMonthOfYear).toBe(0) // January
+            expect(firstDay.gregorianMonthOfYear).toBe(1) // January
             expect(firstDay.gregorianStartDate).toEqual(new Date(2022, 0, 30)) // January 30th 2022
             expect(firstDay.gregorianEndDate).toEqual(new Date(2022, 0, 30, 23, 59, 59, 999)) // January 30th 2022
         });
@@ -33,7 +33,7 @@ describe("RetailCalendar", () => {
             expect(secondDay.monthOfYear).toBe(1)
             expect(secondDay.weekOfYear).toBe(0)
             expect(secondDay.gregorianDayOfYear).toBe(31)
-            expect(secondDay.gregorianMonthOfYear).toBe(0) // January
+            expect(secondDay.gregorianMonthOfYear).toBe(1) // January
             expect(secondDay.gregorianStartDate).toEqual(new Date(2022, 0, 31)) // January 31th 2022
             expect(secondDay.gregorianEndDate).toEqual(new Date(2022, 0, 31, 23, 59, 59, 999)) // January 31th 2022
         });
@@ -46,7 +46,7 @@ describe("RetailCalendar", () => {
             expect(thirdDay.monthOfYear).toBe(1)
             expect(thirdDay.weekOfYear).toBe(0)
             expect(thirdDay.gregorianDayOfYear).toBe(32)
-            expect(thirdDay.gregorianMonthOfYear).toBe(1) // February
+            expect(thirdDay.gregorianMonthOfYear).toBe(2) // February
             expect(thirdDay.gregorianStartDate).toEqual(new Date(2022, 1, 1)) // February 1st 2022
             expect(thirdDay.gregorianEndDate).toEqual(new Date(2022, 1, 1, 23, 59, 59, 999)) // February 1st 2022
         });
@@ -59,7 +59,7 @@ describe("RetailCalendar", () => {
             expect(lastDay.monthOfYear).toBe(12)
             expect(lastDay.weekOfYear).toBe(51)
             expect(lastDay.gregorianDayOfYear).toBe(28)
-            expect(lastDay.gregorianMonthOfYear).toBe(0) // January
+            expect(lastDay.gregorianMonthOfYear).toBe(1) // January
             expect(lastDay.gregorianStartDate).toEqual(new Date(2023, 0, 28)) // January 28th 2023
             expect(lastDay.gregorianEndDate).toEqual(new Date(2023, 0, 28, 23, 59, 59, 999)) // January 28th 2023
             expect(lastDay.gregorianDayOfMonth).toEqual(28)
@@ -73,7 +73,7 @@ describe("RetailCalendar", () => {
             expect(lastDay.monthOfYear).toBe(8)
             expect(lastDay.weekOfYear).toBe(31)
             expect(lastDay.gregorianDayOfYear).toBe(248)
-            expect(lastDay.gregorianMonthOfYear).toBe(8) // September
+            expect(lastDay.gregorianMonthOfYear).toBe(9) // September
             expect(lastDay.gregorianStartDate).toEqual(new Date(2022, 8, 5)) // September 5th 2022
             expect(lastDay.gregorianEndDate).toEqual(new Date(2022, 8, 5, 23, 59, 59, 999)) // September 5th 2022
         });
@@ -97,7 +97,7 @@ describe("RetailCalendar", () => {
             expect(firstDay.monthOfYear).toBe(-1)
             expect(firstDay.weekOfYear).toBe(-1)
             expect(firstDay.gregorianDayOfYear).toBe(29)
-            expect(firstDay.gregorianMonthOfYear).toBe(0) // January
+            expect(firstDay.gregorianMonthOfYear).toBe(1) // January
             expect(firstDay.gregorianStartDate).toEqual(new Date(2023, 0, 29)) // January 29th 2023
             expect(firstDay.gregorianEndDate).toEqual(new Date(2023, 0, 29, 23, 59, 59, 999)) // January 29th 2023
         });
@@ -110,7 +110,7 @@ describe("RetailCalendar", () => {
             expect(secondDay.monthOfYear).toBe(-1)
             expect(secondDay.weekOfYear).toBe(-1)
             expect(secondDay.gregorianDayOfYear).toBe(30)
-            expect(secondDay.gregorianMonthOfYear).toBe(0) // January
+            expect(secondDay.gregorianMonthOfYear).toBe(1) // January
             expect(secondDay.gregorianStartDate).toEqual(new Date(2023, 0, 30)) // January 30th 2023
             expect(secondDay.gregorianEndDate).toEqual(new Date(2023, 0, 30, 23, 59, 59, 999)) // January 30th 2023
         });
@@ -123,7 +123,7 @@ describe("RetailCalendar", () => {
             expect(thirdDay.monthOfYear).toBe(-1)
             expect(thirdDay.weekOfYear).toBe(-1)
             expect(thirdDay.gregorianDayOfYear).toBe(31)
-            expect(thirdDay.gregorianMonthOfYear).toBe(0) // January
+            expect(thirdDay.gregorianMonthOfYear).toBe(1) // January
             expect(thirdDay.gregorianStartDate).toEqual(new Date(2023, 0, 31)) // January 31th 2023
             expect(thirdDay.gregorianEndDate).toEqual(new Date(2023, 0, 31, 23, 59, 59, 999)) // January 31th 2023
         });
@@ -136,7 +136,7 @@ describe("RetailCalendar", () => {
             expect(lastDay.monthOfYear).toBe(12)
             expect(lastDay.weekOfYear).toBe(51)
             expect(lastDay.gregorianDayOfYear).toBe(34)
-            expect(lastDay.gregorianMonthOfYear).toBe(1) // February
+            expect(lastDay.gregorianMonthOfYear).toBe(2) // February
             expect(lastDay.gregorianStartDate).toEqual(new Date(2024, 1, 3)) // Feb 3rd 2024
             expect(lastDay.gregorianEndDate).toEqual(new Date(2024, 1, 3, 23, 59, 59, 999)) // Feb 3rd 2024
             expect(lastDay.gregorianDayOfMonth).toEqual(3)
@@ -150,7 +150,7 @@ describe("RetailCalendar", () => {
             expect(randomDay.monthOfYear).toBe(8)
             expect(randomDay.weekOfYear).toBe(30)
             expect(randomDay.gregorianDayOfYear).toBe(247)
-            expect(randomDay.gregorianMonthOfYear).toBe(8) // September
+            expect(randomDay.gregorianMonthOfYear).toBe(9) // September
             expect(randomDay.gregorianStartDate).toEqual(new Date(2023, 8, 4)) // September 4th 2023
             expect(randomDay.gregorianEndDate).toEqual(new Date(2023, 8, 4, 23, 59, 59, 999)) // September 4th 2023
             expect(randomDay.gregorianDayOfMonth).toEqual(4)

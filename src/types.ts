@@ -85,7 +85,7 @@ export interface RetailCalendarDay {
   dayOfYear: number // Starts at 1
   gregorianStartDate: Date
   gregorianEndDate: Date
-  gregorianMonthOfYear: number; // Starts at 0
+  gregorianMonthOfYear: number; // Starts at 1
   gregorianDayOfYear: number; // Starts at 1
   gregorianDayOfMonth: number; // Starts at 1
 }

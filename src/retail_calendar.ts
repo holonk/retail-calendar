@@ -152,7 +152,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         const gregorianStartDate = moment(week.gregorianStartDate).add(dayIndex - 1, 'day').toDate();
         const gregorianEndDate = moment(gregorianStartDate).endOf('day').toDate();
         const momentDateOfDay = moment(gregorianStartDate);
-        const gregorianMonthOfYear = momentDateOfDay.month();
+        const gregorianMonthOfYear = momentDateOfDay.month() + 1; // moment months are 0 indexed, but we want 1 indexed
         const gregorianDayOfYear = momentDateOfDay.dayOfYear();
         const gregorianDayOfMonth = momentDateOfDay.date();
         const isLeapWeek = week.weekOfYear === -1;
@@ -167,7 +167,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
           gregorianMonthOfYear,
           gregorianDayOfYear,
           gregorianDayOfMonth
-        })  
+        })
         dayOfYear += 1;
       };
     });
