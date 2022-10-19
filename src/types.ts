@@ -79,9 +79,9 @@ export interface RetailCalendar {
 
 export interface RetailCalendarDay {
   weekOfYear: number;
-  monthOfYear: number;
+  monthOfYear: number; // Starts at beginningMonthIndex
   dayOfWeek: number // 1 = First day of week, 7 = Last day of week
-  dayOfMonth: number // Starts at beginningMonthIndex
+  dayOfMonth: number // Starts at 1
   dayOfYear: number // Starts at 1
   gregorianStartDate: Date
   gregorianEndDate: Date
