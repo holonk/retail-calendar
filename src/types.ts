@@ -74,6 +74,20 @@ export interface RetailCalendar {
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
+  days: RetailCalendarDay[]
+}
+
+export interface RetailCalendarDay {
+  weekOfYear: number;
+  monthOfYear: number; // Starts at beginningMonthIndex
+  dayOfWeek: number // 1 = First day of week, 7 = Last day of week
+  dayOfMonth: number // Starts at 1
+  dayOfYear: number // Starts at 1
+  gregorianStartDate: Date
+  gregorianEndDate: Date
+  gregorianMonthOfYear: number; // Starts at 1
+  gregorianDayOfYear: number; // Starts at 1
+  gregorianDayOfMonth: number; // Starts at 1
 }
 
 export interface RetailCalendarWeek {
@@ -107,7 +121,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {}
+export { }
 
 declare global {
   namespace jest {
