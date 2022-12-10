@@ -1,35 +1,23 @@
-import moment from 'moment'
+import { addDaysToDate, addWeeksToDate, getDayDifference, setIsoWeekDay } from './date_utils'
 import { LastDayStrategy } from './types'
 
 export class LastDayNearestEOMStrategy implements LastDayStrategy {
   getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: moment.Moment,
+    lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
-  ): moment.Moment {
-    const mutableLastDay = moment(lastDayOfGregorianYear)
+  ): Date {
+    const mutableLastDay = new Date(lastDayOfGregorianYear)
     // Generate 3 candidates which has the same day of week.
     // Current week, last week, next week
-    const currentWeekCandidate = moment(mutableLastDay).isoWeekday(
-      lastDayOfIsoWeek,
-    )
+    const currentWeekCandidate = setIsoWeekDay(mutableLastDay, lastDayOfIsoWeek)
 
-    const lastWeekCandidate = moment(mutableLastDay)
-      .subtract(1, 'week')
-      .isoWeekday(lastDayOfIsoWeek)
-    const nextWeekCandidate = moment(mutableLastDay)
-      .add(1, 'week')
-      .isoWeekday(lastDayOfIsoWeek)
+    const lastWeekCandidate = setIsoWeekDay(addWeeksToDate(mutableLastDay, -1), lastDayOfIsoWeek)
+    const nextWeekCandidate = setIsoWeekDay(addWeeksToDate(mutableLastDay, 1), lastDayOfIsoWeek)
 
     // Calculate absolute day differences from each candidate to EOM
-    const currentWeekDiff = Math.abs(
-      mutableLastDay.diff(currentWeekCandidate, 'days'),
-    )
-    const lastWeekDiff = Math.abs(
-      mutableLastDay.diff(lastWeekCandidate, 'days'),
-    )
-    const nextWeekDiff = Math.abs(
-      mutableLastDay.diff(nextWeekCandidate, 'days'),
-    )
+    const currentWeekDiff = Math.abs(getDayDifference(mutableLastDay, currentWeekCandidate))
+    const lastWeekDiff = Math.abs(getDayDifference(mutableLastDay, lastWeekCandidate))
+    const nextWeekDiff = Math.abs(getDayDifference(mutableLastDay, nextWeekCandidate))
 
     // Find nearest difference
     const minDiff = Math.min(currentWeekDiff, lastWeekDiff, nextWeekDiff)

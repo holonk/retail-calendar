@@ -16,11 +16,11 @@ import { nrfYears } from './data/nrf_years'
 import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
 import { nrf2018, nrf2017Restated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
-import moment from 'moment'
 import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
 import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
+import { endOfDay, startOfDay, toFormattedString } from '../src/date_utils';
+import { parseEndDate, parseStartDate } from './utils/parser';
 
-const DayComparisonFormat = 'YYYY-MM-DD'
 
 describe('RetailCalendar', () => {
   describe("leap year strategy options", () => {
@@ -45,7 +45,7 @@ describe('RetailCalendar', () => {
           weekGrouping: WeekGrouping.Group454,
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.January,
-          weekCalculation: WeekCalculation.LastDayNearestEOM, 
+          weekCalculation: WeekCalculation.LastDayNearestEOM,
           restated: true
         }, 2017)
 
@@ -88,7 +88,7 @@ describe('RetailCalendar', () => {
     })
   })
 
-describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
+  describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
     it('returns the right data for each week of 2022', () => {
       const calendar = new RetailCalendarFactory({
         weekCalculation: WeekCalculation.LastDayNearestEOM,
@@ -103,8 +103,8 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
         const actualWeek = calendar.weeks[weekIndex];
         expect(actualWeek).toBeTheSameWeekAs(expectedWeek)
       }
+    })
   })
-})
 
   describe('given NRF calendar options', () => {
     it('numberOfWeeks calculates properly for each year', () => {
@@ -129,13 +129,10 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
       for (let index = 0; index < 12; index++) {
         const month = calendar.months[index]
         const nrfMonth = nrf2018[index]
-        expect(month.gregorianStartDate.getTime()).toEqual(
-          moment(nrfMonth.start).startOf('day').toDate().getTime(),
-        )
-
-        expect(month.gregorianEndDate.getTime()).toEqual(
-          moment(nrfMonth.end).endOf('day').toDate().getTime(),
-        )
+        const expectedStart = parseStartDate(nrfMonth.start);
+        const expectedEnd = parseEndDate(nrfMonth.end);
+        expect(month.gregorianStartDate.getTime()).toEqual(expectedStart.getTime())
+        expect(month.gregorianEndDate.getTime()).toEqual(expectedEnd.getTime())
       }
     })
 
@@ -145,10 +142,10 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
       const month = calendar.months[monthIndex]
       const nrfMonth = nrf2017Restated[monthIndex]
       expect(month.gregorianStartDate.getTime()).toEqual(
-        moment(nrfMonth.start).startOf('day').toDate().getTime(),
+        parseStartDate(nrfMonth.start).getTime(),
       )
       expect(month.gregorianEndDate.getTime()).toEqual(
-        moment(nrfMonth.end).endOf('day').toDate().getTime(),
+        parseEndDate(nrfMonth.end).getTime(),
       )
     })
 
@@ -180,17 +177,17 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
       const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
       const weeks = calendar.weeks
       expect(weeks[0].gregorianStartDate.getTime()).toEqual(
-        moment('2018-02-04').toDate().getTime(),
+        parseStartDate('2018-02-04').getTime(),
       )
       expect(weeks[0].gregorianEndDate.getTime()).toEqual(
-        moment('2018-02-10').endOf('day').toDate().getTime(),
+        parseEndDate('2018-02-10').getTime(),
       )
 
       expect(weeks[1].gregorianStartDate.getTime()).toEqual(
-        moment('2018-02-11').toDate().getTime(),
+        parseStartDate('2018-02-11').getTime(),
       )
       expect(weeks[1].gregorianEndDate.getTime()).toEqual(
-        moment('2018-02-17').endOf('day').toDate().getTime(),
+        parseEndDate('2018-02-17').getTime(),
       )
     })
 
@@ -377,10 +374,10 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
         for (const month of yearData.months) {
           const calendarMonth = calendar.months[month.monthOfYear]
           expect(calendarMonth.gregorianStartDate.getTime()).toEqual(
-            moment(month.start).startOf('day').toDate().getTime(),
+            parseStartDate(month.start).getTime(),
           )
           expect(calendarMonth.gregorianEndDate.getTime()).toEqual(
-            moment(month.end).endOf('day').toDate().getTime(),
+            parseEndDate(month.end).getTime(),
           )
         }
       }
@@ -389,7 +386,7 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
 
   describe('given beginning month index option', () => {
     it('returns correct monthOfYear value for each month and week', () => {
-      const calendar = new RetailCalendarFactory({...NRFCalendarOptions, beginningMonthIndex: 0}, 2018)
+      const calendar = new RetailCalendarFactory({ ...NRFCalendarOptions, beginningMonthIndex: 0 }, 2018)
       const weeks = calendar.weeks
       // 4, 5, 4 calendar
       const monthOfYearByWeek = [
@@ -416,8 +413,8 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
     })
 
     it('returns correct quarterOfYear value for each month', () => {
-      const calendar = new RetailCalendarFactory({...NRFCalendarOptions, beginningMonthIndex: 0}, 2018)
-      const months= calendar.months
+      const calendar = new RetailCalendarFactory({ ...NRFCalendarOptions, beginningMonthIndex: 0 }, 2018)
+      const months = calendar.months
       expect(months[0].quarterOfYear).toBe(1)
       expect(months[1].quarterOfYear).toBe(1)
       expect(months[2].quarterOfYear).toBe(1)
@@ -436,9 +433,9 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
     })
   })
 
-  describe('given "last day nearest end of month except restated" week calculation method', ()=> {
+  describe('given "last day nearest end of month except restated" week calculation method', () => {
 
-    it('it moves 53rd week to previous year', ()=> {
+    it('it moves 53rd week to previous year', () => {
       const options = {
         weekGrouping: WeekGrouping.Group445,
         lastDayOfWeek: LastDayOfWeek.Saturday,
@@ -446,26 +443,23 @@ describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
         weekCalculation: WeekCalculation.LastDayBeforeEomExceptLeapYear,
         leapYearStrategy: LeapYearStrategy.DropLastWeek
       }
-    
+
       for (const yearData of lastDayBeforeEomExceptLeapYear) {
         const calendar = new RetailCalendarFactory(options, yearData.year)
         for (const month of yearData.months) {
           const calendarMonth = calendar.months[month.monthOfYear]
-          expect(moment(calendarMonth.gregorianStartDate).format(DayComparisonFormat))
+          expect(toFormattedString(calendarMonth.gregorianStartDate))
             .toEqual(month.start)
-          expect(moment(calendarMonth.gregorianEndDate).format(DayComparisonFormat)).toEqual(
+          expect(toFormattedString(calendarMonth.gregorianEndDate)).toEqual(
             month.end
           )
         }
-        if(yearData.leapWeek) {
+        if (yearData.leapWeek) {
           const leapWeek = calendar.weeks[52]
-          expect(moment(leapWeek.gregorianStartDate).format(DayComparisonFormat))
-            .toEqual(yearData.leapWeek.start)
-          expect(moment(leapWeek.gregorianEndDate).format(DayComparisonFormat))
-            .toEqual(yearData.leapWeek.end)
+          expect(toFormattedString(leapWeek.gregorianStartDate)).toEqual(yearData.leapWeek.start)
+          expect(toFormattedString(leapWeek.gregorianEndDate)).toEqual(yearData.leapWeek.end)
         }
       }
-      
     })
   })
 })
