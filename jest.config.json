@@ -3,9 +3,25 @@
     "^.+\\.(t|j)sx?$": "ts-jest"
   },
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  "testPathIgnorePatterns": ["/__tests__/data/", "/__tests__/matchers/"],
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+  "testPathIgnorePatterns": [
+    "/__tests__/data/",
+    "/__tests__/matchers/",
+    "__tests__/utils/"
+  ],
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ],
   "collectCoverage": true,
-  "coveragePathIgnorePatterns": ["/__tests__/data/", "/__tests__/matchers/"],
-  "setupFilesAfterEnv": ["./__tests__/matchers/be_the_same_week_as.ts"]
+  "coveragePathIgnorePatterns": [
+    "/__tests__/data/",
+    "/__tests__/matchers/"
+  ],
+  "setupFilesAfterEnv": [
+    "./__tests__/matchers/be_the_same_week_as.ts"
+  ]
 }

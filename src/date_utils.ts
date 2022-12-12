@@ -1,7 +1,5 @@
 export function addDaysToDate(date: Date, days: number): Date {
-    const newDate = new Date(date)
-    newDate.setDate(newDate.getDate() + days)
-    return newDate
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days, date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 }
 
 export function addWeeksToDate(date: Date, weeks: number): Date {
@@ -64,5 +62,7 @@ export function getDayOfYear(date: Date): number {
 }
 
 export function toFormattedString(date: Date): string {
-    return date.toISOString().split('T')[0]
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split("T")[0];
 }
