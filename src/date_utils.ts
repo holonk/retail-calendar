@@ -61,8 +61,13 @@ export function getDayOfYear(date: Date): number {
     return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / millisecondsInDay;
 }
 
+/**
+ * Returns formatted string in (YYYY-MM-DD) format
+ */
 export function toFormattedString(date: Date): string {
-    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+    // ISO string is in UTC, so we need to convert it to local time by subtracting the timezone offset.
+    const millisecondsInMinute = 1000 * 60
+    return new Date(date.getTime() - (date.getTimezoneOffset() * millisecondsInMinute))
         .toISOString()
         .split("T")[0];
 }
