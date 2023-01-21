@@ -6,7 +6,7 @@ export class LastDayBeforeEOMStrategy implements LastDayStrategy {
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
   ): Date {
-    let candidate = setIsoWeekDay(lastDayOfGregorianYear, lastDayOfIsoWeek);
+    let candidate = setIsoWeekDay(lastDayOfGregorianYear, lastDayOfIsoWeek)
 
     if (candidate.getMonth() !== lastDayOfGregorianYear.getMonth()) {
       candidate = addWeeksToDate(candidate, -1)

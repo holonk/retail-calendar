@@ -18,7 +18,15 @@ import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 import { FirstBOWOfFirstMonth } from './first_bow_of_first_month'
 import { LastDayBeforeEOMExceptLeapYearStrategy } from './last_day_before_eom_except_leap_year'
-import { addDaysToDate, addWeeksToDate, endOfDay, endOfMonth, getDayOfYear, getWeekDifference, startOfDay } from './date_utils'
+import {
+  addDaysToDate,
+  addWeeksToDate,
+  endOfDay,
+  endOfMonth,
+  getDayOfYear,
+  getWeekDifference,
+  startOfDay,
+} from './date_utils'
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
@@ -40,7 +48,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.leapYearStrategy = this.getLeapYearStrategy()
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
-    this.firstDayOfYear = startOfDay(addDaysToDate(addWeeksToDate(this.lastDayOfYear, -this.numberOfWeeks), 1))
+    this.firstDayOfYear = startOfDay(
+      addDaysToDate(addWeeksToDate(this.lastDayOfYear, -this.numberOfWeeks), 1),
+    )
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
     this.days = this.generateDays()
@@ -146,7 +156,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     let dayOfYear = 1
     this.weeks.forEach((week) => {
       for (let dayIndex = 1; dayIndex < DAYS_IN_WEEK + 1; dayIndex++) {
-        const gregorianStartDate = addDaysToDate(week.gregorianStartDate, dayIndex - 1)
+        const gregorianStartDate = addDaysToDate(
+          week.gregorianStartDate,
+          dayIndex - 1,
+        )
         const gregorianEndDate = endOfDay(gregorianStartDate)
         const gregorianMonthOfYear = gregorianStartDate.getMonth() + 1 // JS Date is 0 indexed
         const gregorianDayOfYear = getDayOfYear(gregorianStartDate)
@@ -252,7 +265,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateLastDayOfYear(year: number): Date {
-    const lastDayOfYear = endOfMonth(new Date(year, this.options.lastMonthOfYear, 1))
+    const lastDayOfYear = endOfMonth(
+      new Date(year, this.options.lastMonthOfYear, 1),
+    )
     const lastIsoWeekDay = this.options.lastDayOfWeek
     const weekCalculation = this.getWeekCalculationStrategy(
       this.options.weekCalculation,
@@ -266,10 +281,12 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   calculateNumberOfWeeks(): any {
     // Make sure we get whole day difference
     // by measuring from the end of current year to start of last year
-    const lastDayOfYear = endOfDay(this.calculateLastDayOfYear(this.calendarYear))
-    const lastDayOfLastYear = startOfDay(this.calculateLastDayOfYear(
-      this.calendarYear - 1,
-    ))
+    const lastDayOfYear = endOfDay(
+      this.calculateLastDayOfYear(this.calendarYear),
+    )
+    const lastDayOfLastYear = startOfDay(
+      this.calculateLastDayOfYear(this.calendarYear - 1),
+    )
     const numWeeks = getWeekDifference(lastDayOfYear, lastDayOfLastYear)
     return numWeeks
   }

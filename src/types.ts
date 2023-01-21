@@ -121,7 +121,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export { }
+export {}
 
 declare global {
   namespace jest {

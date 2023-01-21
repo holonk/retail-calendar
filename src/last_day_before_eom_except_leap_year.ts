@@ -1,4 +1,9 @@
-import { addDaysToDate, addWeeksToDate, endOfYear, getWeekDifference } from './date_utils'
+import {
+  addDaysToDate,
+  addWeeksToDate,
+  endOfYear,
+  getWeekDifference,
+} from './date_utils'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayStrategy } from './types'
 
@@ -7,7 +12,9 @@ export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
   ): Date {
-    const lastDayOfNextGregorianYear = endOfYear(addDaysToDate(lastDayOfGregorianYear, 1));
+    const lastDayOfNextGregorianYear = endOfYear(
+      addDaysToDate(lastDayOfGregorianYear, 1),
+    )
     const lastDayOfThisYear = new LastDayBeforeEOMStrategy().getLastDayForGregorianLastDay(
       lastDayOfGregorianYear,
       lastDayOfIsoWeek,

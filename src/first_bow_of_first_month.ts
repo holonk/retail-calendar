@@ -1,4 +1,4 @@
-import { addDaysToDate, getIsoWeekDay } from './date_utils';
+import { addDaysToDate, getIsoWeekDay } from './date_utils'
 import { LastDayStrategy } from './types'
 
 export class FirstBOWOfFirstMonth implements LastDayStrategy {
