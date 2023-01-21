@@ -41,9 +41,7 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
   },
-  "dependencies": {
-    "moment": "^2.25.3"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=10.13.0"
   },

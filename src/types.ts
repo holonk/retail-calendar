@@ -111,9 +111,9 @@ export interface RetailCalendarMonth {
 
 export interface LastDayStrategy {
   getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: moment.Moment,
+    lastDayOfGregorianYear: Date,
     isoLastDayOfWeek: number,
-  ): moment.Moment
+  ): Date
 }
 
 export type WeekOfCalendar = {
@@ -121,7 +121,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {}
+export { }
 
 declare global {
   namespace jest {

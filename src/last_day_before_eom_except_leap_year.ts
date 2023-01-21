@@ -1,15 +1,13 @@
+import { addDaysToDate, addWeeksToDate, endOfYear, getWeekDifference } from './date_utils'
 import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
-import moment from 'moment'
 import { LastDayStrategy } from './types'
 
 export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
   getLastDayForGregorianLastDay(
-    lastDayOfGregorianYear: moment.Moment,
+    lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
-  ): moment.Moment {
-    const lastDayOfNextGregorianYear = moment(lastDayOfGregorianYear)
-      .add(1, 'day')
-      .endOf('year')
+  ): Date {
+    const lastDayOfNextGregorianYear = endOfYear(addDaysToDate(lastDayOfGregorianYear, 1));
     const lastDayOfThisYear = new LastDayBeforeEOMStrategy().getLastDayForGregorianLastDay(
       lastDayOfGregorianYear,
       lastDayOfIsoWeek,
@@ -19,8 +17,8 @@ export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
       lastDayOfIsoWeek,
     )
 
-    if (lastDayOfNextYear.diff(lastDayOfThisYear, 'week') === 53) {
-      return moment(lastDayOfThisYear).add(1, 'week')
+    if (getWeekDifference(lastDayOfNextYear, lastDayOfThisYear) === 53) {
+      return addWeeksToDate(lastDayOfThisYear, 1)
     }
 
     return lastDayOfThisYear

@@ -1,4 +1,3 @@
-import moment from 'moment'
 import {
   RetailCalendar,
   RetailCalendarConstructor,
@@ -19,6 +18,7 @@ import { LastDayBeforeEOMStrategy } from './last_day_before_eom'
 import { LastDayNearestEOMStrategy } from './last_day_nearest_eom'
 import { FirstBOWOfFirstMonth } from './first_bow_of_first_month'
 import { LastDayBeforeEOMExceptLeapYearStrategy } from './last_day_before_eom_except_leap_year'
+import { addDaysToDate, addWeeksToDate, endOfDay, endOfMonth, getDayOfYear, getWeekDifference, startOfDay } from './date_utils'
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
@@ -29,8 +29,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   weeks: RetailCalendarWeek[]
   days: RetailCalendarDay[]
   options: RetailCalendarOptions
-  lastDayOfYear: moment.Moment
-  firstDayOfYear: moment.Moment
+  lastDayOfYear: Date
+  firstDayOfYear: Date
   leapYearStrategy: LeapYearStrategy
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
@@ -40,10 +40,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.leapYearStrategy = this.getLeapYearStrategy()
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
-    this.firstDayOfYear = moment(this.lastDayOfYear)
-      .subtract(this.numberOfWeeks, 'week')
-      .add(1, 'day')
-      .startOf('day')
+    this.firstDayOfYear = startOfDay(addDaysToDate(addWeeksToDate(this.lastDayOfYear, -this.numberOfWeeks), 1))
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
     this.days = this.generateDays()
@@ -96,8 +93,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       const weeksOfMonth = this.weeks.filter(
         (week) => week.monthOfYear === index,
       )
-      const monthStart = moment(weeksOfMonth[0].gregorianStartDate)
-      const monthEnd = moment(
+      const monthStart = new Date(weeksOfMonth[0].gregorianStartDate)
+      const monthEnd = new Date(
         weeksOfMonth[weeksOfMonth.length - 1].gregorianEndDate,
       )
       months.push(
@@ -106,8 +103,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
           quarterOfYear,
           numberOfWeeks,
           weeksOfMonth,
-          monthStart.toDate(),
-          monthEnd.toDate(),
+          monthStart,
+          monthEnd,
         ),
       )
       index += 1
@@ -126,8 +123,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         weekOfQuarter,
         quarterOfYear,
       ] = this.getMonthAndWeekOfMonthOfWeek(weekIndex)
-      const start = moment(this.firstDayOfYear).add(index, 'week')
-      const end = moment(start).add(1, 'week').subtract(1, 'day').endOf('day')
+      const start = addWeeksToDate(this.firstDayOfYear, index)
+      const end = endOfDay(addDaysToDate(addWeeksToDate(start, 1), -1))
       weeks.push(
         new CalendarWeek(
           weekIndex,
@@ -135,8 +132,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
           weekOfQuarter,
           monthOfYear,
           quarterOfYear,
-          start.toDate(),
-          end.toDate(),
+          start,
+          end,
         ),
       )
     }
@@ -149,16 +146,11 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     let dayOfYear = 1
     this.weeks.forEach((week) => {
       for (let dayIndex = 1; dayIndex < DAYS_IN_WEEK + 1; dayIndex++) {
-        const gregorianStartDate = moment(week.gregorianStartDate)
-          .add(dayIndex - 1, 'day')
-          .toDate()
-        const gregorianEndDate = moment(gregorianStartDate)
-          .endOf('day')
-          .toDate()
-        const momentDateOfDay = moment(gregorianStartDate)
-        const gregorianMonthOfYear = momentDateOfDay.month() + 1 // moment months are 0 indexed, but we want 1 indexed
-        const gregorianDayOfYear = momentDateOfDay.dayOfYear()
-        const gregorianDayOfMonth = momentDateOfDay.date()
+        const gregorianStartDate = addDaysToDate(week.gregorianStartDate, dayIndex - 1)
+        const gregorianEndDate = endOfDay(gregorianStartDate)
+        const gregorianMonthOfYear = gregorianStartDate.getMonth() + 1 // JS Date is 0 indexed
+        const gregorianDayOfYear = getDayOfYear(gregorianStartDate)
+        const gregorianDayOfMonth = gregorianStartDate.getDate()
         const isLeapWeek = week.weekOfYear === -1
         days.push({
           dayOfYear,
@@ -259,11 +251,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     }
   }
 
-  calculateLastDayOfYear(year: number): moment.Moment {
-    const lastDayOfYear = moment()
-      .year(year)
-      .month(this.options.lastMonthOfYear)
-      .endOf('month')
+  calculateLastDayOfYear(year: number): Date {
+    const lastDayOfYear = endOfMonth(new Date(year, this.options.lastMonthOfYear, 1))
     const lastIsoWeekDay = this.options.lastDayOfWeek
     const weekCalculation = this.getWeekCalculationStrategy(
       this.options.weekCalculation,
@@ -277,13 +266,11 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   calculateNumberOfWeeks(): any {
     // Make sure we get whole day difference
     // by measuring from the end of current year to start of last year
-    const lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear).endOf(
-      'day',
-    )
-    const lastDayOfLastYear = this.calculateLastDayOfYear(
+    const lastDayOfYear = endOfDay(this.calculateLastDayOfYear(this.calendarYear))
+    const lastDayOfLastYear = startOfDay(this.calculateLastDayOfYear(
       this.calendarYear - 1,
-    ).startOf('day')
-    const numWeeks = lastDayOfYear.diff(lastDayOfLastYear, 'week')
+    ))
+    const numWeeks = getWeekDifference(lastDayOfYear, lastDayOfLastYear)
     return numWeeks
   }
 
