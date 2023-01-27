@@ -462,4 +462,19 @@ describe('RetailCalendar', () => {
       }
     })
   })
+
+  describe("given 0 year", () => {
+    it("it does not generate more than 53 weeks", () => {
+      const options: RetailCalendarOptions = {
+        weekGrouping: WeekGrouping.Group454,
+        leapYearStrategy: LeapYearStrategy.Restated,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        beginningMonthIndex: 0
+      };
+      const calendar = new RetailCalendarFactory(options, 0);
+      expect(calendar.weeks.length).toBeLessThanOrEqual(53);
+    })
+  })
 })
