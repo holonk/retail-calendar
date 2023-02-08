@@ -280,7 +280,7 @@ describe('RetailCalendar', () => {
           const lastWeek = calendar.weeks[52]
           expect(lastWeek.monthOfYear).toBe(-1)
           expect(lastWeek.weekOfMonth).toBe(-1)
-          expect(lastWeek.weekOfYear).toBe(-1)
+          expect(lastWeek.weekOfYear).toBe(52)
 
           const firstMonth = calendar.months[0]
           expect(firstMonth.weeks[0].weekOfYear).toEqual(0)
