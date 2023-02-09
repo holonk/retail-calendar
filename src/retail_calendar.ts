@@ -260,7 +260,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       case LeapYearStrategy.AddToPenultimateMonth:
         return weekIndex
       default:
-        return weekIndex === 52 ? -1 : weekIndex
+        return weekIndex
     }
   }
 

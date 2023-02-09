@@ -272,15 +272,40 @@ describe('RetailCalendar', () => {
       })
 
       describe('when not restated', () => {
-        it('does not assign any months to last week', () => {
-          const calendar = new RetailCalendarFactory(
-            { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropLastWeek },
-            2017,
-          )
+        const notRestatedCalendarOptions = { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropLastWeek }
+
+        it("does not return a week -1", () => {
+          const calendar = new RetailCalendarFactory(notRestatedCalendarOptions, 2017)
+          const leapWeek = calendar.weeks.find((week) => week.weekOfYear === -1)
+
+          expect(leapWeek).toBeUndefined()
+        });
+
+        it("returns week 52 as the last week of the year", () => {
+          const calendar = new RetailCalendarFactory(notRestatedCalendarOptions, 2017)
           const lastWeek = calendar.weeks[52]
+          expect(calendar.weeks).toHaveLength(53)
           expect(lastWeek.monthOfYear).toBe(-1)
           expect(lastWeek.weekOfMonth).toBe(-1)
-          expect(lastWeek.weekOfYear).toBe(-1)
+          expect(lastWeek.weekOfYear).toBe(52)
+        });
+
+        it("assigns first 52 weeks to months and quarters", () => {
+          const calendar = new RetailCalendarFactory(notRestatedCalendarOptions, 2017)
+          const first52Weeks = calendar.weeks.slice(0, 52)
+          // 4 weeks in Jan, 5 in Feb, 4 in Mar and repeats in each quarter
+          // Check that the first 52 weeks are assigned to months and quarters correctly
+          first52Weeks.forEach((week, index) => {
+            const expectedQuarterOfYear = Math.floor(index / 13) + 1;
+            const expectedWeekOfQuarter = (index % 13);
+            expect(week.quarterOfYear).toBe(expectedQuarterOfYear);
+            expect(week.weekOfQuarter).toBe(expectedWeekOfQuarter);
+          });
+        });
+
+        it('does not assign any months to last week', () => {
+          const calendar = new RetailCalendarFactory( notRestatedCalendarOptions, 2017)
+          const lastWeek = calendar.weeks[52]
 
           const firstMonth = calendar.months[0]
           expect(firstMonth.weeks[0].weekOfYear).toEqual(0)

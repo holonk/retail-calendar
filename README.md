@@ -134,13 +134,14 @@ LAST week of year is "dropped".
 ```javascript
 // Restated calendar example.
 // First week of year has no month.
-calendar.weeks[52].weekOfYear // -1
+calendar.weeks[52].weekOfYear // 52
 calendar.weeks[52].weekOfMonth // -1
 calendar.weeks[52].monthOfYear // -1
 
 // First month starts from 1st week
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
+⚠ *previous versions of this library returned weekOfYear as -1, this is no longer the case. Last week's weekOfYear is 52* ⚠
 ⚠ *previous versions of this library used the `restated: false` option to specify a "Drop Last Week" leap year strategy. This still works but is deprecated!* ⚠
 
 #### Add to Penultimate Month
