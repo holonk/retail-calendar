@@ -265,12 +265,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateLastDayOfYear(year: number): Date {
-    const firstDayOfLastMonthOfYear = new Date()
-    firstDayOfLastMonthOfYear.setFullYear(year)
-    firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear)
-    firstDayOfLastMonthOfYear.setDate(1)
-
-    const lastDayOfYear = endOfMonth(firstDayOfLastMonthOfYear)
+    const lastDayOfYear = endOfMonth(
+      new Date(year, this.options.lastMonthOfYear, 1),
+    )
     const lastIsoWeekDay = this.options.lastDayOfWeek
     const weekCalculation = this.getWeekCalculationStrategy(
       this.options.weekCalculation,
