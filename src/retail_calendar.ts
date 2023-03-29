@@ -25,6 +25,7 @@ import {
   endOfMonth,
   getDayOfYear,
   getWeekDifference,
+  newSafeDate,
   startOfDay,
 } from './date_utils'
 
@@ -265,10 +266,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   calculateLastDayOfYear(year: number): Date {
-    const firstDayOfLastMonthOfYear = new Date()
+    const firstDayOfLastMonthOfYear = newSafeDate()
     firstDayOfLastMonthOfYear.setFullYear(year)
-    firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear)
-    firstDayOfLastMonthOfYear.setDate(1)
+    firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear, 1)
 
     const lastDayOfYear = endOfMonth(firstDayOfLastMonthOfYear)
     const lastIsoWeekDay = this.options.lastDayOfWeek

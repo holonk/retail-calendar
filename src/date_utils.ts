@@ -1,5 +1,9 @@
+export function newSafeDate(): Date {
+  return new Date(2000, 0, 1)
+}
+
 export function addDaysToDate(date: Date, days: number): Date {
-  const newDate = new Date()
+  const newDate = newSafeDate()
   newDate.setFullYear(date.getFullYear())
   newDate.setMonth(date.getMonth())
   newDate.setDate(date.getDate() + days)
