@@ -1,13 +1,17 @@
+export function newSafeDate(): Date {
+  return new Date(2000, 0, 1)
+}
+
 export function addDaysToDate(date: Date, days: number): Date {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate() + days,
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-    date.getMilliseconds(),
-  )
+  const newDate = newSafeDate()
+  newDate.setFullYear(date.getFullYear())
+  newDate.setMonth(date.getMonth())
+  newDate.setDate(date.getDate() + days)
+  newDate.setHours(date.getHours())
+  newDate.setMinutes(date.getMinutes())
+  newDate.setSeconds(date.getSeconds())
+  newDate.setMilliseconds(date.getMilliseconds())
+  return newDate
 }
 
 export function addWeeksToDate(date: Date, weeks: number): Date {
