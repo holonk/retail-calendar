@@ -502,4 +502,32 @@ describe('RetailCalendar', () => {
       expect(calendar.weeks.length).toBeLessThanOrEqual(53);
     })
   })
+
+  describe("for any day of the year", () => {
+    it("can create a retail calendar successfully", () => {
+      // iterate over every day of the year, set current date to that day using jest timers, and create a retail calendar
+      // this is to ensure that the retail calendar can be created for any day of the year
+
+      const options: RetailCalendarOptions = NRFCalendarOptions;
+      const year = 2023;
+      // iterate over every day of the year
+      const daysIn2023: Date[] = [];
+      for (let month = 0; month < 12; month++) {
+        const date = new Date(year, month, 1);
+
+        while (date.getMonth() === month) {
+          daysIn2023.push(new Date(date));
+          date.setDate(date.getDate() + 1);
+        }
+      }
+
+      daysIn2023.forEach(day => {
+        jest.useFakeTimers("modern");
+        jest.setSystemTime(day);
+        const calendar = new RetailCalendarFactory(options, year);
+        expect(calendar).toBeDefined();
+        jest.useRealTimers();
+      })
+    })
+  })
 })
