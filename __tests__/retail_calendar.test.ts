@@ -20,6 +20,7 @@ import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_excep
 import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
 import { endOfDay, startOfDay, toFormattedString } from '../src/date_utils';
 import { parseEndDate, parseStartDate } from './utils/parser';
+import {weekOfGregorianDate}  from "../src/gregorian_helpers"
 
 
 describe('RetailCalendar', () => {
@@ -508,7 +509,7 @@ describe('RetailCalendar', () => {
       // iterate over every day of the year, set current date to that day using jest timers, and create a retail calendar
       // this is to ensure that the retail calendar can be created for any day of the year
 
-      const options: RetailCalendarOptions = NRFCalendarOptions;
+      const options: RetailCalendarOptions = { ...NRFCalendarOptions, leapYearStrategy: LeapYearStrategy.DropLastWeek };
       const year = 2023;
       // iterate over every day of the year
       const daysIn2023: Date[] = [];
@@ -521,11 +522,24 @@ describe('RetailCalendar', () => {
         }
       }
 
+      const march29 = new Date(2023, 2, 29);
+      const oneWeekTimeDifferenceMin = 7 * 24 * 60 * 60 * 1000 - (60 * 60 * 1000) - 1; // 1 hour less than 1 week, because of daylight savings time
+      const oneWeekTimeDifferenceMax = 7 * 24 * 60 * 60 * 1000 + (60 * 60 * 1000) - 1; // 1 hour more than 1 week, because of daylight savings time
+
       daysIn2023.forEach(day => {
         jest.useFakeTimers("modern");
         jest.setSystemTime(day);
         const calendar = new RetailCalendarFactory(options, year);
+        calendar.weeks.forEach(week => {
+          // check that start date and end date has one week of difference
+          const receivedTimeDifference = week.gregorianEndDate.getTime() - week.gregorianStartDate.getTime();
+          expect(receivedTimeDifference).toBeGreaterThanOrEqual(oneWeekTimeDifferenceMin);
+          expect(receivedTimeDifference).toBeLessThanOrEqual(oneWeekTimeDifferenceMax);
+        });
         expect(calendar).toBeDefined();
+        // Check weekOfYear for March 29, 2023
+        const weekOfMarch29 = weekOfGregorianDate(march29, options);
+        expect(weekOfMarch29).toBeDefined();
         jest.useRealTimers();
       })
     })
