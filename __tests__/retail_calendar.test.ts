@@ -9,7 +9,6 @@ import {
   LastMonthOfYear,
   WeekCalculation,
   NRFCalendarOptions,
-  LeapYearStrategy,
   RetailCalendar,
 } from '../src/types'
 import { nrfYears } from './data/nrf_years'
@@ -23,70 +22,7 @@ import { parseEndDate, parseStartDate } from './utils/parser';
 
 
 describe('RetailCalendar', () => {
-  describe("leap year strategy options", () => {
-
-    describe('when neither restated nor leapYearStrategy is provided', () => {
-      it('throws an error', () => {
-        expect(() => {
-          new RetailCalendarFactory({
-            weekGrouping: WeekGrouping.Group454,
-            lastDayOfWeek: LastDayOfWeek.Saturday,
-            lastMonthOfYear: LastMonthOfYear.January,
-            weekCalculation: WeekCalculation.LastDayNearestEOM,
-          }, 2018)
-        }).toThrowError(/leapYearStrategy or restated/)
-      })
-    })
-
-    describe("when restated is provided and its true", () => {
-      it("emits a warning", () => {
-        jest.spyOn(console, 'warn').mockImplementation()
-        const retailCalendar = new RetailCalendarFactory({
-          weekGrouping: WeekGrouping.Group454,
-          lastDayOfWeek: LastDayOfWeek.Saturday,
-          lastMonthOfYear: LastMonthOfYear.January,
-          weekCalculation: WeekCalculation.LastDayNearestEOM,
-          restated: true
-        }, 2017)
-
-        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.Restated)
-        expect(console.warn).toHaveBeenCalledWith("restated option is deprecated. Please use leapYearStrategy instead")
-      })
-    })
-
-    describe("when restated is provided and its false", () => {
-      it("emits a warning", () => {
-        jest.spyOn(console, 'warn').mockImplementation()
-        const retailCalendar = new RetailCalendarFactory({
-          weekGrouping: WeekGrouping.Group454,
-          lastDayOfWeek: LastDayOfWeek.Saturday,
-          lastMonthOfYear: LastMonthOfYear.January,
-          weekCalculation: WeekCalculation.LastDayNearestEOM,
-          restated: false
-        }, 2017)
-
-        expect(retailCalendar.leapYearStrategy).toBe(LeapYearStrategy.DropLastWeek)
-        expect(console.warn).toHaveBeenCalledWith("restated option is deprecated. Please use leapYearStrategy instead")
-      })
-    })
-
-    describe("when restated and leapYearStrategy are provided", () => {
-      it('throws an erorr', () => {
-        expect(() => {
-          jest.spyOn(console, 'warn').mockImplementation()
-          const retailCalendar = new RetailCalendarFactory({
-            weekGrouping: WeekGrouping.Group454,
-            lastDayOfWeek: LastDayOfWeek.Saturday,
-            lastMonthOfYear: LastMonthOfYear.January,
-            weekCalculation: WeekCalculation.LastDayNearestEOM,
-            leapYearStrategy: LeapYearStrategy.Restated,
-            restated: false
-          }, 2017)
-        }).toThrowError(/Only one of leapYearStrategy or restated options can be given/)
-      })
-
-    })
-  })
+  // TODO: addLeapYearToPenultimate tests
 
   describe('Given Last Day Nearest EOM, 445, Penultimate Leap Year', () => {
     it('returns the right data for each week of 2022', () => {
@@ -95,7 +31,7 @@ describe('RetailCalendar', () => {
         weekGrouping: WeekGrouping.Group445,
         lastDayOfWeek: LastDayOfWeek.Friday,
         lastMonthOfYear: LastMonthOfYear.January,
-        leapYearStrategy: LeapYearStrategy.AddToPenultimateMonth
+        addLeapYearToPenultimateMonth: true,
       }, 2022)
 
       for (let weekIndex = 0; weekIndex < lastDayNearestEOM445PenultimateWeeks.length; weekIndex++) {
@@ -325,7 +261,6 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.August,
         weekCalculation: WeekCalculation.LastDayBeforeEOM,
-        leapYearStrategy: LeapYearStrategy.DropLastWeek
       }
 
       for (const { year, numberOfWeeks } of lastDayBeforeEOMYears) {
@@ -341,7 +276,6 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          leapYearStrategy: LeapYearStrategy.DropLastWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
@@ -359,7 +293,6 @@ describe('RetailCalendar', () => {
           lastDayOfWeek: LastDayOfWeek.Saturday,
           lastMonthOfYear: LastMonthOfYear.August,
           weekCalculation: WeekCalculation.LastDayBeforeEOM,
-          leapYearStrategy: LeapYearStrategy.DropLastWeek
         }
         const calendar = new RetailCalendarFactory(calendarOptions, 2015)
         const expectedMonthLenthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
@@ -377,7 +310,6 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.LastDayNearestEOM,
-        leapYearStrategy: LeapYearStrategy.Restated
       }
       const calendar = new RetailCalendarFactory(options, 2019)
       expect(calendar.months[11].gregorianStartDate.getFullYear()).toBe(2019)
@@ -391,7 +323,6 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Saturday,
         lastMonthOfYear: LastMonthOfYear.December,
         weekCalculation: WeekCalculation.FirstBOWOfFirstMonth,
-        leapYearStrategy: LeapYearStrategy.Restated
       }
 
       for (const yearData of firstBow) {

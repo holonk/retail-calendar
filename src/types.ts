@@ -33,25 +33,15 @@ export enum WeekCalculation {
   FirstBOWOfFirstMonth,
 }
 
-export enum LeapYearStrategy {
-  Restated,
-  DropLastWeek,
-  AddToPenultimateMonth,
-}
-
 export interface RetailCalendarOptions {
   weekGrouping: WeekGrouping
   lastDayOfWeek: LastDayOfWeek
   lastMonthOfYear: LastMonthOfYear | number
   weekCalculation: WeekCalculation
   /**
-   * If LeapYearStrategy.Restated, 53rd week will belong to last month in year. First week won't belong to any month.
-   * If LeapYearStrategy.DropLastWeek, 53rd week won't belong to any month in year. First week will belong to the first month.
-   * Note: restated: true is a deprecated option that is replaced by LeapYearStrategy.Restated
+   * If the value of addLeapYearToPenultimateMonth is true, then the 11th month of the years that have 53 weeks will be extended by an additional week
    */
-  leapYearStrategy?: LeapYearStrategy
-  /** @deprecated use leapYearStrategy field instead */
-  restated?: boolean
+  addLeapYearToPenultimateMonth?: boolean
   beginningMonthIndex?: number
 }
 
@@ -60,7 +50,6 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
   lastDayOfWeek: LastDayOfWeek.Saturday,
   lastMonthOfYear: LastMonthOfYear.January,
   weekCalculation: WeekCalculation.LastDayNearestEOM,
-  leapYearStrategy: LeapYearStrategy.Restated,
 }
 
 export type RetailCalendarConstructor = new (
@@ -69,12 +58,12 @@ export type RetailCalendarConstructor = new (
 ) => RetailCalendar
 
 export interface RetailCalendar {
-  leapYearStrategy: LeapYearStrategy
   year: number
   numberOfWeeks: number
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
   days: RetailCalendarDay[]
+  addLeapYearToPenultimateMonth: boolean
 }
 
 export interface RetailCalendarDay {
