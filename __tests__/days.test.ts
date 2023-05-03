@@ -92,10 +92,10 @@ describe("RetailCalendar", () => {
         it("should return correct first day information", () => {
             const firstDay = calendar.days[0]
             expect(firstDay.dayOfWeek).toBe(1)
-            expect(firstDay.dayOfMonth).toBe(-1)
+            expect(firstDay.dayOfMonth).toBe(1)
             expect(firstDay.dayOfYear).toBe(1)
-            expect(firstDay.monthOfYear).toBe(-1)
-            expect(firstDay.weekOfYear).toBe(-1)
+            expect(firstDay.monthOfYear).toBe(1)
+            expect(firstDay.weekOfYear).toBe(0)
             expect(firstDay.gregorianDayOfYear).toBe(29)
             expect(firstDay.gregorianMonthOfYear).toBe(1) // January
             expect(firstDay.gregorianStartDate).toEqual(new Date(2023, 0, 29)) // January 29th 2023
@@ -105,10 +105,10 @@ describe("RetailCalendar", () => {
         it("should return correct second day information", () => {
             const secondDay = calendar.days[1]
             expect(secondDay.dayOfWeek).toBe(2)
-            expect(secondDay.dayOfMonth).toBe(-1)
+            expect(secondDay.dayOfMonth).toBe(2)
             expect(secondDay.dayOfYear).toBe(2)
-            expect(secondDay.monthOfYear).toBe(-1)
-            expect(secondDay.weekOfYear).toBe(-1)
+            expect(secondDay.monthOfYear).toBe(1)
+            expect(secondDay.weekOfYear).toBe(0)
             expect(secondDay.gregorianDayOfYear).toBe(30)
             expect(secondDay.gregorianMonthOfYear).toBe(1) // January
             expect(secondDay.gregorianStartDate).toEqual(new Date(2023, 0, 30)) // January 30th 2023
@@ -118,10 +118,10 @@ describe("RetailCalendar", () => {
         it("should return correct third day information", () => {
             const thirdDay = calendar.days[2]
             expect(thirdDay.dayOfWeek).toBe(3)
-            expect(thirdDay.dayOfMonth).toBe(-1)
+            expect(thirdDay.dayOfMonth).toBe(3)
             expect(thirdDay.dayOfYear).toBe(3)
-            expect(thirdDay.monthOfYear).toBe(-1)
-            expect(thirdDay.weekOfYear).toBe(-1)
+            expect(thirdDay.monthOfYear).toBe(1)
+            expect(thirdDay.weekOfYear).toBe(0)
             expect(thirdDay.gregorianDayOfYear).toBe(31)
             expect(thirdDay.gregorianMonthOfYear).toBe(1) // January
             expect(thirdDay.gregorianStartDate).toEqual(new Date(2023, 0, 31)) // January 31th 2023
@@ -130,11 +130,11 @@ describe("RetailCalendar", () => {
 
         it("should return correct last day information", () => {
             const lastDay = calendar.days[53 * 7 - 1]
-            expect(lastDay.dayOfMonth).toBe(28)
+            expect(lastDay.dayOfMonth).toBe(-1)
             expect(lastDay.dayOfWeek).toBe(7)
             expect(lastDay.dayOfYear).toBe(371)
-            expect(lastDay.monthOfYear).toBe(12)
-            expect(lastDay.weekOfYear).toBe(51)
+            expect(lastDay.monthOfYear).toBe(-1)
+            expect(lastDay.weekOfYear).toBe(52)
             expect(lastDay.gregorianDayOfYear).toBe(34)
             expect(lastDay.gregorianMonthOfYear).toBe(2) // February
             expect(lastDay.gregorianStartDate).toEqual(new Date(2024, 1, 3)) // Feb 3rd 2024
@@ -143,12 +143,12 @@ describe("RetailCalendar", () => {
         });
 
         it("should return correct random day information", () => {
-            const randomDay = calendar.days[31 * 7 + 1] // 31st week, 2nd day (first week is leap week)
-            expect(randomDay.dayOfMonth).toBe(2)
+            const randomDay = calendar.days[31 * 7 + 1] // 32nd week, 2nd day
+            expect(randomDay.dayOfMonth).toBe(9)
             expect(randomDay.dayOfWeek).toBe(2)
             expect(randomDay.dayOfYear).toBe(31 * 7 + 2)
             expect(randomDay.monthOfYear).toBe(8)
-            expect(randomDay.weekOfYear).toBe(30)
+            expect(randomDay.weekOfYear).toBe(31)
             expect(randomDay.gregorianDayOfYear).toBe(247)
             expect(randomDay.gregorianMonthOfYear).toBe(9) // September
             expect(randomDay.gregorianStartDate).toEqual(new Date(2023, 8, 4)) // September 4th 2023
