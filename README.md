@@ -29,7 +29,6 @@ const calendar = new RetailCalendarFactory(
     weekGrouping: WeekGrouping.Group454,
     lastDayOfWeek: LastDayOfWeek.Saturday,
     lastMonthOfYear: LastMonthOfYear.January,
-    leapYearStrategy: LeapYearStrategy.DropLastWeek // deprecated: restated: false
   },
   2017,
 )
@@ -102,38 +101,17 @@ calendar.weeks[0].gregorianEndDate // Date
 ### 53 week years
 
 Based on given configuration, a year may contain 53 weeks.
-This complicates comparing months to previous year. This case is handled specially based on the given [LeapYearStrategy](#LeapYearStrategy) option.
 
 #### Restated
 
-If `leapYearStrategy` is `LeapYearStrategy.Restated` 
+⚠ *previous versions of this library used the LeapYearStrategy option to configure restated behavior. This is no longer supported. All 53 week calendars are not restated* ⚠
 
-FIRST week of year is "dropped". It doesn't belong the any month.
+#### Dropping Last Week
 
-```javascript
-// Restated calendar example.
-// First week of year has no month.
-// Note that first week's weekOfYear is -1.
-calendar.numberOfWeeks // 53
-calendar.weeks[0].weekOfYear // -1
-calendar.weeks[0].weekOfMonth // -1
-calendar.weeks[0].monthOfYear // -1
-
-// First month still starts from first week
-calendar.months[0].weeks[0].weekOfYear // 0
-```
-
-⚠ *previous versions of this library used the `restated: true` option to specify a Restated leap year strategy. This still works but is deprecated!* ⚠
-
-#### Drop Last Week
-
-If `leapYearStrategy` is `LeapYearStrategy.DropLastWeek`
-
-LAST week of year is "dropped".
+LAST week of year is "dropped" for 53-week years. This is the default behavior.
 
 ```javascript
-// Restated calendar example.
-// First week of year has no month.
+// Last week of year has no month.
 calendar.weeks[52].weekOfYear // 52
 calendar.weeks[52].weekOfMonth // -1
 calendar.weeks[52].monthOfYear // -1
@@ -142,11 +120,10 @@ calendar.weeks[52].monthOfYear // -1
 calendar.months[0].weeks[0].weekOfYear // 0
 ```
 ⚠ *previous versions of this library returned weekOfYear as -1, this is no longer the case. Last week's weekOfYear is 52* ⚠
-⚠ *previous versions of this library used the `restated: false` option to specify a "Drop Last Week" leap year strategy. This still works but is deprecated!* ⚠
 
 #### Add to Penultimate Month
 
-If `leapYearStrategy` is `LeapYearStrategy.AddToPenultimateMonth`
+If `addLeapWeekToPenultimateMonth` is `true`,
 
 extra week is "added" to the ELEVENTH month
 
@@ -155,6 +132,9 @@ extra week is "added" to the ELEVENTH month
 // 11th Month has 5 weeks instead of 4
 calendar.months[10].weeks.length //5
 ```
+
+⚠ *previous versions of this library supported `leapYearStrategy` option value `LeapYearStrategy.AddToPenultimateMonth` for the same behavior. `leapYearStrategy` is no longer supported* ⚠
+
 ### Options
 
 #### LastDayOfWeek
@@ -167,11 +147,11 @@ Identifies which method to use when calculating end of the retail calendar year.
 
 See [4-4-5 Calendar](https://en.wikipedia.org/wiki/4%E2%80%934%E2%80%935_calendar) article for how both of these methods work.
 
-- WeekCalculation.LastDayNearestEOM: Use the last end of retail week, nearest the end of last gregorian month in the year.
+- WeekCalculation.LastDayNearestEOM: Use the last end of retail week, nearest the end of last Gregorian month in the year.
 
-- WeekCalculation.LastDayBeforeEOM: Use the last end of retail week, before the end of last gregorian month in the year.
+- WeekCalculation.LastDayBeforeEOM: Use the last end of retail week, before the end of last Gregorian month in the year.
 
-- WeekCalculation.LastDayBeforeEomExceptLeapYear: Use the last end of retail week, before the end of last gregorian month in the year. If next year is leap year (has 53 weeks), make this year leap year by moving end of this year by 1 week forward.
+- WeekCalculation.LastDayBeforeEomExceptLeapYear: Use the last end of retail week, before the end of last Gregorian month in the year. If next year is leap year (has 53 weeks), make this year leap year by moving end of this year by 1 week forward.
 
 - WeekCalculation.FirstBOWOfFirstMonth: Use the first, beginning of week day, of the start month as the start day of year.
 
@@ -190,7 +170,9 @@ Specifies how many weeks each month has in a quarter.
 - `WeekGrouping.Group544`: 1st month has 5 weeks, 2nd has 4, 3rd has 4. Repeats for each quarter.
 - `WeekGrouping.Group445`: 1st month has 4 weeks, 2nd has 4, 3rd has 5. Repeats for each quarter.
 
-#### LeapYearStrategy
+If `addLeapWeekToPenultimateMonth` is set to `true`, then the penultimate month will not abide this rule, as it will have an extra week.
+
+#### LeapYearStrategy [Removed]
 
 `enum`
 
@@ -202,7 +184,7 @@ If the year is a leap year (in the context of a retail calendar that means it ha
 
 This option has no effect on 52 week years.
 
-#### restated [Deprecated]
+#### restated [Removed]
 ⚠ *This option has been superseded by [LeapYearStrategy](#LeapYearStrategy)* ⚠
 
 `boolean`. If true, in leap years, first week is not included in any month. Otherwise, in leap years, last week is not included in any month.

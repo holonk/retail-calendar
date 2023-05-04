@@ -1,6 +1,3 @@
-import { LastDayBeforeEOMExceptLeapYearStrategy } from '../src/last_day_before_eom_except_leap_year';
-import { LastDayBeforeEOMStrategy } from './../src/last_day_before_eom';
-import { FirstBOWOfFirstMonth } from '../src/first_bow_of_first_month'
 import { RetailCalendarFactory } from '../src/retail_calendar'
 import {
   RetailCalendarOptions,
@@ -17,7 +14,7 @@ import { nrf2018, nrf2017NotRestated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
 import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
-import { endOfDay, startOfDay, toFormattedString } from '../src/date_utils';
+import { toFormattedString } from '../src/date_utils';
 import { parseEndDate, parseStartDate } from './utils/parser';
 
 
