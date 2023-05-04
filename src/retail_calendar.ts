@@ -45,7 +45,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
-    this.addLeapWeekToPenultimateMonth = this.options.addLeapWeekToPenultimateMonth ?? false
+    this.addLeapWeekToPenultimateMonth =
+      this.options.addLeapWeekToPenultimateMonth ?? false
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = startOfDay(
@@ -55,7 +56,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.months = this.generateMonths()
     this.days = this.generateDays()
   }
-  
+
   generateMonths(): RetailCalendarMonth[] {
     const months = []
     const beginningIndex = this.getBeginningOfMonthIndex()
@@ -127,7 +128,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         const gregorianMonthOfYear = gregorianStartDate.getMonth() + 1 // JS Date is 0 indexed
         const gregorianDayOfYear = getDayOfYear(gregorianStartDate)
         const gregorianDayOfMonth = gregorianStartDate.getDate()
-        
+
         const isLeapWeek = this.isLeapWeek(week.weekOfYear)
         days.push({
           dayOfYear,
@@ -147,17 +148,16 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return days
   }
 
-  
   isLeapWeek(weekIndex: number): boolean {
     if (weekIndex !== 52) {
-      return false;
+      return false
     }
 
-    // If addLeapWeekToPenultimateMonth is true, then 11th month has one additional week. 
+    // If addLeapWeekToPenultimateMonth is true, then 11th month has one additional week.
     // As a result, the 52nd week is not a leap week.
-    return this.addLeapWeekToPenultimateMonth === false;
+    return this.addLeapWeekToPenultimateMonth === false
   }
-  
+
   getMonthAndWeekOfMonthOfWeek(
     weekIndex: number,
   ): [number, number, number, number] {
@@ -215,10 +215,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         break
     }
 
-    if (
-      this.addLeapWeekToPenultimateMonth &&
-      this.numberOfWeeks === 53
-    )
+    if (this.addLeapWeekToPenultimateMonth && this.numberOfWeeks === 53)
       weekDistribution[10]++
 
     return weekDistribution

@@ -1,8 +1,4 @@
-import {
-  addWeeksToDate,
-  getDayDifference,
-  setIsoWeekDay,
-} from './date_utils'
+import { addWeeksToDate, getDayDifference, setIsoWeekDay } from './date_utils'
 import { LastDayStrategy } from './types'
 
 export class LastDayNearestEOMStrategy implements LastDayStrategy {
