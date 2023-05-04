@@ -8,7 +8,6 @@ import {
   WeekGrouping,
   LastDayStrategy,
   LastMonthOfYear,
-  LeapYearStrategy,
   RetailCalendarDay,
 } from './types'
 
@@ -40,13 +39,13 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   options: RetailCalendarOptions
   lastDayOfYear: Date
   firstDayOfYear: Date
-  leapYearStrategy: LeapYearStrategy
+  addLeapWeekToPenultimateMonth: boolean
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
-    this.leapYearStrategy = this.getLeapYearStrategy()
+    this.addLeapWeekToPenultimateMonth = this.options.addLeapWeekToPenultimateMonth ?? false
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = startOfDay(
@@ -56,44 +55,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.months = this.generateMonths()
     this.days = this.generateDays()
   }
-
-  getLeapYearStrategy() {
-    if (
-      this.options.restated === undefined &&
-      this.options.leapYearStrategy === undefined
-    ) {
-      throw new Error(
-        'One of leapYearStrategy or restated options are required',
-      )
-    }
-
-    if (this.options.restated !== undefined) {
-      // tslint:disable-next-line:no-console
-      console.warn(
-        'restated option is deprecated. Please use leapYearStrategy instead',
-      )
-    }
-
-    if (
-      this.options.restated !== undefined &&
-      this.options.leapYearStrategy !== undefined
-    ) {
-      throw new Error(
-        'Only one of leapYearStrategy or restated options can be given',
-      )
-    }
-
-    if (this.options.restated !== undefined && this.options.restated === true) {
-      return LeapYearStrategy.Restated
-    }
-
-    if (this.options.leapYearStrategy !== undefined) {
-      return this.options.leapYearStrategy
-    }
-
-    return LeapYearStrategy.DropLastWeek
-  }
-
+  
   generateMonths(): RetailCalendarMonth[] {
     const months = []
     const beginningIndex = this.getBeginningOfMonthIndex()
@@ -127,7 +89,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   generateWeeks(): RetailCalendarWeek[] {
     const weeks = []
     for (let index = 0; index < this.numberOfWeeks; index++) {
-      const weekIndex = this.getWeekIndex(index)
+      const weekIndex = index
       const [
         monthOfYear,
         weekOfMonth,
@@ -165,12 +127,13 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         const gregorianMonthOfYear = gregorianStartDate.getMonth() + 1 // JS Date is 0 indexed
         const gregorianDayOfYear = getDayOfYear(gregorianStartDate)
         const gregorianDayOfMonth = gregorianStartDate.getDate()
-        const isLeapWeek = week.weekOfYear === -1
+        
+        const isLeapWeek = this.isLeapWeek(week.weekOfYear)
         days.push({
           dayOfYear,
           dayOfWeek: dayIndex,
           dayOfMonth: isLeapWeek ? -1 : week.weekOfMonth * 7 + dayIndex,
-          weekOfYear: isLeapWeek ? -1 : week.weekOfYear,
+          weekOfYear: week.weekOfYear,
           monthOfYear: isLeapWeek ? -1 : week.monthOfYear,
           gregorianStartDate,
           gregorianEndDate,
@@ -184,6 +147,17 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return days
   }
 
+  
+  isLeapWeek(weekIndex: number): boolean {
+    if (weekIndex !== 52) {
+      return false;
+    }
+
+    // If addLeapWeekToPenultimateMonth is true, then 11th month has one additional week. 
+    // As a result, the 52nd week is not a leap week.
+    return this.addLeapWeekToPenultimateMonth === false;
+  }
+  
   getMonthAndWeekOfMonthOfWeek(
     weekIndex: number,
   ): [number, number, number, number] {
@@ -242,27 +216,12 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     }
 
     if (
-      this.leapYearStrategy === LeapYearStrategy.AddToPenultimateMonth &&
+      this.addLeapWeekToPenultimateMonth &&
       this.numberOfWeeks === 53
     )
       weekDistribution[10]++
 
     return weekDistribution
-  }
-
-  getWeekIndex(weekIndex: number): number {
-    if (this.numberOfWeeks !== 53) {
-      return weekIndex
-    }
-
-    switch (this.leapYearStrategy) {
-      case LeapYearStrategy.Restated:
-        return weekIndex - 1
-      case LeapYearStrategy.AddToPenultimateMonth:
-        return weekIndex
-      default:
-        return weekIndex
-    }
   }
 
   calculateLastDayOfYear(year: number): Date {

@@ -61,10 +61,10 @@ export const nrf2018 = [
   },
 ]
 
-export const nrf2017Restated = [
+export const nrf2017NotRestated = [
   {
     monthOfYear: 0,
-    start: '2017-02-05',
-    end: '2017-03-04',
-  },
-]
+    start: '2017-01-29',
+    end: '2017-02-25',
+  }
+];

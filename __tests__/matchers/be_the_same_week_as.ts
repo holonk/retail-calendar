@@ -1,4 +1,3 @@
-import { endOfDay } from "../../src/date_utils"
 import { parseEndDate, parseStartDate } from "../utils/parser";
 
 expect.extend({
