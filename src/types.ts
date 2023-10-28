@@ -63,10 +63,10 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
   leapYearStrategy: LeapYearStrategy.Restated,
 }
 
-export type RetailCalendarConstructor = new (
-  calendarOptions: RetailCalendarOptions,
-  year: number,
-) => RetailCalendar
+export type RetailCalendarConstructor = {
+    new(calendarOptions: RetailCalendarOptions, year: number): RetailCalendar,
+    getRetailCalendar: (calendarOptions: RetailCalendarOptions, year: number) => RetailCalendar
+}
 
 export interface RetailCalendar {
   leapYearStrategy: LeapYearStrategy
