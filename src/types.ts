@@ -52,10 +52,10 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
   weekCalculation: WeekCalculation.LastDayNearestEOM,
 }
 
-export type RetailCalendarConstructor = new (
-  calendarOptions: RetailCalendarOptions,
-  year: number,
-) => RetailCalendar
+export type RetailCalendarConstructor = {
+    new(calendarOptions: RetailCalendarOptions, year: number): RetailCalendar,
+    getRetailCalendar: (calendarOptions: RetailCalendarOptions, year: number) => RetailCalendar
+}
 
 export interface RetailCalendar {
   year: number
