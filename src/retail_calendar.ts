@@ -28,6 +28,12 @@ import {
   newSafeDate,
   startOfDay,
 } from './date_utils'
+import {createMemoizationKeyFromCalendarOptionsAndYear, memoize} from "./utils/memoization";
+
+const buildRetailCalendarFactory = memoize(
+    (retailCalendarOptions: RetailCalendarOptions, year: number) => new RetailCalendarFactory(retailCalendarOptions, year),
+    (retailCalendarOptions: RetailCalendarOptions, year: number) => createMemoizationKeyFromCalendarOptionsAndYear(retailCalendarOptions, year),
+)
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   implements RetailCalendar {
@@ -55,6 +61,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.weeks = this.generateWeeks()
     this.months = this.generateMonths()
     this.days = this.generateDays()
+  }
+
+  static getRetailCalendar(retailCalendarOptions: RetailCalendarOptions, year: number) {
+    return buildRetailCalendarFactory(retailCalendarOptions, year)
   }
 
   getLeapYearStrategy() {
