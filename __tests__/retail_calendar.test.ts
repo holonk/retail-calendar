@@ -66,7 +66,7 @@ describe('RetailCalendar', () => {
       expect(months.map((month) => month.weeks.length)).toEqual(
         expectedMonthLengthsInWeeks,
       )
-    })  
+    })
 
     it('returns month with correct start and end dates', () => {
       const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2018)
@@ -142,7 +142,7 @@ describe('RetailCalendar', () => {
       expect(weeks.length).toBe(expectedNumberOfWeeks)
       for (let index = 0; index < weeks.length; index++) {
         expect(weeks[index].weekOfYear).toBe(index)
-      }        
+      }
     })
 
     it('returns quarters', () => {
@@ -169,7 +169,7 @@ describe('RetailCalendar', () => {
       expect(weeks[51].weekOfQuarter).toEqual(12)
     })
 
-    describe('on leap years', () => {      
+    describe('on leap years', () => {
 
       describe('when inserting a week in penultimate month', () => {
         let calendar: RetailCalendar;
@@ -430,6 +430,27 @@ describe('RetailCalendar', () => {
       };
       const calendar = new RetailCalendarFactory(options, 0);
       expect(calendar.weeks.length).toBeLessThanOrEqual(53);
+    })
+  })
+
+  describe("Memoization", () => {
+    it("should return same retail calendar using same calendar options and year", () => {
+      const options: RetailCalendarOptions = {
+        weekGrouping: WeekGrouping.Group454,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        beginningMonthIndex: 0
+      };
+
+
+      const retailCalendar2022 = RetailCalendarFactory.getRetailCalendar(options, 2022)
+      const anotherRetailCalendar2022 = RetailCalendarFactory.getRetailCalendar(options, 2022)
+      const retailCalendar2023 = RetailCalendarFactory.getRetailCalendar(options, 2023)
+
+      expect(retailCalendar2022).toBe(anotherRetailCalendar2022)
+      expect(retailCalendar2022).not.toBe(retailCalendar2023)
+      expect(anotherRetailCalendar2022).not.toBe(retailCalendar2023)
     })
   })
 })
