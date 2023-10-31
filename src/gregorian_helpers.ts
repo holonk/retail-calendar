@@ -8,7 +8,10 @@ export function weekOfGregorianDate(
   const year = date.getFullYear()
   const candidateYears = [year - 1, year, year + 1]
   for (const candidateYear of candidateYears) {
-    const calendar = RetailCalendarFactory.getRetailCalendar(calendarOptions, candidateYear)
+    const calendar = RetailCalendarFactory.getRetailCalendar(
+      calendarOptions,
+      candidateYear,
+    )
     const week = calendar.weeks.find(
       (calendarWeek) =>
         calendarWeek.gregorianStartDate <= date &&
