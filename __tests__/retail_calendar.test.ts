@@ -433,6 +433,40 @@ describe('RetailCalendar', () => {
     })
   })
 
+  describe("PenultimateDayOfWeekNearestEOM calculation method", () => {
+    it("uses last day week for week calculation, but uses penultimate day for calculating year boundaries", () => {
+      // NRF Calendar has 53 weeks in 2023, last day of week is Saturday
+      const nrfCalendar = new RetailCalendarFactory(NRFCalendarOptions, 2023);
+      expect(nrfCalendar.weeks.length).toEqual(53)
+
+      // When last day of week is changed to Sunday, NRF Calendar has 52 weeks in 2023
+      const nrfOptionsWithSundayAsLastDayOfWeek = {
+        ...NRFCalendarOptions,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+      }
+      const nrfCalendarWithSundayAsLastDayOfWeek = new RetailCalendarFactory(nrfOptionsWithSundayAsLastDayOfWeek, 2023);
+      expect(nrfCalendarWithSundayAsLastDayOfWeek.weeks.length).toEqual(52)
+
+
+      // When using PenultimateDayNearestEndOfMonth, NRF Calendar with Sunday as last day of week has 53 weeks in 2023
+      // like original NRF Calendar
+      const options = {
+        ...NRFCalendarOptions,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+        weekCalculation: WeekCalculation.PenultimateDayOfWeekNearestEOM,
+      }
+      const calendar = new RetailCalendarFactory(options, 2023)
+      expect(calendar.weeks.length).toEqual(53)
+      // Check that each week Gregorian end date is a Sunday
+      calendar.weeks.forEach((week) => {
+          expect(week.gregorianEndDate.getDay()).toEqual(0)
+      })
+      // Check that calendar year starts at Jan 30 2023 Sunday and end at Feb 4 2024 Sunday
+      expect(toFormattedString(calendar.weeks[0].gregorianStartDate)).toEqual("2023-01-30")
+      expect(toFormattedString(calendar.weeks[52].gregorianEndDate)).toEqual("2024-02-04")
+    });
+  });
+
   describe("Memoization", () => {
     it("should return same retail calendar using same calendar options and year", () => {
       const options: RetailCalendarOptions = {
