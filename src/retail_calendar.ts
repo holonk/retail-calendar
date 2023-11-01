@@ -32,6 +32,7 @@ import {
   createMemoizationKeyFromCalendarOptionsAndYear,
   memoize,
 } from './utils/memoization'
+import {PenultimateDayOfWeekNearestEOMStrategy} from "./penultimate_day_of_week_nearest_eom";
 
 const buildRetailCalendarFactory = memoize(
   (retailCalendarOptions: RetailCalendarOptions, year: number) =>
@@ -324,6 +325,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         return new LastDayNearestEOMStrategy()
       case WeekCalculation.FirstBOWOfFirstMonth:
         return new FirstBOWOfFirstMonth()
+      case WeekCalculation.PenultimateDayOfWeekNearestEOM:
+        return new PenultimateDayOfWeekNearestEOMStrategy()
     }
   }
 

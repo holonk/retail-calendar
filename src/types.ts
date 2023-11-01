@@ -31,6 +31,7 @@ export enum WeekCalculation {
   LastDayBeforeEomExceptLeapYear,
   LastDayNearestEOM,
   FirstBOWOfFirstMonth,
+  PenultimateDayOfWeekNearestEOM,
 }
 
 export enum LeapYearStrategy {

@@ -1,25 +1,22 @@
-import { LastDayBeforeEOMExceptLeapYearStrategy } from '../src/last_day_before_eom_except_leap_year';
-import { LastDayBeforeEOMStrategy } from './../src/last_day_before_eom';
-import { FirstBOWOfFirstMonth } from '../src/first_bow_of_first_month'
-import { RetailCalendarFactory } from '../src/retail_calendar'
+import {RetailCalendarFactory} from '../src/retail_calendar'
 import {
-  RetailCalendarOptions,
-  WeekGrouping,
   LastDayOfWeek,
   LastMonthOfYear,
-  WeekCalculation,
-  NRFCalendarOptions,
   LeapYearStrategy,
+  NRFCalendarOptions,
   RetailCalendar,
+  RetailCalendarOptions,
+  WeekCalculation,
+  WeekGrouping,
 } from '../src/types'
-import { nrfYears } from './data/nrf_years'
-import { lastDayBeforeEOMYears } from './data/last_day_before_eom_years'
-import { nrf2018, nrf2017Restated } from './data/nrf_2018'
-import { firstBow } from './data/first_bow'
-import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
-import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
-import { endOfDay, startOfDay, toFormattedString } from '../src/date_utils';
-import { parseEndDate, parseStartDate } from './utils/parser';
+import {nrfYears} from './data/nrf_years'
+import {lastDayBeforeEOMYears} from './data/last_day_before_eom_years'
+import {nrf2017Restated, nrf2018} from './data/nrf_2018'
+import {firstBow} from './data/first_bow'
+import {lastDayBeforeEomExceptLeapYear} from './data/last_day_before_eom_except_leap_year';
+import {lastDayNearestEOM445PenultimateWeeks} from './data/last_day_nearest_eom_445_penultimate_weeks';
+import {toFormattedString} from '../src/date_utils';
+import {parseEndDate, parseStartDate} from './utils/parser';
 
 
 describe('RetailCalendar', () => {
@@ -500,6 +497,62 @@ describe('RetailCalendar', () => {
       };
       const calendar = new RetailCalendarFactory(options, 0);
       expect(calendar.weeks.length).toBeLessThanOrEqual(53);
+    })
+  })
+
+  describe("PenultimateDayOfWeekNearestEOM calculation method", () => {
+    it("uses last day week for week calculation, but uses penultimate day for calculating year boundaries", () => {
+      // NRF Calendar has 53 weeks in 2023, last day of week is Saturday
+      const nrfCalendar = new RetailCalendarFactory(NRFCalendarOptions, 2023);
+      expect(nrfCalendar.weeks.length).toEqual(53)
+
+      // When last day of week is changed to Sunday, NRF Calendar has 52 weeks in 2023
+      const nrfOptionsWithSundayAsLastDayOfWeek = {
+        ...NRFCalendarOptions,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+      }
+      const nrfCalendarWithSundayAsLastDayOfWeek = new RetailCalendarFactory(nrfOptionsWithSundayAsLastDayOfWeek, 2023);
+      expect(nrfCalendarWithSundayAsLastDayOfWeek.weeks.length).toEqual(52)
+
+
+      // When using PenultimateDayNearestEndOfMonth, NRF Calendar with Sunday as last day of week has 53 weeks in 2023
+      // like original NRF Calendar
+      const options = {
+        ...NRFCalendarOptions,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+        weekCalculation: WeekCalculation.PenultimateDayOfWeekNearestEOM,
+      }
+      const calendar = new RetailCalendarFactory(options, 2023)
+      expect(calendar.weeks.length).toEqual(53)
+      // Check that each week Gregorian end date is a Sunday
+      calendar.weeks.forEach((week) => {
+          expect(week.gregorianEndDate.getDay()).toEqual(0)
+      })
+      // Check that calendar year starts at Jan 30 2023 Sunday and end at Feb 4 2024 Sunday
+      expect(toFormattedString(calendar.weeks[0].gregorianStartDate)).toEqual("2023-01-30")
+      expect(toFormattedString(calendar.weeks[52].gregorianEndDate)).toEqual("2024-02-04")
+    });
+  });
+
+  describe("Memoization", () => {
+    it("should return same retail calendar using same calendar options and year", () => {
+      const options: RetailCalendarOptions = {
+        weekGrouping: WeekGrouping.Group454,
+        lastDayOfWeek: LastDayOfWeek.Saturday,
+        lastMonthOfYear: LastMonthOfYear.December,
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        leapYearStrategy: LeapYearStrategy.DropLastWeek,
+        beginningMonthIndex: 0
+      };
+
+
+      const retailCalendar2022 = RetailCalendarFactory.getRetailCalendar(options, 2022)
+      const anotherRetailCalendar2022 = RetailCalendarFactory.getRetailCalendar(options, 2022)
+      const retailCalendar2023 = RetailCalendarFactory.getRetailCalendar(options, 2023)
+
+      expect(retailCalendar2022).toBe(anotherRetailCalendar2022)
+      expect(retailCalendar2022).not.toBe(retailCalendar2023)
+      expect(anotherRetailCalendar2022).not.toBe(retailCalendar2023)
     })
   })
 })
