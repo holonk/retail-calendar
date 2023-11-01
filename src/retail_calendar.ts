@@ -31,7 +31,7 @@ import {
   createMemoizationKeyFromCalendarOptionsAndYear,
   memoize,
 } from './utils/memoization'
-import {PenultimateDayOfWeekNearestEOMStrategy} from "./penultimate_day_of_week_nearest_eom";
+import { PenultimateDayOfWeekNearestEOMStrategy } from './penultimate_day_of_week_nearest_eom'
 
 const buildRetailCalendarFactory = memoize(
   (retailCalendarOptions: RetailCalendarOptions, year: number) =>
