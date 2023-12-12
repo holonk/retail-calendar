@@ -40,9 +40,9 @@ export interface RetailCalendarOptions {
   lastMonthOfYear: LastMonthOfYear | number
   weekCalculation: WeekCalculation
   /**
-   * If the value of addLeapWeekToPenultimateMonth is true, then the 11th month of the years that have 53 weeks will be extended by an additional week
+   * If the value of addLeapWeekToMonth is 11, then the 11th month of the years that have 53 weeks will be extended by an additional week
    */
-  addLeapWeekToPenultimateMonth?: boolean
+  addLeapWeekToMonth?: number
   beginningMonthIndex?: number
 }
 
@@ -67,7 +67,7 @@ export interface RetailCalendar {
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
   days: RetailCalendarDay[]
-  addLeapWeekToPenultimateMonth: boolean
+  addLeapWeekToMonth: number
 }
 
 export interface RetailCalendarDay {

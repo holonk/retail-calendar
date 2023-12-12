@@ -14,20 +14,21 @@ import { nrf2018, nrf2017NotRestated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
 import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
+import { lastDayNearestEOM445ArbitraryLeapYearWeeks } from './data/last_day_nearest_eom_445_arbitrary_leap_year_weeks';
 import { toFormattedString } from '../src/date_utils';
 import { parseEndDate, parseStartDate } from './utils/parser';
 
 
 describe('RetailCalendar', () => {
 
-  describe("addLeapWeekToPenultimateMonth option", () => {
+  describe("addLeapWeekToMonth option", () => {
     it("defaults to false", () => {
       const calendar = new RetailCalendarFactory(NRFCalendarOptions, 2022)
-      expect(calendar.addLeapWeekToPenultimateMonth).toBe(false)
+      expect(calendar.addLeapWeekToMonth).toBe(-1)
     })
-    it("given true, RetailCalendar.addLeapWeekToPenultimateMonth is true", () => {
-      const calendar = new RetailCalendarFactory({ ...NRFCalendarOptions, addLeapWeekToPenultimateMonth: true }, 2022)
-      expect(calendar.addLeapWeekToPenultimateMonth).toBe(true)
+    it("given true, RetailCalendar.addLeapWeekToMonth is 11", () => {
+      const calendar = new RetailCalendarFactory({ ...NRFCalendarOptions, addLeapWeekToMonth: 10 }, 2022)
+      expect(calendar.addLeapWeekToMonth).toBe(10)
     })
   })
 
@@ -39,7 +40,7 @@ describe('RetailCalendar', () => {
         weekGrouping: WeekGrouping.Group445,
         lastDayOfWeek: LastDayOfWeek.Friday,
         lastMonthOfYear: LastMonthOfYear.January,
-        addLeapWeekToPenultimateMonth: true,
+        addLeapWeekToMonth: 10,
       }, 2022)
 
       for (let weekIndex = 0; weekIndex < lastDayNearestEOM445PenultimateWeeks.length; weekIndex++) {
@@ -50,6 +51,26 @@ describe('RetailCalendar', () => {
     })
   })
 
+  describe('Given Last Day Nearest EOM, 445, Arbitrary Leap Year', () => {
+
+    it('returns the right data for each week of 2023', () => {
+      const calendar = new RetailCalendarFactory({
+        weekCalculation: WeekCalculation.LastDayNearestEOM,
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+        lastMonthOfYear: LastMonthOfYear.October,
+        addLeapWeekToMonth: 1,
+      }, 2023)
+
+      expect(calendar.months[1].weeks.length).toEqual(5)
+
+      for (let weekIndex = 0; weekIndex < lastDayNearestEOM445ArbitraryLeapYearWeeks.length; weekIndex++) {
+        const expectedWeek = lastDayNearestEOM445ArbitraryLeapYearWeeks[weekIndex];
+        const actualWeek = calendar.weeks[weekIndex];
+        expect(actualWeek).toBeTheSameWeekAs(expectedWeek)
+      }
+    })
+  })
   describe('given NRF calendar options', () => {
     it('numberOfWeeks calculates properly for each year', () => {
       for (const { year, numberOfWeeks } of nrfYears) {
@@ -176,7 +197,7 @@ describe('RetailCalendar', () => {
 
         beforeEach(() => {
           calendar = new RetailCalendarFactory(
-            { ...NRFCalendarOptions, weekGrouping: WeekGrouping.Group445, addLeapWeekToPenultimateMonth: true },
+            { ...NRFCalendarOptions, weekGrouping: WeekGrouping.Group445, addLeapWeekToMonth: 10 },
             2017,
           )
         })
