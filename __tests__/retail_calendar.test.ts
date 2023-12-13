@@ -262,7 +262,7 @@ describe('RetailCalendar', () => {
         });
 
         it('does not assign any months to last week', () => {
-          const calendar = new RetailCalendarFactory( notRestatedCalendarOptions, 2017)
+          const calendar = new RetailCalendarFactory(notRestatedCalendarOptions, 2017)
           const lastWeek = calendar.weeks[52]
 
           const firstMonth = calendar.months[0]
@@ -480,7 +480,7 @@ describe('RetailCalendar', () => {
       expect(calendar.weeks.length).toEqual(53)
       // Check that each week Gregorian end date is a Sunday
       calendar.weeks.forEach((week) => {
-          expect(week.gregorianEndDate.getDay()).toEqual(0)
+        expect(week.gregorianEndDate.getDay()).toEqual(0)
       })
       // Check that calendar year starts at Jan 30 2023 Sunday and end at Feb 4 2024 Sunday
       expect(toFormattedString(calendar.weeks[0].gregorianStartDate)).toEqual("2023-01-30")

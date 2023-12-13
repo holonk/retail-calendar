@@ -54,7 +54,7 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
 }
 
 export type RetailCalendarConstructor = {
-  new (calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
+  new(calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
   getRetailCalendar: (
     calendarOptions: RetailCalendarOptions,
     year: number,
@@ -114,7 +114,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {}
+export { }
 
 declare global {
   namespace jest {
