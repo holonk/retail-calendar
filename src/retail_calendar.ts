@@ -57,8 +57,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
-    this.addLeapWeekToMonth =
-      this.options.addLeapWeekToMonth ?? -1
+    this.addLeapWeekToMonth = this.options.addLeapWeekToMonth ?? -1
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = startOfDay(
@@ -234,7 +233,11 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         break
     }
 
-    if (this.options.addLeapWeekToMonth && this.options.addLeapWeekToMonth >= 0 && this.numberOfWeeks === 53)
+    if (
+      this.options.addLeapWeekToMonth &&
+      this.options.addLeapWeekToMonth >= 0 &&
+      this.numberOfWeeks === 53
+    )
       weekDistribution[this.options.addLeapWeekToMonth]++
 
     return weekDistribution
