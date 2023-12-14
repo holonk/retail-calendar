@@ -40,9 +40,9 @@ export interface RetailCalendarOptions {
   lastMonthOfYear: LastMonthOfYear | number
   weekCalculation: WeekCalculation
   /**
-   * If the value of addLeapWeekToPenultimateMonth is true, then the 11th month of the years that have 53 weeks will be extended by an additional week
+   * If the value of addLeapWeekToMonth is 11, then the 11th month of the years that have 53 weeks will be extended by an additional week
    */
-  addLeapWeekToPenultimateMonth?: boolean
+  addLeapWeekToMonth?: number
   beginningMonthIndex?: number
 }
 
@@ -54,7 +54,7 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
 }
 
 export type RetailCalendarConstructor = {
-  new (calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
+  new(calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
   getRetailCalendar: (
     calendarOptions: RetailCalendarOptions,
     year: number,
@@ -67,7 +67,7 @@ export interface RetailCalendar {
   months: RetailCalendarMonth[]
   weeks: RetailCalendarWeek[]
   days: RetailCalendarDay[]
-  addLeapWeekToPenultimateMonth: boolean
+  addLeapWeekToMonth: number
 }
 
 export interface RetailCalendarDay {
@@ -114,7 +114,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {}
+export { }
 
 declare global {
   namespace jest {

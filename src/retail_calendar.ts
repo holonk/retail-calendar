@@ -51,14 +51,14 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   options: RetailCalendarOptions
   lastDayOfYear: Date
   firstDayOfYear: Date
-  addLeapWeekToPenultimateMonth: boolean
+  addLeapWeekToMonth: number
 
   constructor(calendarOptions: RetailCalendarOptions, year: number) {
     this.year = year
     this.options = calendarOptions
     this.calendarYear = this.getAdjustedGregorianYear(year)
-    this.addLeapWeekToPenultimateMonth =
-      this.options.addLeapWeekToPenultimateMonth ?? false
+    this.addLeapWeekToMonth =
+      this.options.addLeapWeekToMonth ?? -1
     this.numberOfWeeks = this.calculateNumberOfWeeks()
     this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
     this.firstDayOfYear = startOfDay(
@@ -172,9 +172,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       return false
     }
 
-    // If addLeapWeekToPenultimateMonth is true, then 11th month has one additional week.
+    // If addLeapWeekToMonth is greater than zero, then that month has one additional week.
     // As a result, the 52nd week is not a leap week.
-    return this.addLeapWeekToPenultimateMonth === false
+    return this.addLeapWeekToMonth === -1
   }
 
   getMonthAndWeekOfMonthOfWeek(
@@ -234,8 +234,8 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         break
     }
 
-    if (this.addLeapWeekToPenultimateMonth && this.numberOfWeeks === 53)
-      weekDistribution[10]++
+    if (this.options.addLeapWeekToMonth && this.options.addLeapWeekToMonth >= 0 && this.numberOfWeeks === 53)
+      weekDistribution[this.options.addLeapWeekToMonth]++
 
     return weekDistribution
   }

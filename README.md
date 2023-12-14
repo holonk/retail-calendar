@@ -121,9 +121,9 @@ calendar.months[0].weeks[0].weekOfYear // 0
 ```
 ⚠ *previous versions of this library returned weekOfYear as -1, this is no longer the case. Last week's weekOfYear is 52* ⚠
 
-#### Add to Penultimate Month
+#### Add Leap Week to Month
 
-If `addLeapWeekToPenultimateMonth` is `true`,
+If `addLeapWeekToMonth` is `11`,
 
 extra week is "added" to the ELEVENTH month
 
@@ -170,7 +170,8 @@ Specifies how many weeks each month has in a quarter.
 - `WeekGrouping.Group544`: 1st month has 5 weeks, 2nd has 4, 3rd has 4. Repeats for each quarter.
 - `WeekGrouping.Group445`: 1st month has 4 weeks, 2nd has 4, 3rd has 5. Repeats for each quarter.
 
-If `addLeapWeekToPenultimateMonth` is set to `true`, then the penultimate month will not abide this rule, as it will have an extra week.
+#### addLeapWeekToMonth
+If `addLeapWeekToMonth` is set to `10`, then the penultimate month will not abide this rule, as it will have an extra week. This value is zero-indexed.
 
 #### LeapYearStrategy [Removed]
 
