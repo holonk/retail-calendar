@@ -32,8 +32,11 @@ export enum WeekCalculation {
   LastDayNearestEOM,
   FirstBOWOfFirstMonth,
   PenultimateDayOfWeekNearestEOM,
+  CustomLeapYear,
 }
 
+// Adding new fields to this type will break memoization
+// Make sure that you adjust the memoization logic in src/utils/memoization.ts#stringifyCalendarOptions
 export interface RetailCalendarOptions {
   weekGrouping: WeekGrouping
   lastDayOfWeek: LastDayOfWeek
@@ -44,6 +47,13 @@ export interface RetailCalendarOptions {
    */
   addLeapWeekToMonth?: number
   beginningMonthIndex?: number
+  customLeapYearOptions?: CustomLeapYearOptions
+}
+
+export type CustomLeapYearOptions = {
+    calendarYear: number
+    yearEndDate: string // In the format of "YYYY-MM-DD"
+    leapYearFrequency: number // In years
 }
 
 export const NRFCalendarOptions: RetailCalendarOptions = {
@@ -106,6 +116,7 @@ export interface LastDayStrategy {
   getLastDayForGregorianLastDay(
     lastDayOfGregorianYear: Date,
     isoLastDayOfWeek: number,
+    retailCalendarYear: number,
   ): Date
 }
 

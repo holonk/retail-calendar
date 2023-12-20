@@ -1,4 +1,4 @@
-import { RetailCalendarOptions } from '../types'
+import {CustomLeapYearOptions, RetailCalendarOptions} from '../types'
 
 export function memoize<T extends (...args: any) => any>(
   func: T,
@@ -29,7 +29,7 @@ export function createMemoizationKeyFromCalendarOptionsAndYear(
 function stringifyCalendarOptions(
   retailCalendarOptions: RetailCalendarOptions,
 ) {
-  return Object.entries(retailCalendarOptions)
-    .map((e) => e.join(':'))
-    .join('-')
+  const { weekGrouping, lastDayOfWeek, lastMonthOfYear, weekCalculation, addLeapWeekToMonth, beginningMonthIndex, customLeapYearOptions } = retailCalendarOptions
+  return `1:${weekGrouping}-2:${lastDayOfWeek}-3:${lastMonthOfYear}-4:${weekCalculation}-5:${addLeapWeekToMonth}-6:${beginningMonthIndex}-7:${customLeapYearOptions?.calendarYear}-8:${customLeapYearOptions?.yearEndDate}-9:${customLeapYearOptions?.leapYearFrequency}`
 }
+

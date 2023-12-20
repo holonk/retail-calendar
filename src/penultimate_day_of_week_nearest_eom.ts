@@ -11,6 +11,7 @@ export class PenultimateDayOfWeekNearestEOMStrategy implements LastDayStrategy {
   getLastDayForGregorianLastDay(
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
+    retailCalendarYear: number,
   ): Date {
     // get penultimate day of ISO week by moving one day back
     const penultimateDayOfIsoWeek =
@@ -20,6 +21,7 @@ export class PenultimateDayOfWeekNearestEOMStrategy implements LastDayStrategy {
     const lastWeekOfYear = lastDayNearestEOMStrategy.getLastDayForGregorianLastDay(
       lastDayOfGregorianYear,
       penultimateDayOfIsoWeek,
+      retailCalendarYear,
     )
 
     // move the day one day forward to get the last day of the week
