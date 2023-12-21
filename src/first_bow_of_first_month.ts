@@ -5,6 +5,7 @@ export class FirstBOWOfFirstMonth implements LastDayStrategy {
   getLastDayForGregorianLastDay(
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
+    _retailCalendarYear: number,
   ): Date {
     const firstDayOfIsoWeek = lastDayOfIsoWeek === 7 ? 1 : lastDayOfIsoWeek + 1
     // Go to the next month, i.e start month of next year

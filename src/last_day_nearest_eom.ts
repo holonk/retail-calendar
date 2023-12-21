@@ -5,6 +5,7 @@ export class LastDayNearestEOMStrategy implements LastDayStrategy {
   getLastDayForGregorianLastDay(
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
+    _retailCalendarYear: number,
   ): Date {
     const mutableLastDay = new Date(lastDayOfGregorianYear)
     // Generate 3 candidates which has the same day of week.

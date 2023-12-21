@@ -32,6 +32,7 @@ import {
   memoize,
 } from './utils/memoization'
 import { PenultimateDayOfWeekNearestEOMStrategy } from './penultimate_day_of_week_nearest_eom'
+import { CustomLeapYearStrategy } from './custom_leap_year'
 
 const buildRetailCalendarFactory = memoize(
   (retailCalendarOptions: RetailCalendarOptions, year: number) =>
@@ -59,7 +60,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.calendarYear = this.getAdjustedGregorianYear(year)
     this.addLeapWeekToMonth = this.options.addLeapWeekToMonth ?? -1
     this.numberOfWeeks = this.calculateNumberOfWeeks()
-    this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear)
+    this.lastDayOfYear = this.calculateLastDayOfYear(
+      this.calendarYear,
+      this.year,
+    )
     this.firstDayOfYear = startOfDay(
       addDaysToDate(addWeeksToDate(this.lastDayOfYear, -this.numberOfWeeks), 1),
     )
@@ -243,7 +247,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weekDistribution
   }
 
-  calculateLastDayOfYear(year: number): Date {
+  calculateLastDayOfYear(year: number, retailCalendarYear: number): Date {
     const firstDayOfLastMonthOfYear = newSafeDate()
     firstDayOfLastMonthOfYear.setFullYear(year)
     firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear, 1)
@@ -256,6 +260,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     return weekCalculation.getLastDayForGregorianLastDay(
       lastDayOfYear,
       lastIsoWeekDay,
+      retailCalendarYear,
     )
   }
 
@@ -263,10 +268,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     // Make sure we get whole day difference
     // by measuring from the end of current year to start of last year
     const lastDayOfYear = endOfDay(
-      this.calculateLastDayOfYear(this.calendarYear),
+      this.calculateLastDayOfYear(this.calendarYear, this.year),
     )
     const lastDayOfLastYear = startOfDay(
-      this.calculateLastDayOfYear(this.calendarYear - 1),
+      this.calculateLastDayOfYear(this.calendarYear - 1, this.year - 1),
     )
     const numWeeks = getWeekDifference(lastDayOfYear, lastDayOfLastYear)
     return numWeeks
@@ -286,6 +291,23 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         return new FirstBOWOfFirstMonth()
       case WeekCalculation.PenultimateDayOfWeekNearestEOM:
         return new PenultimateDayOfWeekNearestEOMStrategy()
+      case WeekCalculation.CustomLeapYear: {
+        const { leapYear, leapYearEndDate, leapYearFrequency } = this.options
+        if (
+          leapYear === undefined ||
+          leapYearEndDate === undefined ||
+          leapYearFrequency === undefined
+        ) {
+          throw new Error(
+            'CustomLeapYear week calculation requires leapYear, leapYearEndDate, and leapYearFrequency to be defined',
+          )
+        }
+        return new CustomLeapYearStrategy(
+          leapYear,
+          leapYearEndDate,
+          leapYearFrequency,
+        )
+      }
     }
   }
 

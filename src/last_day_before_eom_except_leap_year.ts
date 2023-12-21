@@ -11,6 +11,7 @@ export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
   getLastDayForGregorianLastDay(
     lastDayOfGregorianYear: Date,
     lastDayOfIsoWeek: number,
+    retailCalendarYear: number,
   ): Date {
     const lastDayOfNextGregorianYear = endOfYear(
       addDaysToDate(lastDayOfGregorianYear, 1),
@@ -18,10 +19,12 @@ export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
     const lastDayOfThisYear = new LastDayBeforeEOMStrategy().getLastDayForGregorianLastDay(
       lastDayOfGregorianYear,
       lastDayOfIsoWeek,
+      retailCalendarYear,
     )
     const lastDayOfNextYear = new LastDayBeforeEOMStrategy().getLastDayForGregorianLastDay(
       lastDayOfNextGregorianYear,
       lastDayOfIsoWeek,
+      retailCalendarYear + 1,
     )
 
     if (getWeekDifference(lastDayOfNextYear, lastDayOfThisYear) === 53) {
