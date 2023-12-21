@@ -32,7 +32,7 @@ import {
   memoize,
 } from './utils/memoization'
 import { PenultimateDayOfWeekNearestEOMStrategy } from './penultimate_day_of_week_nearest_eom'
-import {CustomLeapYearStrategy} from "./custom_leap_year";
+import { CustomLeapYearStrategy } from './custom_leap_year'
 
 const buildRetailCalendarFactory = memoize(
   (retailCalendarOptions: RetailCalendarOptions, year: number) =>
@@ -60,7 +60,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     this.calendarYear = this.getAdjustedGregorianYear(year)
     this.addLeapWeekToMonth = this.options.addLeapWeekToMonth ?? -1
     this.numberOfWeeks = this.calculateNumberOfWeeks()
-    this.lastDayOfYear = this.calculateLastDayOfYear(this.calendarYear, this.year)
+    this.lastDayOfYear = this.calculateLastDayOfYear(
+      this.calendarYear,
+      this.year,
+    )
     this.firstDayOfYear = startOfDay(
       addDaysToDate(addWeeksToDate(this.lastDayOfYear, -this.numberOfWeeks), 1),
     )
@@ -289,13 +292,21 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       case WeekCalculation.PenultimateDayOfWeekNearestEOM:
         return new PenultimateDayOfWeekNearestEOMStrategy()
       case WeekCalculation.CustomLeapYear: {
-        const { leapYear, leapYearEndDate,leapYearFrequency   } = this.options;
-        if (leapYear === undefined || leapYearEndDate === undefined || leapYearFrequency === undefined) {
+        const { leapYear, leapYearEndDate, leapYearFrequency } = this.options
+        if (
+          leapYear === undefined ||
+          leapYearEndDate === undefined ||
+          leapYearFrequency === undefined
+        ) {
           throw new Error(
             'CustomLeapYear week calculation requires leapYear, leapYearEndDate, and leapYearFrequency to be defined',
           )
         }
-        return new CustomLeapYearStrategy(leapYear, leapYearEndDate, leapYearFrequency)
+        return new CustomLeapYearStrategy(
+          leapYear,
+          leapYearEndDate,
+          leapYearFrequency,
+        )
       }
     }
   }

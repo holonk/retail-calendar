@@ -1,4 +1,4 @@
-import { RetailCalendarOptions} from '../types'
+import { RetailCalendarOptions } from '../types'
 
 export function memoize<T extends (...args: any) => any>(
   func: T,
@@ -30,7 +30,6 @@ function stringifyCalendarOptions(
   retailCalendarOptions: RetailCalendarOptions,
 ) {
   return Object.entries(retailCalendarOptions)
-      .map((e) => e.join(':'))
-      .join('-')
+    .map((e) => e.join(':'))
+    .join('-')
 }
-

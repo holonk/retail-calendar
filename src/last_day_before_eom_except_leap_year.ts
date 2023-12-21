@@ -24,7 +24,7 @@ export class LastDayBeforeEOMExceptLeapYearStrategy implements LastDayStrategy {
     const lastDayOfNextYear = new LastDayBeforeEOMStrategy().getLastDayForGregorianLastDay(
       lastDayOfNextGregorianYear,
       lastDayOfIsoWeek,
-        retailCalendarYear + 1,
+      retailCalendarYear + 1,
     )
 
     if (getWeekDifference(lastDayOfNextYear, lastDayOfThisYear) === 53) {
