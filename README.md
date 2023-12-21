@@ -173,9 +173,10 @@ Specifies how many weeks each month has in a quarter.
 #### addLeapWeekToMonth
 If `addLeapWeekToMonth` is set to `10`, then the penultimate month will not abide this rule, as it will have an extra week. This value is zero-indexed.
 
-#### customLeapYearOptions
-Overrides how leap years are calculated. If this is set, given `customLeapYearOptions.yearEndDate` will be the end of calendar year of `customLeapYearOptions.calendarYear`.
-Then remaining leap years will be calculated by `customLeapYearOptions.leapYearFrequency` option.
+#### leapYear, leapYearEndDate, leapYearFrequency
+Overrides how leap years are calculated. Used only if weekCalculation is set to `WeekCalculation.CustomLeapYear`.
+If these options are set, given `leapYearEndDate` will be the end of calendar year of `leapYear`.
+Then remaining leap years will be calculated using `leapYearFrequency` option.
 
 For given `{ yearEndDate: '2006-03-11', calendarYear: 2006, leapYearFrequency: 6 }` customLeapYearOptions, 2006 will be a leap year and the last day of the year will be 2006-03-11.
 Following leap years will be 2012, 2018, 2024 and so on.

@@ -292,7 +292,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         const { leapYear, leapYearEndDate,leapYearFrequency   } = this.options;
         if (leapYear === undefined || leapYearEndDate === undefined || leapYearFrequency === undefined) {
           throw new Error(
-            'CustomLeapYear week calculation requires customLeapYearOptions',
+            'CustomLeapYear week calculation requires leapYear, leapYearEndDate, and leapYearFrequency to be defined',
           )
         }
         return new CustomLeapYearStrategy(leapYear, leapYearEndDate, leapYearFrequency)
