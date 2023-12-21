@@ -1,26 +1,24 @@
 import {
     LastDayOfWeek,
     LastMonthOfYear,
-    RetailCalendar, RetailCalendarFactory,
+    RetailCalendarFactory,
     RetailCalendarOptions,
     WeekCalculation,
     WeekGrouping
 } from "../src";
-import {addDaysToDate, endOfDay, startOfDay} from "../src/date_utils";
+import { endOfDay, startOfDay} from "../src/date_utils";
 
 describe("Given CustomLeapYear calendar options", () => {
     let customLeapYearCalendarOptions: RetailCalendarOptions;
     beforeEach(() => {
         customLeapYearCalendarOptions = {
-            customLeapYearOptions: {
-                calendarYear: 2006,
-                yearEndDate: "2006-03-11", // 2006 March 11th, Saturday
-                leapYearFrequency: 6,
-            },
             weekCalculation: WeekCalculation.CustomLeapYear,
             lastDayOfWeek:LastDayOfWeek.Saturday,
             lastMonthOfYear: LastMonthOfYear.March,
             weekGrouping: WeekGrouping.Group454,
+            leapYear: 2006,
+            leapYearEndDate: "2006-03-11", // 2006 March 11th, Saturday
+            leapYearFrequency: 6,
         };
     });
     // 2005 2011 2017 2023

@@ -47,13 +47,11 @@ export interface RetailCalendarOptions {
    */
   addLeapWeekToMonth?: number
   beginningMonthIndex?: number
-  customLeapYearOptions?: CustomLeapYearOptions
-}
 
-export type CustomLeapYearOptions = {
-    calendarYear: number
-    yearEndDate: string // In the format of "YYYY-MM-DD"
-    leapYearFrequency: number // In years
+  // Leap Year Options
+  leapYear?: number
+  leapYearEndDate?: string // In the format of "YYYY-MM-DD"
+  leapYearFrequency?: number // In years
 }
 
 export const NRFCalendarOptions: RetailCalendarOptions = {

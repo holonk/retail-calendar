@@ -289,15 +289,14 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       case WeekCalculation.PenultimateDayOfWeekNearestEOM:
         return new PenultimateDayOfWeekNearestEOMStrategy()
       case WeekCalculation.CustomLeapYear: {
-        const customLeapYearOptions = this.options.customLeapYearOptions
-        if (!customLeapYearOptions) {
+        const { leapYear, leapYearEndDate,leapYearFrequency   } = this.options;
+        if (leapYear === undefined || leapYearEndDate === undefined || leapYearFrequency === undefined) {
           throw new Error(
             'CustomLeapYear week calculation requires customLeapYearOptions',
           )
         }
-        return new CustomLeapYearStrategy(customLeapYearOptions)
+        return new CustomLeapYearStrategy(leapYear, leapYearEndDate, leapYearFrequency)
       }
-
     }
   }
 
