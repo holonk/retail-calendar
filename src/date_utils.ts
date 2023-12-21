@@ -1,3 +1,10 @@
+export function createDateFromYYYYMMDD(dateString: string): Date {
+  const [year, month, day] = dateString.split('-').map(parseIntBase10)
+  const date = newSafeDate()
+  date.setFullYear(year, month - 1, day)
+  return date
+}
+
 export function newSafeDate(): Date {
   return new Date(2000, 0, 1)
 }
@@ -88,4 +95,8 @@ export function toFormattedString(date: Date): string {
   )
     .toISOString()
     .split('T')[0]
+}
+
+export function parseIntBase10(value: string): number {
+  return parseInt(value, 10)
 }

@@ -1,5 +1,10 @@
 import { LastDayStrategy } from './types'
-import { addWeeksToDate } from './date_utils'
+import {
+  addWeeksToDate,
+  createDateFromYYYYMMDD,
+  endOfDay,
+  newSafeDate,
+} from './date_utils'
 
 export class CustomLeapYearStrategy implements LastDayStrategy {
   leapYear: number
@@ -23,7 +28,8 @@ export class CustomLeapYearStrategy implements LastDayStrategy {
     const startCalendarYear = this.leapYear
     const startYearEndDate = this.leapYearEndDate
     const yearDifference = retailCalendarYear - startCalendarYear
-    let yearEndDate = new Date(startYearEndDate)
+    let yearEndDate = createDateFromYYYYMMDD(this.leapYearEndDate)
+
     if (yearDifference > 0) {
       // start at the startCalendarYear + 1, because we already have the end date for the startCalendarYear
       for (let i = startCalendarYear + 1; i <= retailCalendarYear; i += 1) {
