@@ -14,7 +14,7 @@ import { nrf2018, nrf2017NotRestated } from './data/nrf_2018'
 import { firstBow } from './data/first_bow'
 import { lastDayBeforeEomExceptLeapYear } from './data/last_day_before_eom_except_leap_year';
 import { lastDayNearestEOM445PenultimateWeeks } from './data/last_day_nearest_eom_445_penultimate_weeks';
-import { lastDayNearestEOM445ArbitraryLeapYearWeeks } from './data/last_day_nearest_eom_445_arbitrary_leap_year_weeks';
+import { lastDayNearestEOM445Weeks } from './data/last_day_nearest_eom_445_arbitrary_leap_year_weeks';
 import { toFormattedString } from '../src/date_utils';
 import { parseEndDate, parseStartDate } from './utils/parser';
 
@@ -59,15 +59,34 @@ describe('RetailCalendar', () => {
         weekGrouping: WeekGrouping.Group445,
         lastDayOfWeek: LastDayOfWeek.Sunday,
         lastMonthOfYear: LastMonthOfYear.October,
-        addLeapWeekToMonth: 1,
       }, 2023)
 
-      expect(calendar.months[1].weeks.length).toEqual(5)
-
-      for (let weekIndex = 0; weekIndex < lastDayNearestEOM445ArbitraryLeapYearWeeks.length; weekIndex++) {
-        const expectedWeek = lastDayNearestEOM445ArbitraryLeapYearWeeks[weekIndex];
+      for (let weekIndex = 0; weekIndex < lastDayNearestEOM445Weeks.length; weekIndex++) {
+        const expectedWeek = lastDayNearestEOM445Weeks[weekIndex];
         const actualWeek = calendar.weeks[weekIndex];
         expect(actualWeek).toBeTheSameWeekAs(expectedWeek)
+      }
+    })
+
+    it('addLeapWeekTo is respected for 0..11 values', () => {
+      const range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      for (const addLeapWeekToMonth of range) {
+        const calendar = new RetailCalendarFactory({
+          weekCalculation: WeekCalculation.LastDayNearestEOM,
+        weekGrouping: WeekGrouping.Group445,
+        lastDayOfWeek: LastDayOfWeek.Sunday,
+        lastMonthOfYear: LastMonthOfYear.October,
+          addLeapWeekToMonth,
+        }, 2024)
+
+        const expectedMonthLengthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
+        for (const monthIndex of range) {
+          if (monthIndex === addLeapWeekToMonth) {
+            expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex] + 1)
+          } else {
+            expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex])
+          }
+        }
       }
     })
   })
