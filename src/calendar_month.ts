@@ -1,5 +1,6 @@
 import { RetailCalendarMonth, RetailCalendarWeek } from './types'
 
+export type X = { y: string }
 export class CalendarMonth implements RetailCalendarMonth {
   monthOfYear: number
   quarterOfYear: number
