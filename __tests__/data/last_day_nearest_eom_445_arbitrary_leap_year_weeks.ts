@@ -1,4 +1,4 @@
-export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
+export const lastDayNearestEOM445Weeks = [
   {
     'weekOfYear': 0,
     'weekOfMonth': 0,
@@ -81,9 +81,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 8,
-    'weekOfMonth': 4,
+    'weekOfMonth': 0,
     'weekOfQuarter': 8,
-    'monthOfYear': 2,
+    'monthOfYear': 3,
     'quarterOfYear': 1,
     'gregorianStartDate': '2023-12-25',
     'gregorianEndDate': '2023-12-31'
@@ -91,7 +91,7 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 9,
-    'weekOfMonth': 0,
+    'weekOfMonth': 1,
     'weekOfQuarter': 9,
     'monthOfYear': 3,
     'quarterOfYear': 1,
@@ -101,7 +101,7 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 10,
-    'weekOfMonth': 1,
+    'weekOfMonth': 2,
     'weekOfQuarter': 10,
     'monthOfYear': 3,
     'quarterOfYear': 1,
@@ -111,7 +111,7 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 11,
-    'weekOfMonth': 2,
+    'weekOfMonth': 3,
     'weekOfQuarter': 11,
     'monthOfYear': 3,
     'quarterOfYear': 1,
@@ -121,7 +121,7 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 12,
-    'weekOfMonth': 3,
+    'weekOfMonth': 4,
     'weekOfQuarter': 12,
     'monthOfYear': 3,
     'quarterOfYear': 1,
@@ -131,18 +131,18 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 13,
-    'weekOfMonth': 4,
-    'weekOfQuarter': 13,
-    'monthOfYear': 3,
-    'quarterOfYear': 1,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 0,
+    'monthOfYear': 4,
+    'quarterOfYear': 2,
     'gregorianStartDate': '2024-01-29',
     'gregorianEndDate': '2024-02-04'
   },
 
   {
     'weekOfYear': 14,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 0,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 1,
     'monthOfYear': 4,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-02-05',
@@ -151,8 +151,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 15,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 1,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 2,
     'monthOfYear': 4,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-02-12',
@@ -161,8 +161,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 16,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 2,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 3,
     'monthOfYear': 4,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-02-19',
@@ -171,9 +171,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 17,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 3,
-    'monthOfYear': 4,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 4,
+    'monthOfYear': 5,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-02-26',
     'gregorianEndDate': '2024-03-03'
@@ -181,8 +181,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 18,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 4,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 5,
     'monthOfYear': 5,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-03-04',
@@ -191,8 +191,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 19,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 5,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 6,
     'monthOfYear': 5,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-03-11',
@@ -201,8 +201,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 20,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 6,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 7,
     'monthOfYear': 5,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-03-18',
@@ -211,9 +211,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 21,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 7,
-    'monthOfYear': 5,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 8,
+    'monthOfYear': 6,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-03-25',
     'gregorianEndDate': '2024-03-31'
@@ -221,8 +221,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 22,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 8,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 9,
     'monthOfYear': 6,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-04-01',
@@ -231,8 +231,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 23,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 9,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 10,
     'monthOfYear': 6,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-04 -08',
@@ -241,8 +241,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 24,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 10,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 11,
     'monthOfYear': 6,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-04-15',
@@ -251,8 +251,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 25,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 11,
+    'weekOfMonth': 4,
+    'weekOfQuarter': 12,
     'monthOfYear': 6,
     'quarterOfYear': 2,
     'gregorianStartDate': '2024-04-22',
@@ -261,18 +261,18 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 26,
-    'weekOfMonth': 4,
-    'weekOfQuarter': 12,
-    'monthOfYear': 6,
-    'quarterOfYear': 2,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 0,
+    'monthOfYear': 7,
+    'quarterOfYear': 3,
     'gregorianStartDate': '2024-04-29',
     'gregorianEndDate': '2024-05-05'
   },
 
   {
     'weekOfYear': 27,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 0,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 1,
     'monthOfYear': 7,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-05-06',
@@ -281,8 +281,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 28,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 1,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 2,
     'monthOfYear': 7,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-05-13',
@@ -291,8 +291,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 29,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 2,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 3,
     'monthOfYear': 7,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-05-20',
@@ -301,9 +301,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 30,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 3,
-    'monthOfYear': 7,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 4,
+    'monthOfYear': 8,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-05-27',
     'gregorianEndDate': '2024-06-02'
@@ -311,8 +311,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 31,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 4,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 5,
     'monthOfYear': 8,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-06-03',
@@ -321,8 +321,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 32,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 5,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 6,
     'monthOfYear': 8,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-06-10',
@@ -331,8 +331,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 33,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 6,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 7,
     'monthOfYear': 8,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-06-17',
@@ -341,9 +341,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 34,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 7,
-    'monthOfYear': 8,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 8,
+    'monthOfYear': 9,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-06-24',
     'gregorianEndDate': '2024-06-30'
@@ -351,8 +351,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 35,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 8,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 9,
     'monthOfYear': 9,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-07-01',
@@ -361,8 +361,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 36,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 9,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 10,
     'monthOfYear': 9,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-07 -08',
@@ -371,8 +371,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 37,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 10,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 11,
     'monthOfYear': 9,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-07-15',
@@ -381,8 +381,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 38,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 11,
+    'weekOfMonth': 4,
+    'weekOfQuarter': 12,
     'monthOfYear': 9,
     'quarterOfYear': 3,
     'gregorianStartDate': '2024-07-22',
@@ -391,18 +391,18 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 39,
-    'weekOfMonth': 4,
-    'weekOfQuarter': 12,
-    'monthOfYear': 9,
-    'quarterOfYear': 3,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 0,
+    'monthOfYear': 10,
+    'quarterOfYear': 4,
     'gregorianStartDate': '2024-07-29',
     'gregorianEndDate': '2024 -08-04'
   },
 
   {
     'weekOfYear': 40,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 0,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 1,
     'monthOfYear': 10,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -08-05',
@@ -411,8 +411,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 41,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 1,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 2,
     'monthOfYear': 10,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -08-12',
@@ -421,8 +421,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 42,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 2,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 3,
     'monthOfYear': 10,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -08-19',
@@ -431,9 +431,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 43,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 3,
-    'monthOfYear': 10,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 4,
+    'monthOfYear': 11,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -08-26',
     'gregorianEndDate': '2024 -09-01'
@@ -441,8 +441,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 44,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 4,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 5,
     'monthOfYear': 11,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -09-02',
@@ -451,8 +451,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 45,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 5,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 6,
     'monthOfYear': 11,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -09 -09',
@@ -461,8 +461,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 46,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 6,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 7,
     'monthOfYear': 11,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -09-16',
@@ -471,9 +471,9 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 47,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 7,
-    'monthOfYear': 11,
+    'weekOfMonth': 0,
+    'weekOfQuarter': 8,
+    'monthOfYear': 12,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -09-23',
     'gregorianEndDate': '2024 -09-29'
@@ -481,8 +481,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 48,
-    'weekOfMonth': 0,
-    'weekOfQuarter': 8,
+    'weekOfMonth': 1,
+    'weekOfQuarter': 9,
     'monthOfYear': 12,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024 -09-30',
@@ -491,8 +491,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 49,
-    'weekOfMonth': 1,
-    'weekOfQuarter': 9,
+    'weekOfMonth': 2,
+    'weekOfQuarter': 10,
     'monthOfYear': 12,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024-10-07',
@@ -501,8 +501,8 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 50,
-    'weekOfMonth': 2,
-    'weekOfQuarter': 10,
+    'weekOfMonth': 3,
+    'weekOfQuarter': 11,
     'monthOfYear': 12,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024-10-14',
@@ -511,22 +511,12 @@ export const lastDayNearestEOM445ArbitraryLeapYearWeeks = [
 
   {
     'weekOfYear': 51,
-    'weekOfMonth': 3,
-    'weekOfQuarter': 11,
+    'weekOfMonth': 4,
+    'weekOfQuarter': 12,
     'monthOfYear': 12,
     'quarterOfYear': 4,
     'gregorianStartDate': '2024-10-21',
     'gregorianEndDate': '2024-10-27'
   },
-
-  {
-    'weekOfYear': 52,
-    'weekOfMonth': 4,
-    'weekOfQuarter': 12,
-    'monthOfYear': 12,
-    'quarterOfYear': 4,
-    'gregorianStartDate': '2024-10-28',
-    'gregorianEndDate': '2024-11-03'
-  }
 ]
 

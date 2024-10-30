@@ -74,7 +74,6 @@ describe("Given CustomLeapYear calendar options", () => {
         for (let i = 2005; i < 2030; i++) {
             const retailCalendar = RetailCalendarFactory.getRetailCalendar(customLeapYearCalendarOptions, i);
             expect(retailCalendar.weeks[retailCalendar.weeks.length - 1].gregorianEndDate).toEqual(expectedEndDates[i - 2005]);
-            console.log(`Year ${i} end date: ${retailCalendar.weeks[retailCalendar.weeks.length - 1].gregorianEndDate}`);
         }
     });
 });

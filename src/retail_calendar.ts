@@ -238,7 +238,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     }
 
     if (
-      this.options.addLeapWeekToMonth &&
+      this.options.addLeapWeekToMonth !== undefined &&
       this.options.addLeapWeekToMonth >= 0 &&
       this.numberOfWeeks === 53
     )
