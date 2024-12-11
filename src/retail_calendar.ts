@@ -87,7 +87,41 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
       const quarterOfYear = Math.floor((index - beginningIndex) / 3) + 1;
+      if (this.options.weekGrouping === WeekGrouping.GroupRegular) {
+        const jan1 = new Date(this.calendarYear, 0, 1);
+        const week0Start = new Date(this.weeks[0].gregorianStartDate);
+        const week0End = new Date(this.weeks[0].gregorianEndDate);
 
+        if (jan1 < week0Start || jan1 > week0End) {
+          // Create previous week
+          const prevWeekEnd = new Date(week0Start);
+          prevWeekEnd.setDate(prevWeekEnd.getDate() - 1);
+          const prevWeekStart = new Date(prevWeekEnd);
+          prevWeekStart.setDate(prevWeekStart.getDate() - 6);
+
+          // Create new week object for previous week
+          const prevWeek = new CalendarWeek(
+            0, // weekOfYear
+            0, // weekOfMonth
+            0, // weekOfQuarter
+            1, // monthOfYear
+            1, // quarterOfYear
+            prevWeekStart,
+            prevWeekEnd
+          );
+
+          // Shift existing weeks indices
+          this.weeks = this.weeks.map((week) => ({
+            ...week,
+            weekOfYear: week.weekOfYear + 1,
+            weekOfMonth:
+              week.monthOfYear === 1 ? week.weekOfMonth + 1 : week.weekOfMonth,
+          }));
+
+          // Insert previous week at the beginning
+          this.weeks.unshift(prevWeek);
+        }
+      } 
       const weeksOfMonth =
         this.options.weekGrouping === WeekGrouping.GroupRegular
           ? this.weeks.filter((week) => {
@@ -105,12 +139,18 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
               );
 
               // For December, ensure we don't include weeks from previous year's December
-              if (index - beginningIndex === 11 && weekStart.getFullYear() < this.calendarYear) {
+              if (
+                index - beginningIndex === 11 &&
+                weekStart.getFullYear() < this.calendarYear
+              ) {
                 return false;
               }
 
               // For January, ensure we don't include weeks from next year
-              if (index - beginningIndex === 0 && weekStart.getFullYear() > this.calendarYear) {
+              if (
+                index - beginningIndex === 0 &&
+                weekStart.getFullYear() > this.calendarYear
+              ) {
                 return false;
               }
 
@@ -136,7 +176,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       const monthStart = new Date(weeksOfMonth[0].gregorianStartDate);
       const monthEnd = new Date(
         weeksOfMonth[weeksOfMonth.length - 1].gregorianEndDate
-      ); 
+      );
       months.push(
         new CalendarMonth(
           index,
@@ -330,16 +370,18 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   calculateLastDayOfYear(year: number, retailCalendarYear: number): Date {
     const firstDayOfLastMonthOfYear = newSafeDate();
     firstDayOfLastMonthOfYear.setFullYear(year);
-    this.options.lastMonthOfYear = this.options.weekGrouping === WeekGrouping.GroupRegular 
-    ? LastMonthOfYear.December
-    : this.options.lastMonthOfYear;
+    this.options.lastMonthOfYear =
+      this.options.weekGrouping === WeekGrouping.GroupRegular
+        ? LastMonthOfYear.December
+        : this.options.lastMonthOfYear;
     firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear, 1);
 
     const lastDayOfYear = endOfMonth(firstDayOfLastMonthOfYear);
     const lastIsoWeekDay = this.options.lastDayOfWeek;
-    this.options.weekCalculation = this.options.weekGrouping === WeekGrouping.GroupRegular 
-      ? WeekCalculation.LastDayNearestEOM 
-      : this.options.weekCalculation;
+    this.options.weekCalculation =
+      this.options.weekGrouping === WeekGrouping.GroupRegular
+        ? WeekCalculation.LastDayNearestEOM
+        : this.options.weekCalculation;
     const weekCalculation = this.getWeekCalculationStrategy(
       this.options.weekCalculation
     );
@@ -350,7 +392,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     );
   }
 
-  calculateNumberOfWeeks(): number { 
+  calculateNumberOfWeeks(): number {
     // Make sure we get whole day difference
     // by measuring from the end of current year to start of last year
     const lastDayOfYear = endOfDay(
@@ -398,7 +440,10 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getAdjustedGregorianYear(year: number): number {
-    if (this.options.lastMonthOfYear !== LastMonthOfYear.December && this.options.weekGrouping !== WeekGrouping.GroupRegular) {
+    if (
+      this.options.lastMonthOfYear !== LastMonthOfYear.December &&
+      this.options.weekGrouping !== WeekGrouping.GroupRegular
+    ) {
       return year + 1;
     } else {
       return year;
