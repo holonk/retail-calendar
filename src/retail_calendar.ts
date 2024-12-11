@@ -86,9 +86,19 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
     for (const numberOfWeeks of this.getWeekDistribution()) {
       const quarterOfYear = Math.floor((index - beginningIndex) / 3) + 1
-      const weeksOfMonth = this.weeks.filter(
-        (week) => week.monthOfYear === index,
-      )
+      const weeksOfMonth = this.options.weekGrouping === WeekGrouping.GroupRegular
+        ? this.weeks.filter((week) => {
+            const weekStart = new Date(week.gregorianStartDate);
+            const weekEnd = new Date(week.gregorianEndDate);
+            const monthStart = new Date(this.calendarYear, index - beginningIndex, 1);
+            
+            // Include week if:
+            // 1. Week starts in this month, OR
+            // 2. Week contains the first day of this month
+            return weekStart.getMonth() === (index - beginningIndex) ||
+                   (weekStart <= monthStart && weekEnd >= monthStart);
+          })
+        : this.weeks.filter((week) => week.monthOfYear === index);
       const monthStart = new Date(weeksOfMonth[0].gregorianStartDate)
       const monthEnd = new Date(
         weeksOfMonth[weeksOfMonth.length - 1].gregorianEndDate,
@@ -224,7 +234,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
   getWeekDistribution(): number[] {
     let weekDistribution: number[]
-
+    const firstDay = startOfDay(this.firstDayOfYear);
     switch (this.options.weekGrouping) {
       case WeekGrouping.Group445:
         weekDistribution = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
@@ -236,17 +246,40 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
         break
       case WeekGrouping.GroupRegular:
-        // For regular calendar, distribute weeks evenly
-        const totalWeeks = this.numberOfWeeks
-        const baseWeeks = Math.floor(totalWeeks / 12) // Either 4 or 4.33...
-        const extraWeeks = totalWeeks - (baseWeeks * 12) // Remaining weeks to distribute
+        // For regular calendar, assign weeks to months based on where the majority of days fall
         
-        weekDistribution = Array(12).fill(baseWeeks)
-        // Distribute remaining weeks evenly from the start
-        for (let i = 0; i < extraWeeks; i++) {
-          weekDistribution[i]++
+        weekDistribution = Array(12).fill(0);
+        
+        // Iterate through each week and assign it to the month where most of its days belong
+        for (let weekIndex = 0; weekIndex < this.numberOfWeeks; weekIndex++) {
+          const weekStart = addWeeksToDate(firstDay, weekIndex);
+          const weekEnd = endOfDay(addDaysToDate(weekStart, 6));
+          
+          // Count days in each month for this week
+          const daysInMonth = Array(12).fill(0);
+          let currentDay = weekStart;
+          
+          for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+            const monthIndex = currentDay.getMonth();
+            daysInMonth[monthIndex]++;
+            currentDay = addDaysToDate(currentDay, 1);
+          }
+          
+          // Assign week to month with most days
+          let maxDays = 0;
+          let assignedMonth = 0;
+          daysInMonth.forEach((days, monthIndex) => {
+            if (days > maxDays) {
+              maxDays = days;
+              assignedMonth = monthIndex;
+            }
+          });
+          
+          weekDistribution[assignedMonth]++;
         }
         break
+      default:
+        throw new Error(`Unsupported week grouping: ${this.options.weekGrouping}`)
     }
 
     if (

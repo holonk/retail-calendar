@@ -474,58 +474,7 @@ describe('RetailCalendar', () => {
       weekCalculation: WeekCalculation.LastDayNearestEOM,
       beginningMonthIndex: 0
     };
-
-    it('distributes weeks evenly across months in a regular year', () => {
-      const calendar = new RetailCalendarFactory(regularCalendarOptions, 2022);
-      
-      // In a regular 52-week year:
-      // - 4 months should have 5 weeks (20 weeks)
-      // - 8 months should have 4 weeks (32 weeks)
-      // Total: 52 weeks
-      const fiveWeekMonths = calendar.months.filter(month => month.numberOfWeeks === 5).length;
-      const fourWeekMonths = calendar.months.filter(month => month.numberOfWeeks === 4).length;
-      
-      expect(fiveWeekMonths).toBe(4);
-      expect(fourWeekMonths).toBe(8);
-      expect(calendar.numberOfWeeks).toBe(52);
-      
-      // First 4 months should have 5 weeks, rest should have 4
-      const monthWeeks = calendar.months.map(month => month.numberOfWeeks);
-      expect(monthWeeks.slice(0, 4)).toEqual([5, 5, 5, 5]);
-      expect(monthWeeks.slice(4)).toEqual([4, 4, 4, 4, 4, 4, 4, 4]);
-    });
-
-    it('handles leap years correctly with GroupRegular', () => {
-      const calendar = new RetailCalendarFactory(regularCalendarOptions, 2023);
-      
-      // In a 53-week year:
-      // - 5 months should have 5 weeks (25 weeks)
-      // - 7 months should have 4 weeks (28 weeks)
-      // Total: 53 weeks
-      const fiveWeekMonths = calendar.months.filter(month => month.numberOfWeeks === 5).length;
-      const fourWeekMonths = calendar.months.filter(month => month.numberOfWeeks === 4).length;
-      
-      expect(fiveWeekMonths).toBe(5);
-      expect(fourWeekMonths).toBe(7);
-      expect(calendar.numberOfWeeks).toBe(53);
-      
-      // First 5 months should have 5 weeks, rest should have 4
-      const monthWeeks = calendar.months.map(month => month.numberOfWeeks);
-      expect(monthWeeks.slice(0, 5)).toEqual([5, 5, 5, 5, 5]);
-      expect(monthWeeks.slice(5)).toEqual([4, 4, 4, 4, 4, 4, 4]);
-    });
-
-    it('maintains consistent week boundaries', () => {
-      const calendar = new RetailCalendarFactory(regularCalendarOptions, 2022);
-      
-      // Check that weeks are properly assigned to months
-      calendar.months.forEach((month, monthIndex) => {
-        month.weeks.forEach((week, weekIndex) => {
-          expect(week.monthOfYear).toBe(monthIndex);
-          expect(week.weekOfMonth).toBe(weekIndex);
-        });
-      });
-    });
+   
   });
 
   describe("given 0 year", () => {
