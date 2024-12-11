@@ -109,6 +109,11 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
                 return false;
               }
 
+              // For January, ensure we don't include weeks from next year
+              if (index - beginningIndex === 0 && weekStart.getFullYear() > this.calendarYear) {
+                return false;
+              }
+
               // Include week if:
               // 1. Week starts in this month, OR
               // 2. Week contains the first day of this month
