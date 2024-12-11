@@ -82,7 +82,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Sunday,
         lastMonthOfYear: LastMonthOfYear.October,
         addLeapWeekToMonth,
-      }, 2024)
+      }, 2023)
 
       const expectedMonthLengthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
       for (const monthIndex of range) {

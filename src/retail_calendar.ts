@@ -235,6 +235,9 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
       case WeekGrouping.Group544:
         weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
         break
+      case WeekGrouping.GroupRegular:
+        weekDistribution = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        break
     }
 
     if (

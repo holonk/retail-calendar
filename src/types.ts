@@ -2,6 +2,7 @@ export enum WeekGrouping {
   Group445,
   Group544,
   Group454,
+  GroupRegular,
 }
 export enum LastDayOfWeek {
   Monday = 1,
