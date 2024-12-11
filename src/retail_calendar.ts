@@ -90,13 +90,13 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         ? this.weeks.filter((week) => {
             const weekStart = new Date(week.gregorianStartDate);
             const weekEnd = new Date(week.gregorianEndDate);
-            const monthStart = new Date(this.calendarYear, index - beginningIndex, 1);
+            const calendarMonthStart = new Date(this.calendarYear, index - beginningIndex, 1);
             
             // Include week if:
             // 1. Week starts in this month, OR
             // 2. Week contains the first day of this month
             return weekStart.getMonth() === (index - beginningIndex) ||
-                   (weekStart <= monthStart && weekEnd >= monthStart);
+                   (weekStart <= calendarMonthStart && weekEnd >= calendarMonthStart);
           })
         : this.weeks.filter((week) => week.monthOfYear === index);
       const monthStart = new Date(weeksOfMonth[0].gregorianStartDate)
