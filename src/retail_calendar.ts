@@ -236,14 +236,24 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
         weekDistribution = [5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4]
         break
       case WeekGrouping.GroupRegular:
-        weekDistribution = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+        // For regular calendar, distribute weeks evenly
+        const totalWeeks = this.numberOfWeeks
+        const baseWeeks = Math.floor(totalWeeks / 12) // Either 4 or 4.33...
+        const extraWeeks = totalWeeks - (baseWeeks * 12) // Remaining weeks to distribute
+        
+        weekDistribution = Array(12).fill(baseWeeks)
+        // Distribute remaining weeks evenly from the start
+        for (let i = 0; i < extraWeeks; i++) {
+          weekDistribution[i]++
+        }
         break
     }
 
     if (
       this.options.addLeapWeekToMonth !== undefined &&
       this.options.addLeapWeekToMonth >= 0 &&
-      this.numberOfWeeks === 53
+      this.numberOfWeeks === 53 &&
+      this.options.weekGrouping !== WeekGrouping.GroupRegular // Skip for GroupRegular as it's handled above
     )
       weekDistribution[this.options.addLeapWeekToMonth]++
 
