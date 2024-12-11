@@ -150,8 +150,6 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
 
   generateWeeks(): RetailCalendarWeek[] {
     const weeks = [];
-    const startOfYear = new Date(this.calendarYear, 0, 1); // January 1st
-    const endOfYear = new Date(this.calendarYear, 11, 31); // December 31st
     let extraWeek = 0;
     if (this.options.weekGrouping === WeekGrouping.GroupRegular) extraWeek = 1;
     for (let index = 0; index < this.numberOfWeeks + extraWeek; index++) {
@@ -327,10 +325,16 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   calculateLastDayOfYear(year: number, retailCalendarYear: number): Date {
     const firstDayOfLastMonthOfYear = newSafeDate();
     firstDayOfLastMonthOfYear.setFullYear(year);
+    this.options.lastMonthOfYear = this.options.weekGrouping === WeekGrouping.GroupRegular 
+    ? LastMonthOfYear.December
+    : this.options.lastMonthOfYear;
     firstDayOfLastMonthOfYear.setMonth(this.options.lastMonthOfYear, 1);
 
     const lastDayOfYear = endOfMonth(firstDayOfLastMonthOfYear);
     const lastIsoWeekDay = this.options.lastDayOfWeek;
+    this.options.weekCalculation = this.options.weekGrouping === WeekGrouping.GroupRegular 
+      ? WeekCalculation.LastDayNearestEOM 
+      : this.options.weekCalculation;
     const weekCalculation = this.getWeekCalculationStrategy(
       this.options.weekCalculation
     );
@@ -389,7 +393,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
   }
 
   getAdjustedGregorianYear(year: number): number {
-    if (this.options.lastMonthOfYear !== LastMonthOfYear.December) {
+    if (this.options.lastMonthOfYear !== LastMonthOfYear.December && this.options.weekGrouping !== WeekGrouping.GroupRegular) {
       return year + 1;
     } else {
       return year;
