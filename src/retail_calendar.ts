@@ -106,7 +106,7 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     } else {
       if(currentDay < 0 ) {
         calendarData = this.getRetailCalendar(retailCalendarOptions, date.getFullYear()-1)
-        currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear));
+        currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear))+1;
       }else if(currentDay > 364) {
         calendarData = this.getRetailCalendar(retailCalendarOptions, date.getFullYear()+1)
         currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear))+1;
