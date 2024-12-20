@@ -9,6 +9,7 @@ import {
   LastDayStrategy,
   LastMonthOfYear,
   RetailCalendarDay,
+  RetailMonth,
 } from "./types";
 
 import { CalendarMonth } from "./calendar_month";
@@ -23,6 +24,7 @@ import {
   endOfDay,
   endOfMonth,
   getDayOfYear,
+  getDayDifference,
   getWeekDifference,
   newSafeDate,
   startOfDay,
@@ -42,8 +44,7 @@ const buildRetailCalendarFactory = memoize(
 );
 
 export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
-  implements RetailCalendar
-{
+  implements RetailCalendar {
   year: number;
   calendarYear: number;
   numberOfWeeks: number;
@@ -78,6 +79,62 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
     year: number
   ) {
     return buildRetailCalendarFactory(retailCalendarOptions, year);
+  }
+
+  static getWeekOfYear(result: RetailCalendar, weekOfYear: number): RetailCalendarWeek {
+    return result.weeks.find((week) => week.weekOfYear === weekOfYear) as RetailCalendarWeek;
+  }
+
+  static getMonthOfYear(result: RetailCalendar, monthOfYear: number): RetailCalendarMonth {
+    return result.months.find((month) => month.monthOfYear === monthOfYear) as RetailCalendarMonth;
+  }
+
+  static getDateOfYear(result: RetailCalendar, dayOfYear: number): RetailCalendarDay {
+    return result.days.find((day) => day.dayOfYear === dayOfYear) as RetailCalendarDay;
+  }
+
+  static getWeekAndMonth(retailCalendarOptions: RetailCalendarOptions, date: Date) {
+    let calendarData: RetailCalendar = this.getRetailCalendar(retailCalendarOptions, date.getFullYear())
+    let currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear))+1;
+    let currentDayData:RetailCalendarDay  = this.getDateOfYear(calendarData, currentDay);
+    if (currentDayData) {
+      return {
+        weekOfYear: this.getWeekOfYear(calendarData, currentDayData.weekOfYear),
+        monthOfYear: this.getMonthOfYear(calendarData, currentDayData.monthOfYear),
+        date: currentDayData.gregorianStartDate,
+      };
+    } else {
+      if(currentDay < 0 ) {
+        calendarData = this.getRetailCalendar(retailCalendarOptions, date.getFullYear()-1)
+        currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear));
+      }else if(currentDay > 364) {
+        calendarData = this.getRetailCalendar(retailCalendarOptions, date.getFullYear()+1)
+        currentDay = getDayDifference(date, new Date(calendarData.firstDayOfYear))+1;
+      } 
+      currentDayData = this.getDateOfYear(calendarData, currentDay);
+      return {
+        weekOfYear: this.getWeekOfYear(calendarData, currentDayData.weekOfYear),
+        monthOfYear: this.getMonthOfYear(calendarData, currentDayData.monthOfYear),
+        date: currentDayData.gregorianStartDate,
+      };
+    }
+  }
+
+  static getRetailMonth(
+    retailCalendarOptions: RetailCalendarOptions,
+    date: Date
+  ): RetailMonth {
+    const result = this.getWeekAndMonth(retailCalendarOptions, date);
+    if (!result) {
+      throw new Error(
+        `No retail calendar month found for ${date.toDateString()}. This should never be the case. Please report this to calendar authorities.`
+      );
+    }
+    return {
+      month: result.monthOfYear,
+      week: result.weekOfYear,
+      date: result.date
+    };
   }
 
   generateMonths(): RetailCalendarMonth[] {
@@ -121,50 +178,50 @@ export const RetailCalendarFactory: RetailCalendarConstructor = class Calendar
           // Insert previous week at the beginning
           this.weeks.unshift(prevWeek);
         }
-      } 
+      }
       const weeksOfMonth =
         this.options.weekGrouping === WeekGrouping.GroupRegular
           ? this.weeks.filter((week) => {
-              const weekStart = new Date(week.gregorianStartDate);
-              const weekEnd = new Date(week.gregorianEndDate);
-              const calendarMonthStart = new Date(
-                this.calendarYear,
-                index - beginningIndex,
-                1
-              );
-              const calendarMonthEnd = new Date(
-                this.calendarYear,
-                index - beginningIndex + 1,
-                0
-              );
+            const weekStart = new Date(week.gregorianStartDate);
+            const weekEnd = new Date(week.gregorianEndDate);
+            const calendarMonthStart = new Date(
+              this.calendarYear,
+              index - beginningIndex,
+              1
+            );
+            const calendarMonthEnd = new Date(
+              this.calendarYear,
+              index - beginningIndex + 1,
+              0
+            );
 
-              // For December, ensure we don't include weeks from previous year's December
-              if (
-                index - beginningIndex === 11 &&
-                weekStart.getFullYear() < this.calendarYear
-              ) {
-                return false;
-              }
+            // For December, ensure we don't include weeks from previous year's December
+            if (
+              index - beginningIndex === 11 &&
+              weekStart.getFullYear() < this.calendarYear
+            ) {
+              return false;
+            }
 
-              // For January, ensure we don't include weeks from next year
-              if (
-                index - beginningIndex === 0 &&
-                weekStart.getFullYear() > this.calendarYear
-              ) {
-                return false;
-              }
+            // For January, ensure we don't include weeks from next year
+            if (
+              index - beginningIndex === 0 &&
+              weekStart.getFullYear() > this.calendarYear
+            ) {
+              return false;
+            }
 
-              // Include week if:
-              // 1. Week starts in this month, OR
-              // 2. Week contains the first day of this month
-              // 3. Week contains the last day of this month
-              return (
-                weekStart.getMonth() === index - beginningIndex ||
-                (weekStart <= calendarMonthStart &&
-                  weekEnd >= calendarMonthStart) ||
-                (weekStart <= calendarMonthEnd && weekEnd >= calendarMonthEnd)
-              );
-            })
+            // Include week if:
+            // 1. Week starts in this month, OR
+            // 2. Week contains the first day of this month
+            // 3. Week contains the last day of this month
+            return (
+              weekStart.getMonth() === index - beginningIndex ||
+              (weekStart <= calendarMonthStart &&
+                weekEnd >= calendarMonthStart) ||
+              (weekStart <= calendarMonthEnd && weekEnd >= calendarMonthEnd)
+            );
+          })
           : this.weeks.filter((week) => week.monthOfYear === index);
 
       // Skip months with no weeks
