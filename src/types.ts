@@ -2,6 +2,7 @@ export enum WeekGrouping {
   Group445,
   Group544,
   Group454,
+  GroupRegular,
 }
 export enum LastDayOfWeek {
   Monday = 1,
@@ -62,11 +63,21 @@ export const NRFCalendarOptions: RetailCalendarOptions = {
 }
 
 export type RetailCalendarConstructor = {
-  new (calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
+  new(calendarOptions: RetailCalendarOptions, year: number): RetailCalendar
   getRetailCalendar: (
     calendarOptions: RetailCalendarOptions,
     year: number,
   ) => RetailCalendar
+  getRetailMonth: (
+    calendarOptions: RetailCalendarOptions,
+    date: Date,
+  ) => RetailMonth
+}
+
+export interface RetailMonth {
+  month: RetailCalendarMonth
+  week: RetailCalendarWeek
+  date: Date
 }
 
 export interface RetailCalendar {
@@ -76,6 +87,8 @@ export interface RetailCalendar {
   weeks: RetailCalendarWeek[]
   days: RetailCalendarDay[]
   addLeapWeekToMonth: number
+  firstDayOfYear: Date
+  lastDayOfYear: Date
 }
 
 export interface RetailCalendarDay {
@@ -123,7 +136,7 @@ export type WeekOfCalendar = {
   week: RetailCalendarWeek
 }
 
-export {}
+export { }
 
 declare global {
   namespace jest {

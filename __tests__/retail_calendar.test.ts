@@ -82,7 +82,7 @@ describe('RetailCalendar', () => {
         lastDayOfWeek: LastDayOfWeek.Sunday,
         lastMonthOfYear: LastMonthOfYear.October,
         addLeapWeekToMonth,
-      }, 2024)
+      }, 2023)
 
       const expectedMonthLengthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
       for (const monthIndex of range) {
@@ -291,6 +291,7 @@ describe('RetailCalendar', () => {
           const lastWeek = calendar.weeks[52]
 
           const firstMonth = calendar.months[0]
+          expect(firstMonth.weeks[0]).toEqual(calendar.weeks[0])
           expect(firstMonth.weeks[0].weekOfYear).toEqual(0)
 
           const lastMonth = calendar.months[11]
@@ -464,6 +465,17 @@ describe('RetailCalendar', () => {
       }
     })
   })
+
+  describe('given GroupRegular calendar options', () => {
+    const regularCalendarOptions: RetailCalendarOptions = {
+      weekGrouping: WeekGrouping.GroupRegular,
+      lastDayOfWeek: LastDayOfWeek.Saturday,
+      lastMonthOfYear: LastMonthOfYear.January,
+      weekCalculation: WeekCalculation.LastDayNearestEOM,
+      beginningMonthIndex: 0
+    };
+   
+  });
 
   describe("given 0 year", () => {
     it("it does not generate more than 53 weeks", () => {
