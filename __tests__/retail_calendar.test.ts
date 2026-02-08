@@ -69,22 +69,19 @@ describe('RetailCalendar', () => {
     })
 
     it('addLeapWeekTo is respected for 0..11 values', () => {
-      console.log(new Date())
-      console.log(new Date().getTimezoneOffset())
       const range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
       for (const addLeapWeekToMonth of range) {
         const calendar = new RetailCalendarFactory({
           weekCalculation: WeekCalculation.LastDayNearestEOM,
-        weekGrouping: WeekGrouping.Group445,
-        lastDayOfWeek: LastDayOfWeek.Sunday,
-        lastMonthOfYear: LastMonthOfYear.October,
+          weekGrouping: WeekGrouping.Group445,
+          lastDayOfWeek: LastDayOfWeek.Sunday,
+          lastMonthOfYear: LastMonthOfYear.October,
           addLeapWeekToMonth,
-        }, 2024)
+        }, 2023)
 
         const expectedMonthLengthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
         for (const monthIndex of range) {
           if (monthIndex === addLeapWeekToMonth) {
-            console.log(monthIndex, expectedMonthLengthsInWeeks[monthIndex], calendar.weeks.length)
             expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex] + 1)
           } else {
             expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex])
@@ -92,29 +89,6 @@ describe('RetailCalendar', () => {
         }
       }
     })
-  })
-
-  it('addLeapWeekTo is respected for 0..11 values', () => {
-    
-    const range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    for (const addLeapWeekToMonth of range) {
-      const calendar = new RetailCalendarFactory({
-        weekCalculation: WeekCalculation.LastDayNearestEOM,
-        weekGrouping: WeekGrouping.Group445,
-        lastDayOfWeek: LastDayOfWeek.Sunday,
-        lastMonthOfYear: LastMonthOfYear.October,
-        addLeapWeekToMonth,
-      }, 2024)
-
-      const expectedMonthLengthsInWeeks = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5]
-      for (const monthIndex of range) {
-        if (monthIndex === addLeapWeekToMonth) {
-          expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex] + 1)
-        } else {
-          expect(calendar.months[monthIndex].weeks.length).toEqual(expectedMonthLengthsInWeeks[monthIndex])
-        }
-      }
-    }
   })
 
 
